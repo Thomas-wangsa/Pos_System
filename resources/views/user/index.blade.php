@@ -183,15 +183,19 @@
                   </td>
                   @else 
                     @foreach($data['users'] as $key=>$val)
-                    <td>
-                      {{$key}}
-                    </td>
-                    <td>
-                      {{$val['name']}}
-                    </td>
-                    <td>
-                      {{$val['email']}}
-                    </td>
+                    <tr>
+                      <td>
+                        {{$key}}
+                      </td>
+                      <td>
+                        {{$val['name']}}
+                      </td>
+                      <td>
+                        {{$val['email']}}
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
                     @endforeach
                   @endif
                 </tbody>

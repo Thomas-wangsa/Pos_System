@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 
 use App\User;
+use App\Http\Models\Category;
 
 class DatabaseSeeder extends Seeder
 {
@@ -27,6 +28,19 @@ class DatabaseSeeder extends Seeder
 
         foreach ($users_array as $key => $value) {
             User::firstOrCreate($value);       
+        }
+
+        $category_array = array(
+            array(
+                "name"=>"sofa",
+            ),
+            array(
+                "name"=>"piring",
+            )
+        );
+
+        foreach ($category_array as $key => $value) {
+            Category::firstOrCreate($value);       
         }
     }
 }
