@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Models\Category;
+use App\Http\Models\Customer;
 
 class CustomerController extends Controller
 {
@@ -12,8 +14,12 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
+    {   
+        $customer = Customer::all();
+        $category = Category::all();
+        $data['category'] = $category;
+        $data['customer'] = $customer;
+        return view('customer/index',compact('data'));
     }
 
     /**

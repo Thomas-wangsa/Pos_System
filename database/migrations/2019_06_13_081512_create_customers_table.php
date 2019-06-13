@@ -17,13 +17,13 @@ class CreateCustomersTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('category');
             $table->string('name');
-            $table->string('mobile');
-            $table->string('owner');
-            $table->string('adrress');
+            $table->string('mobile')->nullable();
+            $table->string('owner')->nullable();
+            $table->string('adrress')->nullable();
             $table->uuid('uuid'); 
             $table->text('comment')->nullable();
-            $table->timestamp('relation_at');
-            $table->timestamp('relation_end');  
+            $table->timestamp('relation_at')->nullable();
+            $table->timestamp('relation_end')->nullable();  
             $table->timestamps();
             $table->softDeletes();
         });
