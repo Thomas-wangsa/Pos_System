@@ -75,7 +75,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span> 
               </button>
-              <a class="navbar-brand" href="#">WebSiteName</a>
+              <a class="navbar-brand" href="/home">WebSiteName</a>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
               <ul class="nav navbar-nav">
@@ -98,6 +98,7 @@
     <div class="body_wrapper" >
       <div class="container-fluid">
         <div class="row content">
+          
           <div class="col-sm-3 sidenav" style="padding-top: 15px">
             <h4>John's Blog</h4>
             <ul class="nav nav-pills nav-stacked">
@@ -118,91 +119,98 @@
 
           <div class="col-sm-9" style="padding-top: 20px">
             
-            <div class="col-md-3">
-              <div class="thumbnail">
-                <a href="{{route('user.index')}}">
-
-                  <div class="icon_block">
-                        <span class="glyphicon glyphicon-user ">
-                        </span> &nbsp;
-                  </div>
-                  <div class="caption text-center">
-                    <p> User</p>
-                  </div>
-                </a>
+          
+              <div style="margin-top: 15px">
+                <div class="pull-left">
+                  <a href="{{route('customer.create')}}">
+                    <button type="button" class="btn btn-md btn-primary">
+                      add new customers
+                    </button>
+                  </a>
+                </div>
+                <div class="clearfix"> </div>
               </div>
-            </div>
 
-            <div class="col-md-3">
-              <div class="thumbnail">
-                <a href="{{route('customer.index')}}">
 
-                  <div class="icon_block">
-                        <span class="glyphicon glyphicon-user ">
-                        </span> &nbsp;
+              <div class="pull-left">
+                <form class="form-inline" action="">
+                  <input type="hidden" name="search" value="on"> </input>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-search">
+                        </i>
+                      </span>
+                      <input type="text" class="form-control" 
+                      name="search_nama" placeholder="Find Name..."
+                      value="{{Request::get('search_nama')}}">
+                    </div>
                   </div>
-                  <div class="caption text-center">
-                    <p> Customer </p>
+                  
+                  <div class="form-group">
+                    <select class="form-control" name="search_filter">
+                      <option value=""> Filter By </option>
+                    </select>
                   </div>
-                </a>
+
+                  <div class="form-group">
+                      <select class="form-control" name="search_order">
+                        <option value=""> Sort By </option>
+                      </select>
+                  </div>
+                
+                  <button type="submit" class="btn btn-info"> 
+                    Filter
+                  </button> 
+                </form>
               </div>
-            </div>
-
-            <div class="col-md-3">
-              <div class="thumbnail">
-                <a href="{{route('po.index')}}">
-
-                  <div class="icon_block">
-                        <span class="glyphicon glyphicon-user ">
-                        </span> &nbsp;
-                  </div>
-                  <div class="caption text-center">
-                    <p> PO </p>
-                  </div>
-                </a>
-              </div>
-            </div>
-
-            <div class="col-md-3">
-              <div class="thumbnail">
-                <a href="/w3images/nature.jpg">
-
-                  <div class="icon_block">
-                        <span class="glyphicon glyphicon-file">
-                        </span> &nbsp;
-                  </div>
-                  <div class="caption text-center">
-                    <p>Lorem ipsum...</p>
-                  </div>
-                </a>
-              </div>
-            </div>
+              <div class="clearfix"> </div>
 
 
-            <div class="col-md-3">
-              <div class="thumbnail">
-                <a href="/w3images/nature.jpg">
-
-                  <div class="icon_block">
-                        <span class="glyphicon glyphicon-file">
-                        </span> &nbsp;
-                  </div>
-                  <div class="caption text-center">
-                    <p>Lorem ipsum...</p>
-                  </div>
-                </a>
-              </div>
-            </div>
+              <table class="table table-bordered table-responsive">
+                <thead>
+                  <tr>
+                    <th> No </th>
+                    <th> customer </th>
+                    <th> internal </th>
+                    <th> external </th>
+                    <th style="min-width: 120px"> Action </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @if (count($data['po']) == 0 ) 
+                  <td colspan="10" class="text-center"> 
+                    No User Found! 
+                  </td>
+                  @else 
+                    @foreach($data['po'] as $key=>$val)
+                    <tr>
+                      <td>
+                        {{$key}}
+                      </td>
+                      <td>
+                        {{$val['customer_id']}}
+                      </td>
+                      <td>
+                        {{$val['internal_code']}}
+                      </td>
+                      <td>
+                        {{$val['external_code']}}
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                    @endforeach
+                  @endif
+                </tbody>
+              </table>
 
 
 
-            
-           
+          </div> <!-- col9 -->
 
-          </div>
         </div>
       </div>
-    
     </div> <!-- body-->
 
     <footer class="container-fluid">

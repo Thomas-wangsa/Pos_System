@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Http\Models\Category;
+use App\Http\Models\Customer;
+use App\Http\Models\PO;
 class POController extends Controller
 {
     /**
@@ -13,7 +15,13 @@ class POController extends Controller
      */
     public function index()
     {
-        //
+        $customer = Customer::all();
+        $category = Category::all();
+        $po = PO::all();
+        $data['category'] = $category;
+        $data['customer'] = $customer;
+        $data['po'] = $po;
+        return view('po/index',compact('data'));
     }
 
     /**
