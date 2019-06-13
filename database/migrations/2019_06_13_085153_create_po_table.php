@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCustomersTable extends Migration
+class CreatePoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,17 @@ class CreateCustomersTable extends Migration
      */
     public function up()
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('po', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('category');
-            $table->string('name');
-            $table->string('mobile')->nullable();
-            $table->string('owner')->nullable();
-            $table->string('adrress')->nullable();
+            $table->unsignedInteger('po_id');
+            $table->string('internal_code');
+            $table->string('external_code');
             $table->unsignedInteger('status');
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
             $table->uuid('uuid'); 
             $table->text('comment')->nullable();
-            $table->timestamp('relation_at')->nullable();
-            $table->timestamp('relation_end')->nullable();  
+            $table->timestamp('po_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -39,6 +36,6 @@ class CreateCustomersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('po');
     }
 }
