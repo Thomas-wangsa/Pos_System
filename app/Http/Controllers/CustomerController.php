@@ -44,7 +44,15 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $new_customer = new Customer;
+
+        $new_customer->category = $request->category;
+        $new_customer->name = $request->name;
+        $new_customer->uuid = "123456";
+        $new_customer->mobile = $request->mobile;
+
+        $new_customer->save();
+        return redirect()->route('customer.index');
     }
 
     /**
