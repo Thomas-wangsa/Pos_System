@@ -29,7 +29,11 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        $customer = Customer::all();
+        $category = Category::all();
+        $data['category'] = $category;
+        $data['customer'] = $customer;
+        return view('customer/create',compact('data'));
     }
 
     /**

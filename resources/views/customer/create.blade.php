@@ -120,16 +120,31 @@
           <div class="col-sm-9" style="padding-top: 20px">
             
           
-            <form action="{{route('user.store')}}" method="POST">
+            <form action="{{route('customer.store')}}" method="POST">
               {{ csrf_field() }}
+              <div class="form-group">
+                <label for="pwd"> Category : </label>
+                <input type="text" class="form-control" id="pwd"  name="category" required="">
+              </div>
+
+              <div class="form-group">
+              <label for="sel1">Category:</label>
+              <select class="form-control" id="sel1" name="category" required="">
+                <option> Select category </option>
+                @foreach($data['category'] as $key=>$val)
+                <option value="{{$val['id']}}"> {{$val['name']}} </option>
+                @endforeach
+              </select>
+            </div>
+
               <div class="form-group">
                 <label for="pwd"> Name : </label>
                 <input type="text" class="form-control" id="pwd"  name="name" required="">
               </div>
 
               <div class="form-group">
-                <label for="pwd">email :</label>
-                <input type="email" class="form-control" id="pwd"  name="email" required="">
+                <label for="pwd"> Mobile :</label>
+                <input type="text" class="form-control" id="pwd"  name="mobile" required="">
               </div>
               <div class="text-center">
                 <button type="submit" class="btn btn-primary btn-block">
