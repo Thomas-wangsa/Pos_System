@@ -15,10 +15,10 @@ class CreatePoTable extends Migration
     {
         Schema::create('po', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('po_id');
+            $table->unsignedInteger('customer_id');
             $table->string('internal_code');
             $table->string('external_code');
-            $table->unsignedInteger('status');
+            $table->unsignedInteger('status')->default(0);
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
             $table->uuid('uuid'); 

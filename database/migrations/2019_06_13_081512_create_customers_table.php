@@ -20,7 +20,7 @@ class CreateCustomersTable extends Migration
             $table->string('mobile')->nullable();
             $table->string('owner')->nullable();
             $table->string('adrress')->nullable();
-            $table->unsignedInteger('status');
+            $table->unsignedInteger('status')->default(0);
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
             $table->uuid('uuid'); 
