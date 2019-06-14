@@ -122,9 +122,9 @@
           
               <div style="margin-top: 15px">
                 <div class="pull-left">
-                  <a href="{{route('customer.create')}}">
+                  <a href="{{route('po.create')}}">
                     <button type="button" class="btn btn-md btn-primary">
-                      add new customers
+                      add new po
                     </button>
                   </a>
                 </div>
@@ -180,7 +180,7 @@
                 <tbody>
                   @if (count($data['po']) == 0 ) 
                   <td colspan="10" class="text-center"> 
-                    No User Found! 
+                    No PO Found! 
                   </td>
                   @else 
                     @foreach($data['po'] as $key=>$val)

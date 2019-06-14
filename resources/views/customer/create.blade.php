@@ -122,11 +122,7 @@
           
             <form action="{{route('customer.store')}}" method="POST">
               {{ csrf_field() }}
-              <div class="form-group">
-                <label for="pwd"> Category : </label>
-                <input type="text" class="form-control" id="pwd"  name="category" required="">
-              </div>
-
+  
               <div class="form-group">
               <label for="sel1">Category:</label>
               <select class="form-control" id="sel1" name="category" required="">

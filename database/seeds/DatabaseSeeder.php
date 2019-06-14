@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
                 // "name"=>"sir kat",
                 // "email"=>"katimin@indosatooredoo.com",
                 "password"=>bcrypt(123456),
+                "created_by"=>null,
+                "updated_by"=>null
             )
         );
 
@@ -33,9 +35,13 @@ class DatabaseSeeder extends Seeder
         $category_array = array(
             array(
                 "name"=>"sofa",
+                "created_by"=>1,
+                "updated_by"=>1
             ),
             array(
                 "name"=>"piring",
+                "created_by"=>1,
+                "updated_by"=>1
             )
         );
 

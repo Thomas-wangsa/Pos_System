@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\Request;
 use App\Http\Models\Category;
 use App\Http\Models\Customer;
@@ -15,10 +17,13 @@ class CustomerController extends Controller
      */
     public function index()
     {   
-        $customer = Customer::all();
+        $customers = Customer::leftjoin('category','category.id','=','customers.category_id')
+                    ->select('customers.*','category.name AS category_name')
+                    ->get();
+        // dd($customer);
         $category = Category::all();
         $data['category'] = $category;
-        $data['customer'] = $customer;
+        $data['customers'] = $customers;
         return view('customer/index',compact('data'));
     }
 
@@ -29,7 +34,10 @@ class CustomerController extends Controller
      */
     public function create()
     {
+        
+
         $customer = Customer::all();
+
         $category = Category::all();
         $data['category'] = $category;
         $data['customer'] = $customer;
@@ -46,11 +54,12 @@ class CustomerController extends Controller
     {
         $new_customer = new Customer;
 
-        $new_customer->category = $request->category;
+        $new_customer->category_id = $request->category;
         $new_customer->name = $request->name;
         $new_customer->uuid = "123456";
         $new_customer->mobile = $request->mobile;
-
+        $new_customer->created_by = Auth::user()->id;
+        $new_customer->updated_by = Auth::user()->id;
         $new_customer->save();
         return redirect()->route('customer.index');
     }

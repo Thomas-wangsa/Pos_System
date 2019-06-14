@@ -171,21 +171,25 @@
                 <thead>
                   <tr>
                     <th> No </th>
+                    <th> Category </th>
                     <th> Name </th>
                     <th> Mobile </th>
                     <th style="min-width: 120px"> Action </th>
                   </tr>
                 </thead>
                 <tbody>
-                  @if (count($data['customer']) == 0 ) 
+                  @if (count($data['customers']) == 0 ) 
                   <td colspan="10" class="text-center"> 
-                    No User Found! 
+                    No Customer Found! 
                   </td>
                   @else 
-                    @foreach($data['customer'] as $key=>$val)
+                    @foreach($data['customers'] as $key=>$val)
                     <tr>
                       <td>
                         {{$key}}
+                      </td>
+                      <td>
+                        {{$val['category_name']}}
                       </td>
                       <td>
                         {{$val['name']}}
