@@ -17,13 +17,13 @@ class CustomerController extends Controller
      */
     public function index()
     {   
-        $customers = Customer::leftjoin('category','category.id','=','customers.category_id')
-                    ->select('customers.*','category.name AS category_name')
+        $customer = Customer::leftjoin('category','category.id','=','customer.category_id')
+                    ->select('customer.*','category.name AS category_name')
                     ->get();
         // dd($customer);
         $category = Category::all();
         $data['category'] = $category;
-        $data['customers'] = $customers;
+        $data['customer'] = $customer;
         return view('customer/index',compact('data'));
     }
 

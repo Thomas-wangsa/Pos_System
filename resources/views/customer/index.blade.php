@@ -178,12 +178,12 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @if (count($data['customers']) == 0 ) 
+                  @if (count($data['customer']) == 0 ) 
                   <td colspan="10" class="text-center"> 
                     No Customer Found! 
                   </td>
                   @else 
-                    @foreach($data['customers'] as $key=>$val)
+                    @foreach($data['customer'] as $key=>$val)
                     <tr>
                       <td>
                         {{$key}}
