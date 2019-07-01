@@ -7,7 +7,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <meta name="author" content="thomas.wangsa@gmail.com">
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->

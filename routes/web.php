@@ -13,10 +13,14 @@
 
 Route::get('/', function () {
 	return redirect('login');
-    //return view('welcome');
 });
 
 Auth::routes();
+
+Route::get('/logout',function(){
+	Auth::guard()->logout();
+    return redirect('/login');
+});
 
 Route::get('/home', 'HomeController@index')->name('home');
 

@@ -18,8 +18,34 @@
             <li><a href="#">Page 3</a></li> 
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            
+            <li>
+              <a href="#" class="dropdown-toggle" 
+              data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
+                <span class="glyphicon glyphicon-user"></span> 
+                &nbsp;
+                {{ ucfirst(Auth::user()->name) }} 
+                &nbsp;&nbsp;<span class="caret"></span>
+              </a>
+
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="{{ route('logout') }}">
+                    <span class="glyphicon glyphicon-envelope"></span>
+                    Profile
+                  </a>
+
+                </li>
+                <li>
+                  <a href="{{ route('logout') }}">
+                    <span class="glyphicon glyphicon-edit"></span>
+                    Password
+                  </a>
+
+                </li>
+              </ul>
+            </li>
+            <li><a href="{{route('logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
           </ul>
         </div>
       </div>

@@ -106,7 +106,7 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
             <a href="#">
-              <span class="glyphicon glyphicon-pencil"
+              <span class="glyphicon glyphicon-edit"
               style="color:green;cursor:pointer" 
               title="edit {{$val['name']}}"
               >

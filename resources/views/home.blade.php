@@ -4,7 +4,6 @@
     <div class="col-md-3">
       <div class="thumbnail">
         <a href="{{route('user.index')}}">
-
           <div class="icon_block">
                 <span class="glyphicon glyphicon-user ">
                 </span> &nbsp;
@@ -67,13 +66,15 @@
         <a href="/w3images/nature.jpg">
 
           <div class="icon_block">
-                <span class="glyphicon glyphicon-file">
+                <span class="glyphicon glyphicon-cog">
                 </span> &nbsp;
           </div>
           <div class="caption text-center">
-            <p>Lorem ipsum...</p>
+            <p> Config </p>
           </div>
         </a>
       </div>
     </div>
+
+
 @endsection
