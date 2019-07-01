@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
-{
+{   
+    protected $faker;
+    protected $redirectTo      = 'user.index';
+    
+    public function __construct(){
+        $this->faker    = Faker::create();
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -40,11 +49,16 @@ class UserController extends Controller
         $new_user = new User;
 
         $new_user->name = $request->name;
-        $new_user->password = "123456";
         $new_user->email = $request->email;
+        $new_user->phone = $request->phone;
+        $new_user->role = $request->role;
+        $new_user->password = bcrypt($request->password);
+        $new_user->uuid  = $this->faker->uuid;
+        $new_user->created_by = Auth::user()->id;
+        $new_user->updated_by = Auth::user()->id;
 
         $new_user->save();
-        return redirect()->route('user.index');
+        return redirect()->route($this->redirectTo);
 
     }
 

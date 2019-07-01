@@ -14,9 +14,12 @@
 
 
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script> -->
+ <!--  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
+  <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
+  <script src="{{ asset('js/jquery.min.js') }}"></script>
+  <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 
 
 
@@ -59,6 +62,9 @@
     .icon_block span {
         font-size: 100px;
     }
+
+    th,td {text-align: center}
+    .table>tbody>tr>td,.table>thead>tr>th {vertical-align: middle}
   </style>
 </head>
 <body>

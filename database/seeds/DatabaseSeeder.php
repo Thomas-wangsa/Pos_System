@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
                 "email"=>"admin@gmail.com",
                 // "name"=>"sir kat",
                 // "email"=>"katimin@indosatooredoo.com",
+                "uuid"=>"20190701qrnaonfsjnf-gsgsgs-tnlyhl",
                 "password"=>bcrypt(123456),
                 "created_by"=>null,
                 "updated_by"=>null

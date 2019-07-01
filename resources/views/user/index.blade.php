@@ -5,14 +5,15 @@
     <div class="pull-left">
       <a href="{{route('user.create')}}">
         <button type="button" class="btn btn-md btn-primary">
-          add new user
+          <span class="glyphicon glyphicon-plus"></span>
+          New Users
         </button>
       </a>
     </div>
     <div class="clearfix"> </div>
   </div>
 
-  <div class="pull-left">
+  <div class="pull-left" style="margin: 10px auto">
     <form class="form-inline" action="">
       <input type="hidden" name="search" value="on"> </input>
       <div class="form-group">
@@ -47,13 +48,15 @@
   <div class="clearfix"> </div>
 
 
-  <table class="table table-bordered table-responsive">
+  <table class="table table-striped table-bordered table-responsive">
     <thead>
       <tr>
         <th> No </th>
         <th> Name </th>
         <th> Email </th>
-        <th style="min-width: 120px"> Action </th>
+        <th> Phone </th>
+        <th> Role </th>
+        <th> Action </th>
       </tr>
     </thead>
     <tbody>
@@ -65,7 +68,7 @@
         @foreach($data['users'] as $key=>$val)
         <tr>
           <td>
-            {{$key}}
+            {{$key+1}}
           </td>
           <td>
             {{$val['name']}}
@@ -74,6 +77,61 @@
             {{$val['email']}}
           </td>
           <td>
+            {{$val['phone']}}
+          </td>
+          <td>
+            @switch($val['role']) 
+              @case(1)
+                admin
+              @break
+              @case(2)
+                owner
+              @break
+              @case(3)
+                sales
+              @break
+              @default
+                -
+            @endswitch
+          </td>
+          <td>
+              
+            <a href="#">  
+              <span class="glyphicon glyphicon-file"
+              style="cursor:pointer" 
+              title="detail {{$val['name']}}" 
+              >
+              </span>
+            </a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <a href="#">
+              <span class="glyphicon glyphicon-pencil"
+              style="color:green;cursor:pointer" 
+              title="edit {{$val['name']}}"
+              >
+              </span>
+            </a> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            
+
+            <a href="#">
+              <span class="glyphicon glyphicon-trash"
+              style="color:red;cursor:pointer" 
+              title="remove {{$val['name']}}"  
+              >
+              </span>
+            </a> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <a href="#">
+              <span class="glyphicon glyphicon-cog"
+              style="color:black;cursor:pointer" 
+              title="setting {{$val['name']}}"  
+              >
+              </span>
+            </a> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           </td>
         </tr>
         @endforeach
