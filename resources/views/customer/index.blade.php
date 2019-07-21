@@ -52,10 +52,11 @@
     <thead>
       <tr>
         <th> No </th>
+        <th> Category </th>
+        <th> Sales </th>
         <th> Name </th>
-        <th> Email </th>
         <th> Phone </th>
-        <th> Role </th>
+        <th> Owner </th>
         <th> Action </th>
       </tr>
     </thead>
@@ -71,29 +72,21 @@
             {{$key+1}}
           </td>
           <td>
-            {{$val['name']}}
+            {{$val['category_name']}}
           </td>
           <td>
-            {{$val['email']}}
+            {{$val['sales_name']}}
+          </td>
+          <td>
+            {{$val['name']}}
           </td>
           <td>
             {{$val['phone']}}
           </td>
           <td>
-            @switch($val['role']) 
-              @case(1)
-                admin
-              @break
-              @case(2)
-                owner
-              @break
-              @case(3)
-                sales
-              @break
-              @default
-                -
-            @endswitch
+            {{$val['owner']}}
           </td>
+          
           <td>
               
             <a href="#">  
@@ -123,15 +116,7 @@
               </span>
             </a> 
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-            <a href="#">
-              <span class="glyphicon glyphicon-cog"
-              style="color:black;cursor:pointer" 
-              title="setting {{$val['name']}}"  
-              >
-              </span>
-            </a> 
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            
           </td>
         </tr>
         @endforeach

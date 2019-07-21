@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
+use App\User;
+
 use App\Http\Models\Category;
 use App\Http\Models\Customer;
 use Faker\Factory as Faker;
@@ -25,7 +27,8 @@ class CustomerController extends Controller
     public function index()
     {   
         $customer = Customer::leftjoin('category','category.id','=','customer.category_id')
-                    ->select('customer.*','category.name AS category_name')
+                    ->leftjoin('users','users.id','=','customer.sales_id')
+                    ->select('customer.*','category.name AS category_name','users.name AS sales_name')
                     ->get();
         // dd($customer);
         $category = Category::all();
@@ -41,10 +44,11 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        
+        $sales = User::where('role',3)->get();
         $category = Category::all();
         $data['category'] = $category;
         $data['faker'] = $this->faker;
+        $data['sales'] = $sales;
         return view('customer/create',compact('data'));
     }
 
@@ -55,13 +59,20 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
         $new_customer = new Customer;
 
         $new_customer->category_id = $request->category;
+        $new_customer->sales_id = $request->sales;
         $new_customer->name = $request->name;
+        
+        $new_customer->phone = $request->phone;
+        $new_customer->owner = $request->owner;
+        $new_customer->address = $request->address;
+        $new_customer->relation_at = $request->relation_at;
+        $new_customer->note = $request->note;
+
         $new_customer->uuid = $this->faker->uuid;
-        $new_customer->mobile = $request->mobile;
         $new_customer->created_by = Auth::user()->id;
         $new_customer->updated_by = Auth::user()->id;
         $new_customer->save();

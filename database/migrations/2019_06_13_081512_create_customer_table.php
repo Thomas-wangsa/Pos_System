@@ -16,17 +16,18 @@ class CreateCustomerTable extends Migration
         Schema::create('customer', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('category_id');
+            $table->unsignedInteger('sales_id')->nullable();
             $table->string('name');
-            $table->string('mobile')->nullable();
+            $table->string('phone')->nullable();
             $table->string('owner')->nullable();
-            $table->string('adrress')->nullable();
+            $table->text('address')->nullable();
             $table->unsignedInteger('status')->default(0);
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
             $table->uuid('uuid'); 
-            $table->text('comment')->nullable();
-            $table->timestamp('relation_at')->nullable();
-            $table->timestamp('relation_end')->nullable();  
+            $table->string('note')->nullable();
+            $table->date('relation_at')->nullable();
+            $table->date('relation_end')->nullable();  
             $table->timestamps();
             $table->softDeletes();
         });
