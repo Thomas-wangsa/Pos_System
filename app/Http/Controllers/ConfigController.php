@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Models\Category;
 use App\Http\Models\Driver;
 
 class ConfigController extends Controller
-{
+{   
+    protected $redirectTo = 'config';
     /**
      * Display a listing of the resource.
      *
@@ -68,7 +69,60 @@ class ConfigController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'config_main'  => 'required|max:30',
+            'config_additional'  => 'required|max:30',
+            'config_category'  => 'required|max:30',
+        ]);
+
+
+        switch ($request->config_category) {
+            case '1':
+                $data_exists = Category::where('name', $request->config_main)->first();
+
+                if($data_exists) {
+                    $request->session()->flash('alert-danger', "Data already exists in Group1 : $request->config_main");
+                    return redirect($this->redirectTo);
+                }
+
+
+                $data  = new Category;
+                $data->name      = $request->config_main;
+                $data->detail    = $request->config_additional;
+
+                break;
+            case '2':
+                $data_exists = Driver::where('name', $request->config_main)->first();
+
+                if($data_exists) {
+                    $request->session()->flash('alert-danger', "Data already exists in Group2 : $request->config_main");
+                    return redirect($this->redirectTo);
+                }
+
+
+                $data  = new Driver;
+                $data->name      = $request->config_main;
+                $data->detail    = $request->config_additional;
+
+                break;
+            default:
+                $request->session()->flash('alert-danger', "Out Of Scope Category value : $request->config_category");
+                return redirect($this->redirectTo);
+                break;
+        }
+
+        $data->created_by = Auth::user()->id;
+        $data->updated_by = Auth::user()->id;
+        $data->created_at = date('Y-m-d H:i:s');
+        $data->updated_at = date('Y-m-d H:i:s');
+
+        if($data->save()) {
+            $request->session()->flash('alert-success', "the $request->config_main have been added to category");
+        } else {
+            $request->session()->flash('alert-danger', "Data is not save, Please contact your administator");
+        }
+        
+        return redirect($this->redirectTo."?search=on&search_nama=&search_filter=".$request->config_category);
     }
 
     /**

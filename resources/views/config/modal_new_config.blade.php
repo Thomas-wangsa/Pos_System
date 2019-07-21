@@ -24,8 +24,6 @@
                   {{$key}}
                 </option>
               @endforeach
-
-                
             </select>
           </div>
 

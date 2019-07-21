@@ -89,7 +89,7 @@
                         <?php $val_name="name";$val_detail="detail";$category_value = "category";?>
                         @break
                     @case(2)
-                      <?php $val_name="group2_name";$val_detail="group2_detail";$category_value = "gedung";?>
+                      <?php $val_name="name";$val_detail="detail";$category_value = "driver";?>
                         @break
                     @default
                       @break
