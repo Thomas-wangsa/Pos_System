@@ -63,7 +63,7 @@
 
     <div class="col-md-3">
       <div class="thumbnail">
-        <a href="/w3images/nature.jpg">
+        <a href="{{route('config.index')}}">
 
           <div class="icon_block">
                 <span class="glyphicon glyphicon-cog">
