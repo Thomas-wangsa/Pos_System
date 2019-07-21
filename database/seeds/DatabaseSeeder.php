@@ -36,11 +36,13 @@ class DatabaseSeeder extends Seeder
         $category_array = array(
             array(
                 "name"=>"sofa",
+                "detail"=>"sofaku",
                 "created_by"=>1,
                 "updated_by"=>1
             ),
             array(
                 "name"=>"piring",
+                "detail"=>"kasurku",
                 "created_by"=>1,
                 "updated_by"=>1
             )
