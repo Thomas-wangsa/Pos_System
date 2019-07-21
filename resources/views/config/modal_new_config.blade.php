@@ -35,7 +35,7 @@
           <div class="form-group">
             <label for="staff_nama"> Additional information :</label>
             <input type="text" class="form-control" id="nama" required="" name="config_additional"
-            value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->name}} @endif">
+            value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->realText}} @endif">
           </div>
           
 				  <button type="submit" class="btn btn-block btn-warning"> 

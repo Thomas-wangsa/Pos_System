@@ -36,7 +36,7 @@
     <div class="form-group">
       <label for="pwd"> Customer Name : </label>
       <input type="text" class="form-control" id="pwd"  name="name" required=""
-      value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->name}} @endif">
+      value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->company}} @endif">
     </div>
 
     <div class="form-group">
@@ -61,14 +61,14 @@
     <div class="form-group">
       <label for="pwd"> Address : </label>
       <input type="text" class="form-control" id="pwd"  name="address"
-      value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->name}} @endif">
+      value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->address}} @endif">
     </div>
 
 
     <div class="form-group">
       <label for="pwd"> Additional Note : </label>
       <input type="text" class="form-control" id="pwd"  name="note"
-      value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->name}} @endif">
+      value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->text}} @endif">
     </div>
 
 
