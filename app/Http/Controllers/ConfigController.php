@@ -5,10 +5,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Models\Category;
 use App\Http\Models\Driver;
+use Faker\Factory as Faker;
 
 class ConfigController extends Controller
 {   
     protected $redirectTo = 'config';
+    protected $faker;
+
+    public function __construct(){
+        $this->faker    = Faker::create();
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -48,6 +55,7 @@ class ConfigController extends Controller
             $data['rows'] = $rows;
 
         }
+        $data['faker'] = $this->faker;
         return view('config/index',compact('data'));
     }
 

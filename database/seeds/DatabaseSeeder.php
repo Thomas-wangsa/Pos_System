@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 
 use App\User;
 use App\Http\Models\Category;
+use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,19 +14,40 @@ class DatabaseSeeder extends Seeder
      * @return void
      */
     public function run() {
+        $faker = Faker::create();
         // $this->call(UsersTableSeeder::class);
 
         $users_array = array(
             array(
                 "name"=>"superman",
                 "email"=>"admin@gmail.com",
-                // "name"=>"sir kat",
-                // "email"=>"katimin@indosatooredoo.com",
-                "uuid"=>"20190701qrnaonfsjnf-gsgsgs-tnlyhl",
+                "phone"=>$faker->phoneNumber,
+                "uuid"=>$faker->uuid,
                 "password"=>bcrypt(123456),
+                "role"=>2,
                 "created_by"=>null,
                 "updated_by"=>null
-            )
+            ),
+            array(
+                "name"=>$faker->name,
+                "email"=>"sales1@gmail.com",
+                "phone"=>$faker->phoneNumber,
+                "uuid"=>$faker->uuid,
+                "password"=>bcrypt(123456),
+                "role"=>3,
+                "created_by"=>null,
+                "updated_by"=>null
+            ),
+            array(
+                "name"=>$faker->name,
+                "email"=>"sales12@gmail.com",
+                "phone"=>$faker->phoneNumber,
+                "uuid"=>$faker->uuid,
+                "password"=>bcrypt(123456),
+                "role"=>3,
+                "created_by"=>null,
+                "updated_by"=>null
+            ),
         );
 
 

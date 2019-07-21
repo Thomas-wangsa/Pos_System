@@ -29,13 +29,13 @@
 
 				  <div class="form-group">
             <label for="staff_nama"> Name : </label>
-            <input type="text" class="form-control" id="nama" required="" 
-            name="config_main" value="">
+            <input type="text" class="form-control" id="nama" required="" name="config_main" 
+            value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->name}} @endif">
           </div>
           <div class="form-group">
             <label for="staff_nama"> Additional information :</label>
-            <input type="text" class="form-control" id="nama" required="" 
-            name="config_additional" value="">
+            <input type="text" class="form-control" id="nama" required="" name="config_additional"
+            value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->name}} @endif">
           </div>
           
 				  <button type="submit" class="btn btn-block btn-warning"> 

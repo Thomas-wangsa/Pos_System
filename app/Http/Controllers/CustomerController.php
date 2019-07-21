@@ -7,9 +7,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Models\Category;
 use App\Http\Models\Customer;
-
+use Faker\Factory as Faker;
 class CustomerController extends Controller
-{
+{   
+    protected $faker;
+    protected $redirectTo      = 'customer.index';
+
+    public function __construct(){
+        $this->faker    = Faker::create();
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -35,12 +42,9 @@ class CustomerController extends Controller
     public function create()
     {
         
-
-        $customer = Customer::all();
-
         $category = Category::all();
         $data['category'] = $category;
-        $data['customer'] = $customer;
+        $data['faker'] = $this->faker;
         return view('customer/create',compact('data'));
     }
 
@@ -56,12 +60,12 @@ class CustomerController extends Controller
 
         $new_customer->category_id = $request->category;
         $new_customer->name = $request->name;
-        $new_customer->uuid = "123456";
+        $new_customer->uuid = $this->faker->uuid;
         $new_customer->mobile = $request->mobile;
         $new_customer->created_by = Auth::user()->id;
         $new_customer->updated_by = Auth::user()->id;
         $new_customer->save();
-        return redirect()->route('customer.index');
+        return redirect()->route($this->redirectTo);
     }
 
     /**

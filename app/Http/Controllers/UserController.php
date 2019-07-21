@@ -11,7 +11,7 @@ class UserController extends Controller
 {   
     protected $faker;
     protected $redirectTo      = 'user.index';
-    
+
     public function __construct(){
         $this->faker    = Faker::create();
 
@@ -34,8 +34,9 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        return view('user/create');
+    {   
+        $data['faker'] = $this->faker;
+        return view('user/create',compact('data'));
     }
 
     /**
@@ -46,7 +47,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {   
-        $new_user = new User;
+        $new_user = new User;   
 
         $new_user->name = $request->name;
         $new_user->email = $request->email;
