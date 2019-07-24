@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePoTable extends Migration
+class CreateSubPoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreatePoTable extends Migration
      */
     public function up()
     {
-        Schema::create('po', function (Blueprint $table) {
+        Schema::create('sub_po', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('customer_id');
-            $table->string('po_name');
+            $table->unsignedInteger('po_id');
+            $table->unsignedInteger('quantity');
+            $table->string('name');
+            $table->unsignedInteger('price');
             $table->unsignedInteger('status')->default(1);
             $table->uuid('uuid'); 
             $table->text('note')->nullable();
-            $table->timestamp('po_date')->nullable();
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
             $table->timestamps();
@@ -35,6 +36,6 @@ class CreatePoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('po');
+        Schema::dropIfExists('sub_po');
     }
 }
