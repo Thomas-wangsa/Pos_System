@@ -20,8 +20,7 @@
 
       <!-- modal body-->
       <div class="modal-body">
-        <form method="GET" action="">
-          {{ csrf_field() }}
+        <form method="GET" action="{{route('po.create')}}">
           
           <div class="form-group">
             <label for="staff_nama"> 
@@ -39,7 +38,7 @@
             <label for="staff_nama"> 
               Customers :
             </label>
-            <select class="form-control" id="customer_uuid">
+            <select class="form-control" id="customer_uuid" name="customer_uuid">
               <option value=""> Select Customer </option>
             </select>
           </div>
@@ -86,8 +85,20 @@
       url: " {{ route('customer.get_customer_by_category_id') }}",
       contentType: "application/json",
       data : JSON.stringify(data),
-      success: function(result) { 
-        alert(result);
+      success: function(result) {
+        response = JSON.parse(result);
+        if(response.error == true) {
+          alert(response.messages);
+        } else { 
+          
+          $.each(response.data, function(key, value) { 
+            $('#customer_uuid')
+              .append($("<option></option>")
+              .attr("value",value.uuid)
+              .text(value.name)
+            );
+          });
+        } 
       }
     });
 

@@ -130,18 +130,23 @@ class CustomerController extends Controller
 
         //trigger exception in a "try" block
         try {
-          $Category_id = $request->category_id;
-          //If the exception is thrown, this text will not be shown
+            $category_id = $request->category_id;
+            $customer_data = Customer::where('category_id',$category_id)
+                            ->select('uuid','name')->get();
 
+            if(count($customer_data) > 0) {
+                $response['data'] = $customer_data;
+                $response['error'] = False;
+                return json_encode($response);
+            }
+
+            $response['messages'] = "no data found!";
+            return json_encode($response);
         }
-
         //catch exception
         catch(Exception $e) {
             $response['messages'] = $e->getMessage();
             return json_encode($response);
         }
-
-
-        return json_encode($response);
     }   
 } 

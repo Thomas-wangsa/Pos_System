@@ -30,9 +30,11 @@ class POController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $customer = Customer::where('uuid',$request->customer_uuid)->first();
+
+        dd($customer);
     }
 
     /**
