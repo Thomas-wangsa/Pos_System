@@ -52,9 +52,9 @@
     <thead>
       <tr>
         <th> No </th>
+        <th> Name </th>
         <th> Category </th>
         <th> Sales </th>
-        <th> Name </th>
         <th> Phone </th>
         <th> Owner </th>
         <th> Action </th>
@@ -72,14 +72,15 @@
             {{$key+1}}
           </td>
           <td>
+            {{$val['name']}}
+          </td>
+          <td>
             {{$val['category_name']}}
           </td>
           <td>
             {{$val['sales_name']}}
           </td>
-          <td>
-            {{$val['name']}}
-          </td>
+          
           <td>
             {{$val['phone']}}
           </td>

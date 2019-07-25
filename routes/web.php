@@ -30,3 +30,4 @@ Route::resource('/customer', 'CustomerController');
 Route::resource('/po', 'POController');
 Route::resource('/config', 'ConfigController');
 
+Route::post('ajax/get_customer_by_category_id','CustomerController@get_customer_by_category_id')->name('customer.get_customer_by_category_id');

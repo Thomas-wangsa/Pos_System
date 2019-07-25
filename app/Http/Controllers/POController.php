@@ -15,12 +15,13 @@ class POController extends Controller
      */
     public function index()
     {
-        $customer = Customer::all();
+        //$customer = Customer::all();
         $category = Category::all();
         $po = PO::all();
         $data['category'] = $category;
-        $data['customer'] = $customer;
+        //$data['customer'] = $customer;
         $data['po'] = $po;
+        //dd($data);
         return view('po/index',compact('data'));
     }
 

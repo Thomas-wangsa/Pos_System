@@ -123,4 +123,25 @@ class CustomerController extends Controller
     {
         //
     }
-}
+
+
+    public function get_customer_by_category_id(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        //trigger exception in a "try" block
+        try {
+          $Category_id = $request->category_id;
+          //If the exception is thrown, this text will not be shown
+
+        }
+
+        //catch exception
+        catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+
+
+        return json_encode($response);
+    }   
+} 

@@ -74,8 +74,14 @@ class DatabaseSeeder extends Seeder
                 "updated_by"=>1
             ),
             array(
+                "name"=>"kasur",
+                "detail"=>"kasur",
+                "created_by"=>1,
+                "updated_by"=>1
+            ),
+            array(
                 "name"=>"piring",
-                "detail"=>"kasurku",
+                "detail"=>"piring",
                 "created_by"=>1,
                 "updated_by"=>1
             )
@@ -90,9 +96,9 @@ class DatabaseSeeder extends Seeder
         $full_data = array();
         for($i=0;$i<=30;$i++) { 
             $customer_array = array(
-                "category_id"=>$faker->numberBetween(1,2),
+                "category_id"=>$faker->numberBetween(1,3),
                 "sales_id"=>$faker->numberBetween(2,4),
-                "name"=>$faker->name,
+                "name"=>$faker->company,
                 "phone"=>$faker->phoneNumber,
                 "owner"=>$faker->name,
                 "address"=>$faker->address,
