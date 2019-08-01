@@ -68,7 +68,11 @@
 <script type="text/javascript">
   $('#select_category').change(function(){
     category_id = $('#select_category').val();
-
+    $('#customer_uuid').empty().append(
+      $("<option></option>")
+      .attr("value","")
+      .text("Select Customer")
+    );
     var data = {
       "category_id":category_id
     };

@@ -6,8 +6,18 @@ use Illuminate\Http\Request;
 use App\Http\Models\Category;
 use App\Http\Models\Customer;
 use App\Http\Models\PO;
+use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Auth;
+
 class POController extends Controller
-{
+{   
+    protected $faker;
+    protected $redirectTo      = 'po.index';
+
+    public function __construct(){
+        $this->faker    = Faker::create();
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +44,11 @@ class POController extends Controller
     {
         $customer = Customer::where('uuid',$request->customer_uuid)->first();
 
-        dd($customer);
+
+        $data['customer'] = $customer;
+
+        // dd($customer);
+        return view('po/create',compact('data')); 
     }
 
     /**
@@ -44,8 +58,21 @@ class POController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {   
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+        $customer = Customer::where('uuid',$request->customer_uuid)->first();
+
+        $po = new PO;
+        $po->customer_id = $customer->id;
+        $po->name = $request->po['po_name'];
+        $po->date = $request->po['po_date'];
+        $po->note = $request->po['po_note'];
+        $po->uuid = $this->faker->uuid;
+        $po->created_by = Auth::user()->id;
+        $po->updated_by = Auth::user()->id;
+        $po->save();
+        // return view('po/create',compact('data')); 
+        dd($request->po);
     }
 
     /**

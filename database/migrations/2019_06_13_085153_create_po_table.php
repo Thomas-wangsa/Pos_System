@@ -16,11 +16,11 @@ class CreatePoTable extends Migration
         Schema::create('po', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('customer_id');
-            $table->string('po_name');
+            $table->string('name');
             $table->unsignedInteger('status')->default(1);
             $table->uuid('uuid'); 
             $table->text('note')->nullable();
-            $table->timestamp('po_date')->nullable();
+            $table->timestamp('date')->nullable();
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
             $table->timestamps();
