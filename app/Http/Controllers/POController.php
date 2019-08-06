@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Models\Category;
 use App\Http\Models\Customer;
 use App\Http\Models\PO;
+use App\Http\Models\SubPO;
+
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Auth;
 
@@ -72,7 +74,29 @@ class POController extends Controller
         $po->updated_by = Auth::user()->id;
         $po->save();
         // return view('po/create',compact('data')); 
-        dd($request->po);
+        // dd($request->subData);
+
+        $full_data = array();
+        for($i=0;$i<count($request->subData);$i++) { 
+            $customer_array = array(
+                "po_id"=>$po->id,
+                "quantity"=>$request->subData[$i]['quantity'],
+                "name"=>$request->subData[$i]['name'],
+                "price"=>$request->subData[$i]['price'],
+                "status"=>$request->subData[$i]['status'],
+                "note"=>$request->subData[$i]['note'],
+                "uuid"=>$this->faker->uuid,
+                "created_by"=>Auth::user()->id,
+                "updated_by"=>Auth::user()->id,
+            );
+
+            array_push($full_data,$customer_array);
+
+        }
+        SubPO::insert($full_data);
+
+        $response['error'] = false;
+        return json_encode($response);
     }
 
     /**

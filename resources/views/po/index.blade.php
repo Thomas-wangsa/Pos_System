@@ -50,16 +50,46 @@
     <thead>
       <tr>
         <th> No </th>
-        <th> Category </th>
-        <th> Sales </th>
+        <th> Customer </th>
         <th> Name </th>
-        <th> Phone </th>
-        <th> Owner </th>
+        <th> Date </th>
+        <th> Status </th>
+        <th> Note </th>
         <th> Action </th>
       </tr>
     </thead>
     <tbody>
-      
+       @if (count($data['po']) == 0 ) 
+      <td colspan="10" class="text-center"> 
+        No PO Found! 
+      </td>
+      @else 
+        @foreach($data['po'] as $key=>$val)
+        <tr>
+          <td>
+            {{$key+1}}
+          </td>
+          <td>
+            {{$val['customer_id']}}
+          </td>
+          <td>
+            {{$val['name']}}
+          </td>
+          <td>
+            {{$val['date']}}
+          </td>
+          <td>
+            {{$val['status']}}
+          </td>
+          <td>
+            {{$val['note']}}
+          </td>
+          <td>
+            
+          </td>
+        </tr>
+        @endforeach
+      @endif
     </tbody>
   </table>
 

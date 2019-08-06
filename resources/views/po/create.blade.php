@@ -76,17 +76,17 @@
 <script type="text/javascript">
 
 $('#save_po_btn').hide();
-no_rows = 1;
+no_rows = 0;
 function add_po_rows() {
 	po_tbody = $('#po_tbody');
 
 	append_rows = "<tr> " +
-		"<td> " + no_rows +" </td>" +  
+		"<td> " + (no_rows+1) +" </td>" +  
 		'<td> <input type="text" class="form-control" id="name'+no_rows+'">  </td>' +
 		'<td> <input type="number" class="form-control" id="quantity'+no_rows+'" value="1"> </td>' +
 		'<td> <input type="number" class="form-control" id="price'+no_rows+'"> </td>' + 
 		'<td>' + 
-		'<select class="form-control">'+
+		'<select class="form-control" id="status'+no_rows+'">'+
 			'<option value="1"> urgent </option>' +
 			'<option value="2" selected> normal </option>' +
 			'<option value="3"> low </option>' +
@@ -114,9 +114,23 @@ function save_po_btn() {
 		"po_note":po_note
 	};
 
+	var subData = [];
+	for (i = 0; i < no_rows; i++) {
+
+		quantityValue = $('#quantity'+i).val();
+		nameValue = $('#name'+i).val();
+		priceValue = $('#price'+i).val();
+		statusValue = $('#status'+i).val();
+		noteValue = $('#note'+i).val();
+		var data = {quantity:quantityValue, name:nameValue, price:priceValue,status:statusValue,note:noteValue};
+		subData.push(data);
+
+	}
+
 	data = {
 		"customer_uuid": "{{ app('request')->input('customer_uuid') }}", 
-		"po":po
+		"po":po,
+		"subData":subData
 	}
 
 
@@ -133,11 +147,18 @@ function save_po_btn() {
       contentType: "application/json",
       data : JSON.stringify(data),
       success: function(result) {
-        alert(result);
+        response = JSON.parse(result);
+		//console.log(response);
+		if(response.error == true) {
+			alert(response.message); 
+		} else {
+			alert("set location success!");
+			var url = "{{route('po.index')}}";
+			window.location = url;
+		}
       }
     });
 
-	alert(po_name);
 }
 </script>
   
