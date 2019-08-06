@@ -88,6 +88,8 @@ class POController extends Controller
                 "uuid"=>$this->faker->uuid,
                 "created_by"=>Auth::user()->id,
                 "updated_by"=>Auth::user()->id,
+                "created_at"=>date("Y-m-d H:i:s"),
+                "updated_at"=>date("Y-m-d H:i:s"), 
             );
 
             array_push($full_data,$customer_array);

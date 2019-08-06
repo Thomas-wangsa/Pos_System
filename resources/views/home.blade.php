@@ -35,11 +35,27 @@
         <a href="{{route('po.index')}}">
 
           <div class="icon_block">
-                <span class="glyphicon glyphicon-user ">
+                <span class="glyphicon glyphicon-file ">
                 </span> &nbsp;
           </div>
           <div class="caption text-center">
             <p> PO </p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+
+    <div class="col-md-3">
+      <div class="thumbnail">
+        <a href="{{route('do.index')}}">
+
+          <div class="icon_block">
+                <span class="glyphicon glyphicon-file ">
+                </span> &nbsp;
+          </div>
+          <div class="caption text-center">
+            <p> DO </p>
           </div>
         </a>
       </div>

@@ -28,6 +28,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('/user', 'UserController');
 Route::resource('/customer', 'CustomerController');
 Route::resource('/po', 'POController');
+Route::resource('/do', 'DOController');
+
 Route::resource('/config', 'ConfigController');
 
 Route::post('ajax/get_customer_by_category_id','CustomerController@get_customer_by_category_id')->name('customer.get_customer_by_category_id');
