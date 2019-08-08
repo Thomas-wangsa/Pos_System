@@ -5,6 +5,10 @@ use Illuminate\Database\Seeder;
 use App\User;
 use App\Http\Models\Category;
 use App\Http\Models\Customer;
+use App\Http\Models\PO;
+use App\Http\Models\SubPO;
+
+use App\Http\Models\PO_Status;
 use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
@@ -94,7 +98,7 @@ class DatabaseSeeder extends Seeder
 
 
         $full_data = array();
-        for($i=0;$i<=30;$i++) { 
+        for($i=0;$i<=15;$i++) { 
             $customer_array = array(
                 "category_id"=>$faker->numberBetween(1,3),
                 "sales_id"=>$faker->numberBetween(2,4),
@@ -115,5 +119,62 @@ class DatabaseSeeder extends Seeder
 
         }
         Customer::insert($full_data);
+
+        $po_data = array();
+        for($i=0;$i<15;$i++) { 
+            
+            $po = new PO;
+            $po->customer_id = $faker->numberBetween(1,15);
+            $po->sales_id = $faker->numberBetween(2,4);
+            $po->number = $faker->randomDigitNotNull();
+            $po->date = date("Y-m-d H:i:s");
+            $po->note = $faker->text;
+            $po->uuid = $faker->uuid;
+            $po->created_by = 1;
+            $po->updated_by = 1;
+            $po->save();
+
+            $sub_po_qty = $faker->numberBetween(1,10);
+
+            $sub_po_data = array();
+            for($j=0;$j<=$sub_po_qty;$j++) {
+                $sub_po_array = array(
+                "po_id"=>$po->id,
+                "quantity"=>$faker->numberBetween(1,1000),
+                "name"=>$faker->name,
+                "price"=>$faker->numberBetween(10000,1000000),
+                "status"=>1,
+                "note"=>$faker->text,
+                "uuid"=>$faker->uuid,
+                "created_by"=>1,
+                "updated_by"=>1,
+                );
+
+                array_push($sub_po_data,$sub_po_array);
+            }
+            SubPO::insert($sub_po_data);
+        }
+
+
+
+        $po_status_array = array(
+            array(
+                "name"=>"active",
+                "color"=>"black",
+            ),
+            array(
+                "name"=>"cancel",
+                "color"=>"red",
+            ),
+            array(
+                "name"=>"closed",
+                "color"=>"black",
+            )
+        );
+
+
+        foreach ($po_status_array as $key => $value) {
+            PO_Status::firstOrCreate($value);       
+        }
     }
 }

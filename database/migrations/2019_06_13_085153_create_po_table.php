@@ -16,7 +16,8 @@ class CreatePoTable extends Migration
         Schema::create('po', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('customer_id');
-            $table->string('name');
+            $table->unsignedInteger('sales_id')->nullable();
+            $table->string('number');
             $table->unsignedInteger('status')->default(1);
             $table->uuid('uuid'); 
             $table->text('note')->nullable();

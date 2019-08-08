@@ -66,7 +66,8 @@ class POController extends Controller
 
         $po = new PO;
         $po->customer_id = $customer->id;
-        $po->name = $request->po['po_name'];
+        $po->sales_id = $customer->sales_id;
+        $po->number = $request->po['po_name'];
         $po->date = $request->po['po_date'];
         $po->note = $request->po['po_note'];
         $po->uuid = $this->faker->uuid;
@@ -78,7 +79,7 @@ class POController extends Controller
 
         $full_data = array();
         for($i=0;$i<count($request->subData);$i++) { 
-            $customer_array = array(
+            $sub_po_array = array(
                 "po_id"=>$po->id,
                 "quantity"=>$request->subData[$i]['quantity'],
                 "name"=>$request->subData[$i]['name'],
@@ -92,7 +93,7 @@ class POController extends Controller
                 "updated_at"=>date("Y-m-d H:i:s"), 
             );
 
-            array_push($full_data,$customer_array);
+            array_push($full_data,$sub_po_array);
 
         }
         SubPO::insert($full_data);
