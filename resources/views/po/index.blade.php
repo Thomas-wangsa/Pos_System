@@ -51,6 +51,7 @@
       <tr>
         <th> No </th>
         <th> Customer </th>
+        <th> Sales </th>
         <th> Name </th>
         <th> Date </th>
         <th> Status </th>
@@ -73,7 +74,10 @@
             {{$val['customer_id']}}
           </td>
           <td>
-            {{$val['name']}}
+            {{$val['sales_id']}}
+          </td>
+          <td>
+            {{$val['number']}}
           </td>
           <td>
             {{$val['date']}}

@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('phone',100)->nullable();
             $table->unsignedTinyInteger('role')->default(1);   
             $table->string('password');
-            $table->uuid('uuid'); 
+            $table->string('uuid',100)->unique(); 
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
             $table->rememberToken();

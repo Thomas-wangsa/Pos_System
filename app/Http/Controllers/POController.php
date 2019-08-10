@@ -70,7 +70,7 @@ class POController extends Controller
         $po->number = $request->po['po_name'];
         $po->date = $request->po['po_date'];
         $po->note = $request->po['po_note'];
-        $po->uuid = $this->faker->uuid;
+        $po->uuid = $customer->id."-".time()."-".$this->faker->uuid;
         $po->created_by = Auth::user()->id;
         $po->updated_by = Auth::user()->id;
         $po->save();
@@ -86,7 +86,7 @@ class POController extends Controller
                 "price"=>$request->subData[$i]['price'],
                 "status"=>$request->subData[$i]['status'],
                 "note"=>$request->subData[$i]['note'],
-                "uuid"=>$this->faker->uuid,
+                "uuid"=>$po->id."-".time()."-".$this->faker->uuid,
                 "created_by"=>Auth::user()->id,
                 "updated_by"=>Auth::user()->id,
                 "created_at"=>date("Y-m-d H:i:s"),
@@ -146,4 +146,30 @@ class POController extends Controller
     {
         //
     }
+
+
+    public function get_po_by_customer_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        //trigger exception in a "try" block
+        try {
+            $category_id = $request->category_id;
+            $customer_data = Customer::where('category_id',$category_id)
+                            ->select('uuid','name')->get();
+
+            if(count($customer_data) > 0) {
+                $response['data'] = $customer_data;
+                $response['error'] = False;
+                return json_encode($response);
+            }
+
+            $response['messages'] = "no data found!";
+            return json_encode($response);
+        }
+        //catch exception
+        catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+    } 
 }

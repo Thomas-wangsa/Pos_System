@@ -3,9 +3,9 @@
 @section('content')
   <div style="margin-top: 15px">
     <div class="pull-left">
-      <button type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target="#modal_select_customer">
+      <button type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target="#modal_select_po">
         <span class="glyphicon glyphicon-plus"></span>
-        New PO
+        New Delivery_Order
       </button>
     </div>
     <div class="clearfix"> </div>
@@ -51,7 +51,7 @@
       <tr>
         <th> No </th>
         <th> Customer </th>
-        <th> Name </th>
+        <th> Number </th>
         <th> Date </th>
         <th> Status </th>
         <th> Note </th>
@@ -61,12 +61,12 @@
     <tbody>
        @if (count($data['do']) == 0 ) 
       <td colspan="10" class="text-center"> 
-        No PO Found! 
+        No DO Found! 
       </td>
       @else
       @endif
     </tbody>
   </table>
 
-  @include('po.modal_select_customer')
+  @include('do.modal_select_po')
 @endsection

@@ -54,7 +54,7 @@ class UserController extends Controller
         $new_user->phone = $request->phone;
         $new_user->role = $request->role;
         $new_user->password = bcrypt($request->password);
-        $new_user->uuid  = $this->faker->uuid;
+        $new_user->uuid  = time()."-".$this->faker->uuid;
         $new_user->created_by = Auth::user()->id;
         $new_user->updated_by = Auth::user()->id;
 

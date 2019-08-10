@@ -72,7 +72,7 @@ class CustomerController extends Controller
         $new_customer->relation_at = $request->relation_at;
         $new_customer->note = $request->note;
 
-        $new_customer->uuid = $this->faker->uuid;
+        $new_customer->uuid = time()."-".$this->faker->uuid;
         $new_customer->created_by = Auth::user()->id;
         $new_customer->updated_by = Auth::user()->id;
         $new_customer->save();
@@ -131,11 +131,11 @@ class CustomerController extends Controller
         //trigger exception in a "try" block
         try {
             $category_id = $request->category_id;
-            $customer_data = Customer::where('category_id',$category_id)
+            $data = Customer::where('category_id',$category_id)
                             ->select('uuid','name')->get();
 
-            if(count($customer_data) > 0) {
-                $response['data'] = $customer_data;
+            if(count($data) > 0) {
+                $response['data'] = $data;
                 $response['error'] = False;
                 return json_encode($response);
             }

@@ -18,7 +18,7 @@ class CreateTableDeliveryOrder extends Migration
             $table->unsignedInteger('po_id');
             $table->string('number');
             $table->unsignedInteger('status')->default(1);
-            $table->uuid('uuid'); 
+            $table->string('uuid',100)->unique(); 
             $table->text('note')->nullable();
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');

@@ -19,7 +19,7 @@ class CreateTableSubDeliveryOrder extends Migration
             $table->unsignedInteger('quantity');
             $table->string('name');
             $table->unsignedInteger('status')->default(1);
-            $table->uuid('uuid'); 
+            $table->string('uuid',100)->unique(); 
             $table->text('note')->nullable();
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');

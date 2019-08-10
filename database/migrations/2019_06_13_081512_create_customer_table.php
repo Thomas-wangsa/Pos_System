@@ -24,7 +24,7 @@ class CreateCustomerTable extends Migration
             $table->unsignedInteger('status')->default(1);
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
-            $table->uuid('uuid'); 
+            $table->string('uuid',100)->unique(); 
             $table->string('note')->nullable();
             $table->date('relation_at')->nullable();
             $table->date('relation_end')->nullable();  
