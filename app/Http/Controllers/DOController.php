@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Models\Category;
+use App\Http\Models\PO;
+use App\Http\Models\SubPO;
+use App\Http\Models\Driver;
+
 use App\Http\Models\Delivery_Order;
 
 use Faker\Factory as Faker;
@@ -39,9 +43,20 @@ class DOController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create(Request $request)
+    {   
+        $po = PO::where('uuid',$request->po_uuid)->first();
+
+
+        $sub_po = SubPO::where('po_id',$po->id)->get();
+        //$customer = Customer::all();
+        $data['po'] = $po;
+        $data['sub_po'] = $sub_po;
+        $data['do'] = Delivery_Order::all();
+        $data['driver'] = Driver::all();
+        //$data['customer'] = $customer;
+        //dd($data);
+        return view('do/create',compact('data'));
     }
 
     /**

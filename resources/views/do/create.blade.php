@@ -5,7 +5,7 @@
 </style>
 	
 	<div style="margin: 10px auto">
-	    <a href="{{route('po.index')}}">
+	    <a href="{{route('do.index')}}">
 	      <button type="button" class="btn btn-md btn-warning">
 	        <span class="glyphicon glyphicon-chevron-left "></span>
 	        Back
@@ -16,19 +16,40 @@
 
 	<div class="main_section">	
 		
+
+
 		<div class="main_section_information" style="margin-bottom: 10px">
-			<strong> Category : </strong> {{$data['customer']->category_id}} 
+			<strong> Customer Name : </strong> -
 			<br/>
-			<strong> Customer Name : </strong> {{$data['customer']->name}} 
+			<strong> PO Number : </strong> {{$data['po']->number}} 
 			<br/>
-			<strong> Sales ID : </strong> {{$data['customer']->sales_id}} 
+			<strong> Sales ID : </strong> {{$data['po']->sales_id}} 
 			<br/>
 		</div>
 
 
+		<form class="form-inline" action="">
+		      
+		      <div class="form-group">
+		      	<label for="po_name"> Driver : </label>
+		        <select class="form-control" name="search_filter">
+		          <option value=""> Select Driver </option>
+		          @if (count($data['driver']) > 0 )
+		          	@foreach($data['driver'] as $key=>$val)
+		          	<option value="{{$val->id}}"> {{$val->name}} </option>
+		          	@endforeach
+		          @endif 
+		        </select>
+		      </div>
+		    
+		      <button type="submit" class="btn btn-primary"> 
+		        Submit
+		      </button> 
+		 </form>
+
 		<form class="form-inline" action="/action_page.php">
 		  <div class="form-group">
-		    <label for="po_name"> PO Name : </label>
+		    <label for="po_name"> Delivery_order Number : </label>
 		    <input type="text" class="form-control" id="po_name" name="po_name">
 		  </div>
 		  &nbsp;&nbsp;&nbsp;
@@ -47,7 +68,7 @@
 		<div style="margin: 10px auto">
 	      <button type="button" class="btn btn-md btn-primary" onclick="add_po_rows()">
 	        <span class="glyphicon glyphicon-plus"></span>
-	        Add PO Detail
+	        Add DO Detail
 	      </button>
 		 </div>
 
@@ -58,7 +79,6 @@
 						<th> No </th>
 						<th width="100px"> Quantity </th>
 						<th> Name </th>
-						<th width="150px"> Price </th>
 						<th> Status </th>
 						<th> Additional Note </th>
 					</tr>
@@ -84,8 +104,14 @@ function add_po_rows() {
 	append_rows = "<tr> " +
 		"<td> " + (no_rows+1) +" </td>" +  
 		'<td> <input type="number" class="form-control" id="quantity'+no_rows+'" value="1"> </td>' +
-		'<td> <input type="text" class="form-control" id="name'+no_rows+'">  </td>' +
-		'<td> <input type="number" class="form-control" id="price'+no_rows+'"> </td>' + 
+
+		'<td>' + 
+		'<select class="form-control" id="name'+no_rows+'">'+
+			'<option value=""> select name </option>' +
+		'</select>' + 
+		'</td>' + 
+
+		
 		'<td>' + 
 		'<select class="form-control" id="status'+no_rows+'">'+
 			'<option value="1"> urgent </option>' +
@@ -97,11 +123,23 @@ function add_po_rows() {
 				  "<tr> ";
 
 	po_tbody.append(append_rows);
+	generate_sub_po_name(no_rows);
 	no_rows++;
+	
 	$('#save_po_btn').show();
 }
 
 
+
+function generate_sub_po_name(no_rows) {
+	data = <?php echo $data['sub_po'];?> ;
+
+	po_tbody = $('#name'+no_rows);
+	$.each(data, function(key, value) { 
+        append_rows = '<option value="'+value.id+'"> '+value.name+' </option>';
+        po_tbody.append(append_rows);
+    });
+}
 
 function save_po_btn() {
 	po_name = $('#po_name').val();

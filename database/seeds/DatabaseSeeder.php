@@ -141,7 +141,7 @@ class DatabaseSeeder extends Seeder
                 $sub_po_array = array(
                 "po_id"=>$po->id,
                 "quantity"=>$faker->numberBetween(1,1000),
-                "name"=>$faker->name,
+                "name"=>$faker->swiftBicNumber,
                 "price"=>$faker->numberBetween(10000,1000000),
                 "status"=>1,
                 "note"=>$faker->text,
@@ -176,5 +176,9 @@ class DatabaseSeeder extends Seeder
         foreach ($po_status_array as $key => $value) {
             PO_Status::firstOrCreate($value);       
         }
+
+
+
+        $driver_array = array();
     }
 }

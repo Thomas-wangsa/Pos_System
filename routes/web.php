@@ -33,3 +33,4 @@ Route::resource('/do', 'DOController');
 Route::resource('/config', 'ConfigController');
 
 Route::post('ajax/get_customer_by_category_id','CustomerController@get_customer_by_category_id')->name('customer.get_customer_by_category_id');
+Route::post('ajax/get_po_by_customer_uuid','POController@get_po_by_customer_uuid')->name('po.get_po_by_customer_uuid');

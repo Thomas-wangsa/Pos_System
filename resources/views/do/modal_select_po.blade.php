@@ -123,6 +123,45 @@
   });
 
 
+
+
+
+  $('#customer_uuid').change(function(){
+    customer_uuid = $('#customer_uuid').val();
+    $('#po_uuid').empty().append(
+      $("<option></option>")
+      .attr("value","")
+      .text("Select PO")
+    );
+    var data = {
+      "customer_uuid":customer_uuid
+    };
+
+    $.ajax({
+      type : "POST",
+      url: " {{ route('po.get_po_by_customer_uuid') }}",
+      contentType: "application/json",
+      data : JSON.stringify(data),
+      success: function(result) {
+        response = JSON.parse(result);
+        if(response.error == true) {
+          alert(response.messages);
+        } else { 
+          
+          $.each(response.data, function(key, value) { 
+            $('#po_uuid')
+              .append($("<option></option>")
+              .attr("value",value.uuid)
+              .text(value.number)
+            );
+          });
+        } 
+      }
+    });
+
+  });
+
+
 </script>
 
 

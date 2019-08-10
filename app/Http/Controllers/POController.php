@@ -153,12 +153,12 @@ class POController extends Controller
 
         //trigger exception in a "try" block
         try {
-            $category_id = $request->category_id;
-            $customer_data = Customer::where('category_id',$category_id)
-                            ->select('uuid','name')->get();
+            $data = PO::join('customer','customer.id','=','po.customer_id')
+                            ->where('customer.uuid',$request->customer_uuid)
+                            ->select('po.uuid','po.number')->get();
 
-            if(count($customer_data) > 0) {
-                $response['data'] = $customer_data;
+            if(count($data) > 0) {
+                $response['data'] = $data;
                 $response['error'] = False;
                 return json_encode($response);
             }

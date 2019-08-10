@@ -21,7 +21,7 @@ class CreatePoTable extends Migration
             $table->unsignedInteger('status')->default(1);
             $table->string('uuid',100)->unique(); 
             $table->text('note')->nullable();
-            $table->timestamp('date')->nullable();
+            $table->date('date')->nullable();
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
             $table->timestamps();
