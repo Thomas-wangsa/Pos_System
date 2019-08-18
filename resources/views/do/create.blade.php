@@ -89,7 +89,7 @@
 		</div>
 
 		<button type="button" class="btn btn-success btn-block" id="add_po" onclick="add_po_rows()"> add new rows </button>
-		<button type="button" class="btn btn-primary btn-block" id="save_po_btn" onclick="save_po_btn()"> Save PO </button>
+		<button type="button" class="btn btn-primary btn-block" id="save_po_btn" onclick="save_po_btn()"> Save Delivery Order </button>
 
 	</div>
 
@@ -182,7 +182,7 @@ function save_po_btn() {
 
     $.ajax({
       type : "POST",
-      url: " {{ route('po.store') }}",
+      url: " {{ route('do.store') }}",
       contentType: "application/json",
       data : JSON.stringify(data),
       success: function(result) {
@@ -192,7 +192,7 @@ function save_po_btn() {
 			alert(response.message); 
 		} else {
 			alert("set location success!");
-			var url = "{{route('po.index')}}";
+			var url = "{{route('do.index')}}";
 			window.location = url;
 		}
       }

@@ -7,6 +7,7 @@ use App\Http\Models\Category;
 use App\Http\Models\Customer;
 use App\Http\Models\PO;
 use App\Http\Models\SubPO;
+use App\Http\Models\Driver;
 
 use App\Http\Models\PO_Status;
 use Faker\Factory as Faker;
@@ -179,6 +180,26 @@ class DatabaseSeeder extends Seeder
 
 
 
-        $driver_array = array();
+        $driver_array = array(
+            array(
+                "name"=>"taufik",
+                "detail"=>"B 9022",
+                "created_by"=>1,
+                "updated_by"=>1,
+            ),
+            array(
+                "name"=>"syamsu",
+                "detail"=>"B 9023",
+                "created_by"=>1,
+                "updated_by"=>1,
+            ),
+        );
+
+
+        foreach ($driver_array as $key => $value) {
+            Driver::firstOrCreate($value);       
+        }
+
+
     }
 }
