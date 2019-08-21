@@ -56,3 +56,19 @@ Question :
 5. printer dah ready ?
 
 
+
+
+
+
+
+
+
+-----------------------
+1. penulisan SJ gmn ?
+2. penulisan INV gmn ?
+3. inv selalu di buat bareng sj atau gmn ? kalau bareng penomoran,date dan info2 lainnya gmn ?
+4. 
+
+
+
+

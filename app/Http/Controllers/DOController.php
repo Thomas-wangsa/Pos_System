@@ -11,6 +11,9 @@ use App\Http\Models\Driver;
 use App\Http\Models\Delivery_Order;
 use App\Http\Models\Sub_Delivery_Order;
 
+use App\Http\Models\Invoice;
+use App\Http\Models\Sub_Invoice;
+
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Auth;
 class DOController extends Controller
@@ -81,13 +84,26 @@ class DOController extends Controller
         $do->uuid = $po->id."-".time()."-".$this->faker->uuid;
         $do->created_by = Auth::user()->id;
         $do->updated_by = Auth::user()->id;
-
-
         $do->save();
 
 
-        $full_data = array();
+        $invoice = new Invoice;
+        $invoice->po_id = $po->id;
+        $invoice->sales_id = $po->sales_id;
+        $invoice->number = $request->delivery_order['do_name'];
+        $invoice->date = $request->delivery_order['do_date'];
+        $invoice->note = $request->delivery_order['do_note'];
+        $invoice->uuid = $po->id."-".time()."-".$this->faker->uuid;
+        $invoice->created_by = Auth::user()->id;
+        $invoice->updated_by = Auth::user()->id;
+        $invoice->save();
+
+
+        $full_data_delivery = array();
+        $full_data_invoice  = array();
+        $grand_total = 0;
         for($i=0;$i<count($request->subData);$i++) { 
+            $total = 0;
             $sub_po_array = array(
                 "delivery_order_id"=>$do->id,
                 "quantity"=>$request->subData[$i]['quantity'],
@@ -101,10 +117,32 @@ class DOController extends Controller
                 "updated_at"=>date("Y-m-d H:i:s"), 
             );
 
-            array_push($full_data,$sub_po_array);
+            $sub_po_data = SubPO::where('po_id',$po->id)
+                        ->where('name',$request->subData[$i]['name'])
+                        ->first();
+            $sub_invoice_array = array(
+                "invoice_id"=>$invoice->id,
+                "quantity"=>$request->subData[$i]['quantity'],
+                "name"=>$request->subData[$i]['name'],
+                "price"=>$sub_po_data->price,
+                "status"=>$request->subData[$i]['status'],
+                "note"=>$request->subData[$i]['note'],
+                "uuid"=>$do->id."-".time()."-".$this->faker->uuid,
+                "created_by"=>Auth::user()->id,
+                "updated_by"=>Auth::user()->id,
+                "created_at"=>date("Y-m-d H:i:s"),
+                "updated_at"=>date("Y-m-d H:i:s"), 
+            );
+            $total = $sub_invoice_array["quantity"] * $sub_invoice_array["price"];
+            $grand_total += $total;
+            array_push($full_data_delivery,$sub_po_array);
+            array_push($full_data_invoice,$sub_invoice_array);
 
         }
-        Sub_Delivery_Order::insert($full_data);
+        Sub_Delivery_Order::insert($full_data_delivery);
+        Sub_Invoice::insert($full_data_invoice);
+        $invoice->total = $grand_total;
+        $invoice->save();
         
         $response['error'] = false;
         return json_encode($response);
