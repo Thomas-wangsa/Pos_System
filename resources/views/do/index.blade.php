@@ -50,8 +50,9 @@
     <thead>
       <tr>
         <th> No </th>
-        <th> Customer </th>
         <th> Number </th>
+        <th> PO </th>
+        <th> Driver </th>
         <th> Date </th>
         <th> Status </th>
         <th> Note </th>
@@ -64,6 +65,35 @@
         No DO Found! 
       </td>
       @else
+        @foreach($data['do'] as $key=>$val)
+        <tr>
+          <td>
+            {{$key+1}}
+          </td>
+          <td>
+            {{$val['number']}}
+          </td>
+          <td>
+            {{$val['po_id']}}
+          </td>
+          <td>
+            {{$val['driver_id']}}
+          </td>
+          
+          <td>
+            {{$val['date']}}
+          </td>
+          <td>
+            {{$val['status']}}
+          </td>
+          <td>
+            {{$val['note']}}
+          </td>
+          <td>
+            
+          </td>
+        </tr>
+        @endforeach
       @endif
     </tbody>
   </table>

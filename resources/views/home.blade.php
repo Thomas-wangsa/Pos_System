@@ -61,6 +61,22 @@
       </div>
     </div>
 
+
+    <div class="col-md-3">
+      <div class="thumbnail">
+        <a href="{{route('invoice.index')}}">
+
+          <div class="icon_block">
+                <span class="glyphicon glyphicon-file ">
+                </span> &nbsp;
+          </div>
+          <div class="caption text-center">
+            <p> Invoice </p>
+          </div>
+        </a>
+      </div>
+    </div>
+
     <div class="col-md-3">
       <div class="thumbnail">
         <a href="/w3images/nature.jpg">

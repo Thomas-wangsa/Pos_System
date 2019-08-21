@@ -50,9 +50,10 @@
     <thead>
       <tr>
         <th> No </th>
+        <th> Number </th>
         <th> Customer </th>
         <th> Sales </th>
-        <th> Name </th>
+        
         <th> Date </th>
         <th> Status </th>
         <th> Note </th>
@@ -71,14 +72,15 @@
             {{$key+1}}
           </td>
           <td>
+            {{$val['number']}}
+          </td>
+          <td>
             {{$val['customer_id']}}
           </td>
           <td>
             {{$val['sales_id']}}
           </td>
-          <td>
-            {{$val['number']}}
-          </td>
+          
           <td>
             {{$val['date']}}
           </td>

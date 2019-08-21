@@ -27,12 +27,11 @@
 			<br/>
 		</div>
 
+		<form class="form-inline" action="/action_page.php">
 
-		<form class="form-inline" action="">
-		      
-		      <div class="form-group">
-		      	<label for="po_name"> Driver : </label>
-		        <select class="form-control" name="search_filter">
+			<div class="form-group">
+		      	<label for="driver_id"> Driver : </label>
+		        <select class="form-control" id="driver_id" name="driver_id">
 		          <option value=""> Select Driver </option>
 		          @if (count($data['driver']) > 0 )
 		          	@foreach($data['driver'] as $key=>$val)
@@ -40,28 +39,21 @@
 		          	@endforeach
 		          @endif 
 		        </select>
-		      </div>
-		    
-		      <button type="submit" class="btn btn-primary"> 
-		        Submit
-		      </button> 
-		 </form>
-
-		<form class="form-inline" action="/action_page.php">
-		  <div class="form-group">
-		    <label for="po_name"> Delivery_order Number : </label>
-		    <input type="text" class="form-control" id="po_name" name="po_name">
-		  </div>
-		  &nbsp;&nbsp;&nbsp;
-		  <div class="form-group">
-		    <label for="po_date"> Date : </label>
-		    <input type="text" class="form-control" id="po_date" name="po_date">
-		  </div>
-		  &nbsp;&nbsp;&nbsp;
-		  <div class="form-group">
-		    <label for="po_note"> Note : </label>
-		    <input type="text" class="form-control" id="po_note" name="po_note">
-		  </div>
+	      	</div>
+			<div class="form-group">
+			    <label for="do_name"> Delivery_order Number : </label>
+			    <input type="text" class="form-control" id="do_name" name="do_name">
+			</div>
+			&nbsp;&nbsp;&nbsp;
+			<div class="form-group">
+			    <label for="do_date"> Date : </label>
+			    <input type="text" class="form-control" id="do_date" name="do_date">
+			</div>
+			&nbsp;&nbsp;&nbsp;
+			<div class="form-group">
+			    <label for="do_note"> Note : </label>
+			    <input type="text" class="form-control" id="do_note" name="do_note">
+			</div>
 		</form>
 
 
@@ -136,21 +128,19 @@ function generate_sub_po_name(no_rows) {
 
 	po_tbody = $('#name'+no_rows);
 	$.each(data, function(key, value) { 
-        append_rows = '<option value="'+value.id+'"> '+value.name+' </option>';
+        append_rows = '<option value="'+value.name+'"> '+value.name+' </option>';
         po_tbody.append(append_rows);
     });
 }
 
 function save_po_btn() {
-	po_name = $('#po_name').val();
-	po_date = $('#po_date').val();
-	po_note = $('#po_note').val();
 
 
-	po = {
-		"po_name":po_name,
-		"po_date":po_date,
-		"po_note":po_note
+	delivery_order = {
+		"driver_id":$('#driver_id').val(),
+		"do_name":$('#do_name').val(),
+		"do_date":$('#do_date').val(),
+		"do_note":$('#do_note').val()
 	};
 
 	var subData = [];
@@ -158,17 +148,16 @@ function save_po_btn() {
 
 		quantityValue = $('#quantity'+i).val();
 		nameValue = $('#name'+i).val();
-		priceValue = $('#price'+i).val();
 		statusValue = $('#status'+i).val();
 		noteValue = $('#note'+i).val();
-		var data = {quantity:quantityValue, name:nameValue, price:priceValue,status:statusValue,note:noteValue};
+		var data = {quantity:quantityValue, name:nameValue,status:statusValue,note:noteValue};
 		subData.push(data);
 
 	}
 
 	data = {
-		"customer_uuid": "{{ app('request')->input('customer_uuid') }}", 
-		"po":po,
+		"po_uuid": "{{ app('request')->input('po_uuid') }}", 
+		"delivery_order":delivery_order,
 		"subData":subData
 	}
 

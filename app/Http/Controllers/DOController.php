@@ -9,6 +9,7 @@ use App\Http\Models\SubPO;
 use App\Http\Models\Driver;
 
 use App\Http\Models\Delivery_Order;
+use App\Http\Models\Sub_Delivery_Order;
 
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Auth;
@@ -67,7 +68,46 @@ class DOController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+        $po = PO::where('uuid',$request->po_uuid)->first();
+
+        $do = new Delivery_Order;
+        $do->po_id = $po->id;
+        $do->driver_id = $request->delivery_order['driver_id'];
+        $do->number = $request->delivery_order['do_name'];
+        $do->date = $request->delivery_order['do_date'];
+        $do->note = $request->delivery_order['do_note'];
+        $do->uuid = $po->id."-".time()."-".$this->faker->uuid;
+        $do->created_by = Auth::user()->id;
+        $do->updated_by = Auth::user()->id;
+
+
+        $do->save();
+
+
+        $full_data = array();
+        for($i=0;$i<count($request->subData);$i++) { 
+            $sub_po_array = array(
+                "delivery_order_id"=>$do->id,
+                "quantity"=>$request->subData[$i]['quantity'],
+                "name"=>$request->subData[$i]['name'],
+                "status"=>$request->subData[$i]['status'],
+                "note"=>$request->subData[$i]['note'],
+                "uuid"=>$do->id."-".time()."-".$this->faker->uuid,
+                "created_by"=>Auth::user()->id,
+                "updated_by"=>Auth::user()->id,
+                "created_at"=>date("Y-m-d H:i:s"),
+                "updated_at"=>date("Y-m-d H:i:s"), 
+            );
+
+            array_push($full_data,$sub_po_array);
+
+        }
+        Sub_Delivery_Order::insert($full_data);
+        
+        $response['error'] = false;
+        return json_encode($response);
     }
 
     /**

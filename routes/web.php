@@ -29,6 +29,8 @@ Route::resource('/user', 'UserController');
 Route::resource('/customer', 'CustomerController');
 Route::resource('/po', 'POController');
 Route::resource('/do', 'DOController');
+Route::resource('/invoice', 'InvoiceController');
+
 
 Route::resource('/config', 'ConfigController');
 
