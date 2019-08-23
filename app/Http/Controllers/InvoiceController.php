@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Models\Invoice;
 
 class InvoiceController extends Controller
 {
@@ -12,8 +13,15 @@ class InvoiceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
+    {   
+
+
+        $data['invoice'] = Invoice::leftjoin('po','po.id','=','invoice.po_id')
+                    ->leftjoin('users','users.id','=','invoice.sales_id')
+                    ->select('invoice.*','po.number AS po_number','users.name AS sales_name')
+                    ->get();
+
+        return view('invoice/index',compact('data'));
     }
 
     /**

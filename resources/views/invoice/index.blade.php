@@ -5,7 +5,7 @@
     <div class="pull-left">
       <button type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target="#modal_select_po">
         <span class="glyphicon glyphicon-plus"></span>
-        New Delivery_Order
+        New Invoice
       </button>
     </div>
     <div class="clearfix"> </div>
@@ -52,18 +52,19 @@
         <th> No </th>
         <th> Number </th>
         <th> PO </th>
-        <th> Driver </th>
+        <th> Sales </th>
+        <th> Total </th>
         <th> Status </th>
         <th> Action </th>
       </tr>
     </thead>
     <tbody>
-       @if (count($data['do']) == 0 ) 
+       @if (count($data['invoice']) == 0 ) 
       <td colspan="10" class="text-center"> 
         No DO Found! 
       </td>
       @else
-        @foreach($data['do'] as $key=>$val)
+        @foreach($data['invoice'] as $key=>$val)
         <?php $uuid = $val["uuid"];?>
         <tr>
           <td>
@@ -76,9 +77,12 @@
             {{$val['po_number']}}
           </td>
           <td>
-            {{$val['driver_name']}}
+            {{$val['sales_name']}}
           </td>
 
+          <td>
+            {{$val['total']}}
+          </td>
           <td>
             {{$val['status_name']}}
           </td>
@@ -119,6 +123,6 @@
     </tbody>
   </table>
 
-  @include('do.modal_select_po')
-  @include('do.modal_info_do')
+  @include('invoice.modal_info_invoice')
+
 @endsection

@@ -10,6 +10,8 @@ use App\Http\Models\SubPO;
 use App\Http\Models\Driver;
 
 use App\Http\Models\PO_Status;
+use App\Http\Models\Delivery_Order_Status;
+
 use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
@@ -161,21 +163,22 @@ class DatabaseSeeder extends Seeder
         $po_status_array = array(
             array(
                 "name"=>"active",
-                "color"=>"blue",
+                "color"=>"black",
             ),
             array(
                 "name"=>"cancel",
                 "color"=>"red",
             ),
             array(
-                "name"=>"closed",
-                "color"=>"black",
+                "name"=>"success",
+                "color"=>"blue",
             )
         );
 
 
         foreach ($po_status_array as $key => $value) {
-            PO_Status::firstOrCreate($value);       
+            PO_Status::firstOrCreate($value); 
+            Delivery_Order_Status::firstOrCreate($value);      
         }
 
 

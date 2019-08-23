@@ -36,7 +36,11 @@ class DOController extends Controller
         //$customer = Customer::all();
         $category = Category::all();
         $data['category'] = $category;
-        $data['do'] = Delivery_Order::all();
+        $data['do'] = Delivery_Order::leftjoin('po','po.id','=','delivery_order.po_id')
+                    ->leftjoin('driver','driver.id','=','delivery_order.driver_id')
+                    ->leftjoin('delivery_order_status','delivery_order_status.id','=','delivery_order.status')
+                    ->select('delivery_order.*','po.number AS po_number','driver.name AS driver_name','delivery_order_status.name AS status_name')
+                    ->get();
         //$data['customer'] = $customer;
         //dd($data);
         return view('do/index',compact('data'));

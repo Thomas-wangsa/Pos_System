@@ -4,8 +4,8 @@ namespace App\Http\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PO_Status extends Model
+class Delivery_Order_Status extends Model
 {
-    protected $table = "po_status";
+    protected $table = "delivery_order_status";
     protected $primaryKey = 'id';
 }
