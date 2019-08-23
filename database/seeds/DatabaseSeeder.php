@@ -161,7 +161,7 @@ class DatabaseSeeder extends Seeder
         $po_status_array = array(
             array(
                 "name"=>"active",
-                "color"=>"black",
+                "color"=>"blue",
             ),
             array(
                 "name"=>"cancel",

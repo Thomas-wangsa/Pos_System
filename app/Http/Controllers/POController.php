@@ -29,7 +29,11 @@ class POController extends Controller
     {
         //$customer = Customer::all();
         $category = Category::all();
-        $po = PO::all();
+        $po = PO::leftjoin('customer','po.customer_id','=','customer.id')
+            ->leftjoin('users','po.sales_id','=','users.id')
+            ->leftjoin('po_status','po.status','=','po_status.id')
+            ->select('po.*','customer.name AS customer_name','users.name AS sales_name','po_status.name AS status_name')
+            ->get();
         $data['category'] = $category;
         //$data['customer'] = $customer;
         $data['po'] = $po;

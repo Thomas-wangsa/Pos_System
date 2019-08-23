@@ -66,6 +66,7 @@
       </td>
       @else 
         @foreach($data['po'] as $key=>$val)
+        <?php $uuid = $val["uuid"];?>
         <tr>
           <td>
             {{$key+1}}
@@ -74,30 +75,21 @@
             {{$val['number']}}
           </td>
           <td>
-            {{$val['customer_id']}}
+            {{$val['customer_name']}}
           </td>
           <td>
-            {{$val['sales_id']}}
+            {{$val['sales_name']}}
           </td>
           
           <td>
             {{$val['date']}}
           </td>
           <td>
-            {{$val['status']}}
+            {{$val['status_name']}}
           </td>
           <td>
-            <a href="{{route('do.create')}}?po_uuid={{$val['uuid']}}">  
-              <span class="glyphicon glyphicon-file"
-              style="cursor:pointer" 
-              title="detail {{$val['name']}}" 
-              >
-              </span>
-            </a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-            <a href="#">  
+            
+            <a href="#" onclick="info('{{$uuid}}')">  
               <span class="glyphicon glyphicon-file"
               style="cursor:pointer" 
               title="detail {{$val['name']}}" 
@@ -124,6 +116,16 @@
               </span>
             </a> 
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <a href="{{route('do.create')}}?po_uuid={{$val['uuid']}}">  
+              <span class="glyphicon glyphicon-file"
+              style="cursor:pointer" 
+              title="detail {{$val['name']}}" 
+              >
+              </span>
+            </a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
           </td>
         </tr>
         @endforeach
@@ -132,4 +134,5 @@
   </table>
 
   @include('po.modal_select_customer')
+  @include('po.modal_info_po')
 @endsection

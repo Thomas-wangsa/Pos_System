@@ -89,16 +89,7 @@
           </td>
           
           <td>
-            <a href="{{route('po.create')}}?customer_uuid={{$val['uuid']}}">  
-              <span class="glyphicon glyphicon-file"
-              style="cursor:pointer" 
-              title="detail {{$val['name']}}" 
-              >
-              </span>
-            </a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
+        
             <a href="#">  
               <span class="glyphicon glyphicon-file"
               style="cursor:pointer" 
@@ -127,6 +118,15 @@
             </a> 
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             
+            <a href="{{route('po.create')}}?customer_uuid={{$val['uuid']}}">  
+              <span class="glyphicon glyphicon-file"
+              style="cursor:pointer" 
+              title="detail {{$val['name']}}" 
+              >
+              </span>
+            </a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                
           </td>
         </tr>
         @endforeach
