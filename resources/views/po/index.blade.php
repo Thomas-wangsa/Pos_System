@@ -56,7 +56,6 @@
         
         <th> Date </th>
         <th> Status </th>
-        <th> Note </th>
         <th> Action </th>
       </tr>
     </thead>
@@ -88,10 +87,43 @@
             {{$val['status']}}
           </td>
           <td>
-            {{$val['note']}}
-          </td>
-          <td>
+            <a href="{{route('do.create')}}?po_uuid={{$val['uuid']}}">  
+              <span class="glyphicon glyphicon-file"
+              style="cursor:pointer" 
+              title="detail {{$val['name']}}" 
+              >
+              </span>
+            </a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+            <a href="#">  
+              <span class="glyphicon glyphicon-file"
+              style="cursor:pointer" 
+              title="detail {{$val['name']}}" 
+              >
+              </span>
+            </a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <a href="#">
+              <span class="glyphicon glyphicon-edit"
+              style="color:green;cursor:pointer" 
+              title="edit {{$val['name']}}"
+              >
+              </span>
+            </a> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             
+
+            <a href="#">
+              <span class="glyphicon glyphicon-trash"
+              style="color:red;cursor:pointer" 
+              title="remove {{$val['name']}}"  
+              >
+              </span>
+            </a> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           </td>
         </tr>
         @endforeach
