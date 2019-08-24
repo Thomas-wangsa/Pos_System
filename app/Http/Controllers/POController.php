@@ -175,5 +175,56 @@ class POController extends Controller
             $response['messages'] = $e->getMessage();
             return json_encode($response);
         }
+    }
+
+    public function get_po_by_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        //trigger exception in a "try" block
+        try {
+            $data["po"] = PO::leftjoin('customer','customer.id','=','po.customer_id')
+                    ->leftjoin('users','users.id','=','po.sales_id')
+                    ->leftjoin('po_status','po_status.id','=','po.status')
+                    ->leftjoin('users as c_user','c_user.id','=','po.created_by')
+                    ->leftjoin('users as u_user','u_user.id','=','po.updated_by')
+                    ->where('po.uuid',$request->uuid)
+                    ->select(
+                        'po.*',
+                        'customer.name AS customer_name',
+                        'users.name AS sales_name',
+                        'po_status.name AS status_name',
+                        'c_user.name AS created_by_name',
+                        'u_user.name AS updated_by_name'
+                    )
+                    ->first();
+
+
+            if($data['po'] == null) {
+                $response['messages'] = "no data po found!";
+                return json_encode($response);
+            }
+
+
+            $data["sub_po"] = SubPO::where('po_id',$data['po']->id)->first();
+
+            if($data['sub_po'] == null) {
+                $response['messages'] = "no detail po found!";
+                return json_encode($response);
+            }
+
+            if(count($data) > 0) {
+                $response['data'] = $data;
+                $response['error'] = False;
+                return json_encode($response);
+            }
+
+            $response['messages'] = "no data found!";
+            return json_encode($response);
+        }
+        //catch exception
+        catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
     } 
 }

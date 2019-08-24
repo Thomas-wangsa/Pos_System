@@ -26,27 +26,27 @@
 						    <tbody id="info_tbody">
 						      <tr class="info">
 						        <th> po number </th>
-						        <td id="modal_info_request_type"> test </td>
+						        <td id="modal_info_number">  </td>
 						      </tr>
 						      <tr>
 						        <th> customer name </th>
-						        <td id="modal_info_request_type">  test </td>
+						        <td id="modal_info_customer_name">   </td>
 						      </tr>
 						      <tr>
 						        <th> sales name </th>
-						        <td id="modal_info_request_type"> test </td>
+						        <td id="modal_info_sales_name">  </td>
 						      </tr>
 						      
 
 						      <tr>
 						        <th> date </th>
-						        <td id="modal_info_register_type"> test </td>
+						        <td id="modal_info_date"> test </td>
 						      </tr>		
 						     
 			
 						      <tr class="info">
 						        <th> status </th>
-						        <td id="modal_info_status_akses">  </td>
+						        <td id="modal_info_status_name">  </td>
 						      </tr>
 						      <tr>
 						        <th> created by </th>
@@ -58,7 +58,7 @@
 						      </tr>
 						      <tr>
 						        <th style="min-width: 200px"> note </th>
-						        <td id="modal_info_additional_note">  </td>
+						        <td id="modal_info_note">  </td>
 						      </tr>
 
 						    </tbody>
@@ -129,6 +129,43 @@
 
 <script type="text/javascript">
 	function info(uuid) {
-		$('#modal_info').modal('show');
+		$('#modal_info_number').html("-");
+		var payload = {"uuid":uuid};
+
+		$.ajax({
+			type : "POST",
+			url: " {{ route('po.get_po_by_uuid') }}",
+			contentType: "application/json",
+			data : JSON.stringify(payload),
+			success: function(result) {
+				response = JSON.parse(result);
+				if(response.error != true) {
+					$('#modal_info_number').html(response.data.po.number);
+					$('#modal_info_customer_name').html(response.data.po.customer_name);
+					$('#modal_info_sales_name').html(response.data.po.sales_name);
+					$('#modal_info_date').html(response.data.po.date);
+					$('#modal_info_status_name').html(response.data.po.status_name);
+					$('#modal_info_created_by').html(response.data.po.created_by_name+" : "+response.data.po.created_at);
+					$('#modal_info_updated_by').html(response.data.po.updated_by_name+" : "+response.data.po.updated_at);
+					$('#modal_info_note').html(response.data.po.note);
+
+					if(length(response.data.sub_po) > 0) {
+						alert(length(response.data.sub_po));
+					}	
+					// $.each(response.data, function (key,val) {
+
+
+					// });
+					// $('#modal_info_po_number').html(response.data.po.number);
+					// alert(response.data.po.number);
+					$('#modal_info').modal('show');
+				} else {
+					alert(response.messages);
+				}	
+			}
+		})
+
+
+		
 	}
 </script>

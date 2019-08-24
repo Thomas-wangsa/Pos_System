@@ -133,6 +133,15 @@
     </tbody>
   </table>
 
+
+<script type="text/javascript">
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+</script>
+
   @include('po.modal_select_customer')
   @include('po.modal_info_po')
 @endsection
