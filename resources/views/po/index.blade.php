@@ -52,7 +52,6 @@
         <th> No </th>
         <th> Number </th>
         <th> Total </th>
-        <th> Date </th>
         <th> Status </th>
         <th> Action </th>
       </tr>
@@ -76,9 +75,7 @@
           <td>
             Rp. {{ number_format($val['total']) }} 
           </td>
-          <td>
-            {{$val['date']}}
-          </td>
+
           <td>
             {{$val['status_name']}}
           </td>

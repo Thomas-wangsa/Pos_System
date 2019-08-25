@@ -17,7 +17,7 @@
         <div class="modal-body">
   			<div class="panel panel-primary">
 		      <div class="panel-heading text-center">
-		      	Basic Information
+		      	Purchase Order Information
 		      </div>
 		      	<div class="panel-body">
 			      	<div class="table-responsive">          
@@ -63,42 +63,50 @@
 
 						    </tbody>
 					  	</table>
+
+					  	<div class="text-center" style="margin-bottom: 10px"> 
+					  		PO Detail Information : 
+					  	</div>
+
+					    <table class="table 
+						table-condensed table-hover table-bordered table-striped">
+							<thead>
+								<tr>
+									<td> no </td>
+									<td> qty </td>
+									<td> desc </td>
+									<td> price </td>
+									<td> total </td>
+								</tr>
+							</thead>
+						    <tbody id="info_sub_tbody">
+						    </tbody>
+						</table>
+
 					</div>
 		      	</div> <!--panel body-->
 		    </div> <!--panel-->
 
-		    <table class="table 
-			table-condensed table-hover table-bordered table-striped">
-				<thead>
-					<tr>
-						<td> no </td>
-						<td> qty </td>
-						<td> desc </td>
-						<td> price </td>
-					</tr>
-				</thead>
-			    <tbody id="info_sub_tbody">
-			      <tr> 
-			      	<td> 1 </td>
-			      	<td> 10 </td>
-			      	<td> sofa kelas 1 </td>
-			      	<td> 5.000.000 </td>
-			      </tr>
-			      <tr> 
-			      	<td> 2 </td>
-			      	<td> 50 </td>
-			      	<td> sofa kelas 2 </td>
-			      	<td> 500.000 </td>
-			      </tr>
-			    </tbody>
-			</table>
 
-		    <div class="panel panel-primary" id="head_modal_document">
+		    <div class="panel panel-success" id="head_modal_document">
 		      <div class="panel-heading text-center" id="body_modal_document">
 		      	Delivery Order List
 		      </div>
 		      	<div class="panel-body">
-
+		      		<table class="table 
+					table-condensed table-hover table-bordered table-striped">
+						<thead>
+							<tr>
+								<td> no </td>
+								<td> qty </td>
+								<td> desc </td>
+								<td> price </td>
+								<td> total </td>
+							</tr>
+						</thead>
+					    <tbody id="info_delivery_order_tbody">
+					    </tbody>
+					</table>
 		      	</div> <!--panel body-->
 		      	<div class="panel-footer"></div>
 		    </div> <!--panel-->
@@ -173,6 +181,9 @@
 												"</td> " +
 												"<td> " +
 												"Rp. " + val.price.toLocaleString() +
+												"</td> " +
+												"<td> " +
+												"Rp. " + val.total.toLocaleString() +
 												"</td> " +
 											  "<tr>";
 							$('#info_sub_tbody').append(append_rows);

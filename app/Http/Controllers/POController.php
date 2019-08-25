@@ -37,7 +37,7 @@ class POController extends Controller
 
 
         foreach($po as $key=>$val) {
-            $po[$key]["total"] = SubPO::where('po_id',$val->id)->sum('price');
+            $po[$key]["total"] = SubPO::where('po_id',$val->id)->sum('total');
         }
         $data['category'] = $category;
         //$data['customer'] = $customer;
