@@ -98,10 +98,9 @@
 						<thead>
 							<tr>
 								<td> no </td>
-								<td> qty </td>
-								<td> desc </td>
-								<td> price </td>
-								<td> total </td>
+								<td> number </td>
+								<td> date </td>
+								<td> status </td>
 							</tr>
 						</thead>
 					    <tbody id="info_delivery_order_tbody">
@@ -117,7 +116,19 @@
 		      	Invoice List
 		      </div>
 		      	<div class="panel-body">
-
+		      		<table class="table 
+					table-condensed table-hover table-bordered table-striped">
+						<thead>
+							<tr>
+								<td> no </td>
+								<td> number </td>
+								<td> date </td>
+								<td> status </td>
+							</tr>
+						</thead>
+					    <tbody id="info_invoice_tbody">
+					    </tbody>
+					</table>
 		      	</div> <!--panel body-->
 		      	<div class="panel-footer"></div>
 		    </div> <!--panel-->
@@ -147,6 +158,8 @@
 		$('#modal_info_note').html("-");
 
 		$('#info_sub_tbody').empty();
+		$('#info_delivery_order_tbody').empty();
+		$('#info_invoice_tbody').empty();
 		var payload = {"uuid":uuid};
 
 		$.ajax({
@@ -188,6 +201,54 @@
 											  "<tr>";
 							$('#info_sub_tbody').append(append_rows);
 						});
+					}
+
+
+					if(response.data.delivery_order.length > 0) {
+						$.each(response.data.delivery_order, function (key,val) {
+
+							var append_rows = "<tr> " +
+												"<td> " +
+												(key+1) +
+												"</td> " +
+												"<td> " +
+												val.number +
+												"</td> " +
+												"<td> " +
+												val.date +
+												"</td> " +
+												"<td> " +
+												val.status_name +
+												"</td> " +
+											  "<tr>";
+							$('#info_delivery_order_tbody').append(append_rows);
+						});
+					} else {
+						$('#info_delivery_order_tbody').append("<tr> <td colspan='6'> no delivery order found! </td></tr>");
+					}
+
+
+					if(response.data.invoice.length > 0) {
+						$.each(response.data.delivery_order, function (key,val) {
+
+							var append_rows = "<tr> " +
+												"<td> " +
+												(key+1) +
+												"</td> " +
+												"<td> " +
+												val.number +
+												"</td> " +
+												"<td> " +
+												val.date +
+												"</td> " +
+												"<td> " +
+												val.status_name +
+												"</td> " +
+											  "<tr>";
+							$('#info_invoice_tbody').append(append_rows);
+						});
+					} else {
+						$('#info_invoice_tbody').append("<tr> <td colspan='6'> no invoice found! </td></tr>");
 					}
 
 					// $.each(response.data, function (key,val) {

@@ -7,6 +7,9 @@ use App\Http\Models\Category;
 use App\Http\Models\Customer;
 use App\Http\Models\PO;
 use App\Http\Models\SubPO;
+use App\Http\Models\Delivery_Order;
+use App\Http\Models\Invoice;
+use App\Http\Models\Invoice_Status;
 
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Auth;
@@ -216,6 +219,26 @@ class POController extends Controller
                 $response['messages'] = "no detail po found!";
                 return json_encode($response);
             }
+
+
+            $data["delivery_order"] = Delivery_Order::leftjoin('delivery_order_status',
+                'delivery_order_status.id','=','delivery_order.status')
+                ->where('delivery_order.po_id',$data['po']->id)
+                ->select('delivery_order.*','delivery_order_status.name AS status_name')
+                ->get();
+
+            $data["invoice"] = Invoice::leftjoin('invoice_status',
+                'invoice_status.id','=','invoice.status')
+                ->where('invoice.po_id',$data['po']->id)
+                ->select('invoice.*','invoice_status.name AS status_name')
+                ->get();
+
+            // if(count($data["invoice"]) > 0 ) {
+            //     foreach($data["invoice"] as $key=>$val) {
+                    
+            //     }
+            // }
+
 
             if(count($data) > 0) {
                 $response['data'] = $data;

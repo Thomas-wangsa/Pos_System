@@ -11,6 +11,7 @@ use App\Http\Models\Driver;
 
 use App\Http\Models\PO_Status;
 use App\Http\Models\Delivery_Order_Status;
+use App\Http\Models\Invoice_Status;
 
 use Faker\Factory as Faker;
 
@@ -163,7 +164,7 @@ class DatabaseSeeder extends Seeder
 
         $po_status_array = array(
             array(
-                "name"=>"active",
+                "name"=>"in-progress",
                 "color"=>"black",
             ),
             array(
@@ -179,9 +180,15 @@ class DatabaseSeeder extends Seeder
 
         foreach ($po_status_array as $key => $value) {
             PO_Status::firstOrCreate($value); 
-            Delivery_Order_Status::firstOrCreate($value);      
+            Delivery_Order_Status::firstOrCreate($value);
+            Invoice_Status::firstOrCreate($value);      
         }
 
+        $inv_status_array = array(
+            "name"=>"active",
+            "color"=>"black"
+        );
+        Invoice_Status::firstOrCreate($inv_status_array);
 
 
         $driver_array = array(
