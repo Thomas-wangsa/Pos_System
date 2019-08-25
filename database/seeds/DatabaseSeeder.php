@@ -153,6 +153,7 @@ class DatabaseSeeder extends Seeder
                 "updated_by"=>1,
                 );
 
+                $sub_po_array["total"] = $sub_po_array["quantity"] * $sub_po_array["price"];
                 array_push($sub_po_data,$sub_po_array);
             }
             SubPO::insert($sub_po_data);

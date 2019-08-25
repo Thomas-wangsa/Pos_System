@@ -23,7 +23,7 @@
 			      	<div class="table-responsive">          
 					 	<table class="table 
 					 	table-condensed table-hover table-bordered table-striped">
-						    <tbody id="info_tbody">
+						    <tbody>
 						      <tr class="info">
 						        <th> po number </th>
 						        <td id="modal_info_number">  </td>
@@ -77,7 +77,7 @@
 						<td> price </td>
 					</tr>
 				</thead>
-			    <tbody id="info_tbody">
+			    <tbody id="info_sub_tbody">
 			      <tr> 
 			      	<td> 1 </td>
 			      	<td> 10 </td>
@@ -130,6 +130,15 @@
 <script type="text/javascript">
 	function info(uuid) {
 		$('#modal_info_number').html("-");
+		$('#modal_info_customer_name').html("-");
+		$('#modal_info_sales_name').html("-");
+		$('#modal_info_date').html("-");
+		$('#modal_info_status_name').html("-");
+		$('#modal_info_created_by').html("-");
+		$('#modal_info_updated_by').html("-");
+		$('#modal_info_note').html("-");
+
+		$('#info_sub_tbody').empty();
 		var payload = {"uuid":uuid};
 
 		$.ajax({
@@ -149,9 +158,27 @@
 					$('#modal_info_updated_by').html(response.data.po.updated_by_name+" : "+response.data.po.updated_at);
 					$('#modal_info_note').html(response.data.po.note);
 
-					if(length(response.data.sub_po) > 0) {
-						alert(length(response.data.sub_po));
-					}	
+					if(response.data.sub_po.length > 0) {
+						$.each(response.data.sub_po, function (key,val) {
+
+							var append_rows = "<tr> " +
+												"<td> " +
+												(key+1) +
+												"</td> " +
+												"<td> " +
+												val.quantity +
+												"</td> " +
+												"<td> " +
+												val.name +
+												"</td> " +
+												"<td> " +
+												"Rp. " + val.price.toLocaleString() +
+												"</td> " +
+											  "<tr>";
+							$('#info_sub_tbody').append(append_rows);
+						});
+					}
+
 					// $.each(response.data, function (key,val) {
 
 

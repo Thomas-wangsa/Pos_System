@@ -51,9 +51,7 @@
       <tr>
         <th> No </th>
         <th> Number </th>
-        <th> Customer </th>
-        <th> Sales </th>
-        
+        <th> Total </th>
         <th> Date </th>
         <th> Status </th>
         <th> Action </th>
@@ -74,13 +72,10 @@
           <td>
             {{$val['number']}}
           </td>
-          <td>
-            {{$val['customer_name']}}
-          </td>
-          <td>
-            {{$val['sales_name']}}
-          </td>
           
+          <td>
+            Rp. {{ number_format($val['total']) }} 
+          </td>
           <td>
             {{$val['date']}}
           </td>

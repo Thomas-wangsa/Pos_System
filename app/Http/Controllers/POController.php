@@ -34,10 +34,14 @@ class POController extends Controller
             ->leftjoin('po_status','po.status','=','po_status.id')
             ->select('po.*','customer.name AS customer_name','users.name AS sales_name','po_status.name AS status_name')
             ->get();
+
+
+        foreach($po as $key=>$val) {
+            $po[$key]["total"] = SubPO::where('po_id',$val->id)->sum('price');
+        }
         $data['category'] = $category;
         //$data['customer'] = $customer;
         $data['po'] = $po;
-        //dd($data);
         return view('po/index',compact('data'));
     }
 
@@ -88,6 +92,7 @@ class POController extends Controller
                 "quantity"=>$request->subData[$i]['quantity'],
                 "name"=>$request->subData[$i]['name'],
                 "price"=>$request->subData[$i]['price'],
+                "total"=>$request->subData[$i]['price'] * $request->subData[$i]['quantity'],
                 "status"=>$request->subData[$i]['status'],
                 "note"=>$request->subData[$i]['note'],
                 "uuid"=>$po->id."-".time()."-".$this->faker->uuid,
@@ -205,7 +210,7 @@ class POController extends Controller
             }
 
 
-            $data["sub_po"] = SubPO::where('po_id',$data['po']->id)->first();
+            $data["sub_po"] = SubPO::where('po_id',$data['po']->id)->get();
 
             if($data['sub_po'] == null) {
                 $response['messages'] = "no detail po found!";
