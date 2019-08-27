@@ -71,7 +71,6 @@
 						<th> No </th>
 						<th width="100px"> Quantity </th>
 						<th> Name </th>
-						<th> Status </th>
 						<th> Additional Note </th>
 					</tr>
 				</thead>
@@ -103,14 +102,6 @@ function add_po_rows() {
 		'</select>' + 
 		'</td>' + 
 
-		
-		'<td>' + 
-		'<select class="form-control" id="status'+no_rows+'">'+
-			'<option value="1"> urgent </option>' +
-			'<option value="2" selected> normal </option>' +
-			'<option value="3"> low </option>' +
-		'</select>' + 
-		'</td>' + 
 		'<td> <input type="text" class="form-control" id="note'+no_rows+'"> </td>' + 
 				  "<tr> ";
 

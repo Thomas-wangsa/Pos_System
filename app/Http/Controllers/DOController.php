@@ -129,7 +129,6 @@ class DOController extends Controller
                 "quantity"=>$request->subData[$i]['quantity'],
                 "name"=>$request->subData[$i]['name'],
                 "price"=>$sub_po_data->price,
-                "status"=>$request->subData[$i]['status'],
                 "note"=>$request->subData[$i]['note'],
                 "uuid"=>$do->id."-".time()."-".$this->faker->uuid,
                 "created_by"=>Auth::user()->id,
@@ -195,5 +194,49 @@ class DOController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function get_do_by_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        try {
+
+            $data["delivery_order"] = Delivery_Order::leftjoin('po','po.id','=','delivery_order.po_id')
+                    ->leftjoin('driver','driver.id','=','delivery_order.driver_id')
+                    ->leftjoin('delivery_order_status','delivery_order_status.id','=','delivery_order.status')
+                    ->leftjoin('users as c_user','c_user.id','=','delivery_order.created_by')
+                    ->leftjoin('users as u_user','u_user.id','=','delivery_order.updated_by')
+                    ->where('delivery_order.uuid',$request->uuid)
+                    ->select(
+                        'delivery_order.*',
+                        'po.number AS po_number',
+                        'driver.name AS driver_name',
+                        'delivery_order_status.name AS status_name',
+                        'c_user.name AS created_by_name',
+                        'u_user.name AS updated_by_name'
+                    )
+                    ->first();
+
+
+            if($data['delivery_order'] == null) {
+                $response['messages'] = "no data delivery_order found!";
+                return json_encode($response);
+            }
+
+            if(count($data) > 0) {
+                $response['data'] = $data;
+                $response['error'] = False;
+                return json_encode($response);
+            }
+
+            $response['messages'] = "no data found!";
+            return json_encode($response);
+
+        }//catch exception
+        catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
     }
 }

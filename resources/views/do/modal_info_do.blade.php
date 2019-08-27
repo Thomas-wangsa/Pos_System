@@ -23,30 +23,30 @@
 			      	<div class="table-responsive">          
 					 	<table class="table 
 					 	table-condensed table-hover table-bordered table-striped">
-						    <tbody id="info_tbody">
+						    <tbody>
 						      <tr class="info">
-						        <th> po number </th>
-						        <td id="modal_info_request_type"> test </td>
-						      </tr>
-						      <tr>
-						        <th> driver </th>
-						        <td id="modal_info_request_type">  test </td>
-						      </tr>
-						      <tr>
 						        <th> delivery order number </th>
-						        <td id="modal_info_request_type"> test </td>
+						        <td id="modal_info_number">  </td>
+						      </tr>
+						      <tr>
+						        <th>  po number </th>
+						        <td id="modal_info_po_number">   </td>
+						      </tr>
+						      <tr>
+						        <th> driver name </th>
+						        <td id="modal_info_driver_name">  </td>
 						      </tr>
 						      
 
 						      <tr>
 						        <th> date </th>
-						        <td id="modal_info_register_type"> test </td>
+						        <td id="modal_info_date">  </td>
 						      </tr>		
 						     
 			
 						      <tr class="info">
 						        <th> status </th>
-						        <td id="modal_info_status_akses">  </td>
+						        <td id="modal_info_status_name">  </td>
 						      </tr>
 						      <tr>
 						        <th> created by </th>
@@ -58,37 +58,35 @@
 						      </tr>
 						      <tr>
 						        <th style="min-width: 200px"> note </th>
-						        <td id="modal_info_additional_note">  </td>
+						        <td id="modal_info_note">  </td>
 						      </tr>
 
 						    </tbody>
 					  	</table>
+
+					  	<div class="text-center" style="margin-bottom: 10px"> 
+					  		Delivery Order Detail Information : 
+					  	</div>
+
+					    <table class="table 
+						table-condensed table-hover table-bordered table-striped">
+							<thead>
+								<tr>
+									<td> no </td>
+									<td> qty </td>
+									<td> desc </td>
+									<td> price </td>
+									<td> total </td>
+								</tr>
+							</thead>
+						    <tbody id="info_sub_tbody">
+						    </tbody>
+						</table>
+
 					</div>
 		      	</div> <!--panel body-->
 		    </div> <!--panel-->
 
-		    <table class="table 
-			table-condensed table-hover table-bordered table-striped">
-				<thead>
-					<tr>
-						<td> no </td>
-						<td> qty </td>
-						<td> desc </td>
-					</tr>
-				</thead>
-			    <tbody id="info_tbody">
-			      <tr> 
-			      	<td> 1 </td>
-			      	<td> 10 </td>
-			      	<td> sofa kelas 1 </td>
-			      </tr>
-			      <tr> 
-			      	<td> 2 </td>
-			      	<td> 50 </td>
-			      	<td> sofa kelas 2 </td>
-			      </tr>
-			    </tbody>
-			</table>
 
 
   		</div> <!--modal body-->
@@ -106,6 +104,42 @@
 
 <script type="text/javascript">
 	function info(uuid) {
-		$('#modal_info').modal('show');
+		$('#modal_info_number').html("-");
+		$('#modal_info_po_number').html("-");
+		$('#modal_info_driver_name').html("-");
+		$('#modal_info_date').html("-");
+		$('#modal_info_status_name').html("-");
+		$('#modal_info_created_by').html("-");
+		$('#modal_info_updated_by').html("-");
+		$('#modal_info_note').html("-");
+
+		var payload = {"uuid":uuid};
+
+		$.ajax({
+			type : "POST",
+			url: " {{ route('do.get_do_by_uuid') }}",
+			contentType: "application/json",
+			data : JSON.stringify(payload),
+			success: function(result) {
+				response = JSON.parse(result);
+				if(response.error != true) {
+					$('#modal_info_number').html(response.data.delivery_order.number);
+					$('#modal_info_po_number').html(response.data.delivery_order.po_number);
+					$('#modal_info_driver_name').html(response.data.delivery_order.driver_name);
+					$('#modal_info_date').html(response.data.delivery_order.date);
+					$('#modal_info_status_name').html(response.data.delivery_order.status_name);
+					$('#modal_info_created_by').html(response.data.delivery_order.created_by_name+" : "+response.data.delivery_order.created_at);
+					$('#modal_info_updated_by').html(response.data.delivery_order.updated_by_name+" : "+response.data.delivery_order.updated_at);
+					$('#modal_info_note').html(response.data.delivery_order.note);
+
+
+					$('#modal_info').modal('show');
+				} else {
+					alert(response.messages);
+				}
+				
+			} 
+		});
+		
 	}
 </script>
