@@ -112,7 +112,6 @@ class DOController extends Controller
                 "delivery_order_id"=>$do->id,
                 "quantity"=>$request->subData[$i]['quantity'],
                 "name"=>$request->subData[$i]['name'],
-                "status"=>$request->subData[$i]['status'],
                 "note"=>$request->subData[$i]['note'],
                 "uuid"=>$do->id."-".time()."-".$this->faker->uuid,
                 "created_by"=>Auth::user()->id,
@@ -223,6 +222,15 @@ class DOController extends Controller
                 $response['messages'] = "no data delivery_order found!";
                 return json_encode($response);
             }
+
+
+            $data["sub_delivery_order"] = Sub_Delivery_Order::where('delivery_order_id',$data['delivery_order']->id)->get();
+
+            if(count($data['sub_delivery_order']) < 1) {
+                $response['messages'] = "no detail delivery order found!";
+                return json_encode($response);
+            }
+
 
             if(count($data) > 0) {
                 $response['data'] = $data;

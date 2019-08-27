@@ -111,7 +111,7 @@
 		    </div> <!--panel-->
 
 
-		    <div class="panel panel-primary" id="head_modal_info_po">
+		    <div class="panel panel-danger" id="head_modal_info_po">
 		      <div class="panel-heading text-center">
 		      	Invoice List
 		      </div>

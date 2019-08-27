@@ -215,7 +215,7 @@ class POController extends Controller
 
             $data["sub_po"] = SubPO::where('po_id',$data['po']->id)->get();
 
-            if($data['sub_po'] == null) {
+            if(count($data['sub_po']) < 1) {
                 $response['messages'] = "no detail po found!";
                 return json_encode($response);
             }

@@ -75,8 +75,7 @@
 									<td> no </td>
 									<td> qty </td>
 									<td> desc </td>
-									<td> price </td>
-									<td> total </td>
+									<td> note </td>
 								</tr>
 							</thead>
 						    <tbody id="info_sub_tbody">
@@ -132,6 +131,26 @@
 					$('#modal_info_updated_by').html(response.data.delivery_order.updated_by_name+" : "+response.data.delivery_order.updated_at);
 					$('#modal_info_note').html(response.data.delivery_order.note);
 
+					if(response.data.sub_delivery_order.length > 0) {
+						$.each(response.data.sub_delivery_order, function (key,val) {
+
+							var append_rows = "<tr> " +
+												"<td> " +
+												(key+1) +
+												"</td> " +
+												"<td> " +
+												val.quantity +
+												"</td> " +
+												"<td> " +
+												val.name +
+												"</td> " +
+												"<td> " +
+												val.note +
+												"</td> " +
+											  "<tr>";
+							$('#info_sub_tbody').append(append_rows);
+						});
+					}
 
 					$('#modal_info').modal('show');
 				} else {

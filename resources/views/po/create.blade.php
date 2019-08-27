@@ -121,9 +121,8 @@ function save_po_btn() {
 		quantityValue = $('#quantity'+i).val();
 		nameValue = $('#name'+i).val();
 		priceValue = $('#price'+i).val();
-		statusValue = $('#status'+i).val();
 		noteValue = $('#note'+i).val();
-		var data = {quantity:quantityValue, name:nameValue, price:priceValue,status:statusValue,note:noteValue};
+		var data = {quantity:quantityValue, name:nameValue, price:priceValue,note:noteValue};
 		subData.push(data);
 
 	}
