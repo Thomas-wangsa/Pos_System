@@ -19,7 +19,6 @@ class CreateInvoiceTable extends Migration
             $table->unsignedInteger('sales_id')->nullable();
             $table->string('number');
             $table->unsignedInteger('status')->default(1);
-            $table->unsignedInteger('total')->default(0);
             $table->string('uuid',100)->unique(); 
             $table->text('note')->nullable();
             $table->date('date')->nullable();

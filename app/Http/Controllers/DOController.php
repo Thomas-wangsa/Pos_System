@@ -105,7 +105,6 @@ class DOController extends Controller
 
         $full_data_delivery = array();
         $full_data_invoice  = array();
-        $grand_total = 0;
         for($i=0;$i<count($request->subData);$i++) { 
             $total = 0;
             $sub_po_array = array(
@@ -128,6 +127,7 @@ class DOController extends Controller
                 "quantity"=>$request->subData[$i]['quantity'],
                 "name"=>$request->subData[$i]['name'],
                 "price"=>$sub_po_data->price,
+                "total"=>$sub_invoice_array["quantity"] * $sub_invoice_array["price"],
                 "note"=>$request->subData[$i]['note'],
                 "uuid"=>$do->id."-".time()."-".$this->faker->uuid,
                 "created_by"=>Auth::user()->id,
@@ -135,16 +135,12 @@ class DOController extends Controller
                 "created_at"=>date("Y-m-d H:i:s"),
                 "updated_at"=>date("Y-m-d H:i:s"), 
             );
-            $total = $sub_invoice_array["quantity"] * $sub_invoice_array["price"];
-            $grand_total += $total;
             array_push($full_data_delivery,$sub_po_array);
             array_push($full_data_invoice,$sub_invoice_array);
 
         }
         Sub_Delivery_Order::insert($full_data_delivery);
         Sub_Invoice::insert($full_data_invoice);
-        $invoice->total = $grand_total;
-        $invoice->save();
         
         $response['error'] = false;
         return json_encode($response);

@@ -112,6 +112,7 @@
 		$('#modal_info_updated_by').html("-");
 		$('#modal_info_note').html("-");
 
+		$('#info_sub_tbody').empty();
 		var payload = {"uuid":uuid};
 
 		$.ajax({

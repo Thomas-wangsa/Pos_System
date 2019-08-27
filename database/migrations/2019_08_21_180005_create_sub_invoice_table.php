@@ -19,6 +19,7 @@ class CreateSubInvoiceTable extends Migration
             $table->unsignedInteger('quantity');
             $table->string('name');
             $table->unsignedInteger('price');
+            $table->unsignedInteger('total')->default(0);
             $table->unsignedInteger('status')->default(1);
             $table->string('uuid',100)->unique(); 
             $table->text('note')->nullable();
