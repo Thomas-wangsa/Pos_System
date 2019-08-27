@@ -171,7 +171,6 @@ function save_po_btn() {
 		if(response.error == true) {
 			alert(response.message); 
 		} else {
-			alert("set location success!");
 			var url = "{{route('do.index')}}";
 			window.location = url;
 		}

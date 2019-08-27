@@ -127,7 +127,7 @@ class DOController extends Controller
                 "quantity"=>$request->subData[$i]['quantity'],
                 "name"=>$request->subData[$i]['name'],
                 "price"=>$sub_po_data->price,
-                "total"=>$sub_invoice_array["quantity"] * $sub_invoice_array["price"],
+                "total"=>$request->subData[$i]['quantity'] * $sub_po_data->price,
                 "note"=>$request->subData[$i]['note'],
                 "uuid"=>$do->id."-".time()."-".$this->faker->uuid,
                 "created_by"=>Auth::user()->id,

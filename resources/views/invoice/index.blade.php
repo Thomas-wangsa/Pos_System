@@ -81,7 +81,7 @@
           </td>
 
           <td>
-            {{$val['total']}}
+            Rp. {{ number_format($val['total']) }}
           </td>
           <td>
             {{$val['status_name']}}
