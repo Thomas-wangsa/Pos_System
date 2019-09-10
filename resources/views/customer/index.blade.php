@@ -53,10 +53,9 @@
       <tr>
         <th> No </th>
         <th> Name </th>
-        <th> Category </th>
-        <th> Sales </th>
-        <th> Phone </th>
         <th> Owner </th>
+        <th> Phone </th>
+        <th> Sales </th>
         <th> Action </th>
       </tr>
     </thead>
@@ -75,17 +74,14 @@
             {{$val['name']}}
           </td>
           <td>
-            {{$val['category_name']}}
-          </td>
-          <td>
-            {{$val['sales_name']}}
+            {{$val['owner']}}
           </td>
           
           <td>
             {{$val['phone']}}
           </td>
           <td>
-            {{$val['owner']}}
+            {{$val['sales_name']}}
           </td>
           
           <td>

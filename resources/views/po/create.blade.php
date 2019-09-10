@@ -17,7 +17,6 @@
 	<div class="main_section">	
 		
 		<div class="main_section_information" style="margin-bottom: 10px">
-			<strong> Category : </strong> {{$data['customer']->category_id}} 
 			<br/>
 			<strong> Customer Name : </strong> {{$data['customer']->name}} 
 			<br/>
@@ -41,6 +40,21 @@
 		    <label for="po_note"> Note : </label>
 		    <input type="text" class="form-control" id="po_note" name="po_note">
 		  </div>
+
+		  <br/> 
+
+		  <div class="form-group">
+		    <label for="po_note"> Category : </label>
+		    <select class="form-control" id="po_category" name="po_category">
+		    	<option value=""> Select Customer </option>
+              	@foreach($data['category'] as $key=>$val)
+              	<option value="{{$val->id}}"> {{$val->name}} </option>
+              	@endforeach
+            </select>
+		    </select>
+		  </div>
+
+
 		</form>
 
 
@@ -121,8 +135,9 @@ function save_po_btn() {
 		quantityValue = $('#quantity'+i).val();
 		nameValue = $('#name'+i).val();
 		priceValue = $('#price'+i).val();
+		statusValue = $('#status'+i).val();
 		noteValue = $('#note'+i).val();
-		var data = {quantity:quantityValue, name:nameValue, price:priceValue,note:noteValue};
+		var data = {quantity:quantityValue, name:nameValue,status:statusValue, price:priceValue,note:noteValue};
 		subData.push(data);
 
 	}

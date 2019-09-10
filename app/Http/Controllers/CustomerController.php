@@ -26,13 +26,10 @@ class CustomerController extends Controller
      */
     public function index()
     {   
-        $customer = Customer::leftjoin('category','category.id','=','customer.category_id')
-                    ->leftjoin('users','users.id','=','customer.sales_id')
-                    ->select('customer.*','category.name AS category_name','users.name AS sales_name')
+        $customer = Customer::leftjoin('users','users.id','=','customer.sales_id')
+                    ->select('customer.*','users.name AS sales_name')
                     ->get();
         // dd($customer);
-        $category = Category::all();
-        $data['category'] = $category;
         $data['customer'] = $customer;
         return view('customer/index',compact('data'));
     }
@@ -45,8 +42,6 @@ class CustomerController extends Controller
     public function create()
     {
         $sales = User::where('role',3)->get();
-        $category = Category::all();
-        $data['category'] = $category;
         $data['faker'] = $this->faker;
         $data['sales'] = $sales;
         return view('customer/create',compact('data'));
@@ -62,7 +57,6 @@ class CustomerController extends Controller
     {   
         $new_customer = new Customer;
 
-        $new_customer->category_id = $request->category;
         $new_customer->sales_id = $request->sales;
         $new_customer->name = $request->name;
         

@@ -13,25 +13,7 @@
   <form action="{{route('customer.store')}}" method="POST">
     {{ csrf_field() }}
 
-    <div class="form-group">
-      <label for="sel1">Category:</label>
-      <select class="form-control" id="sel1" name="category" required="">
-        <option value=""> Select category </option>
-        @foreach($data['category'] as $key=>$val)
-        <option value="{{$val['id']}}"> {{$val['name']}} </option>
-        @endforeach
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="sel1">Sales:</label>
-      <select class="form-control" id="sel1" name="sales">
-        <option value=""> Select sales </option>
-        @foreach($data['sales'] as $key=>$val)
-        <option value="{{$val['id']}}"> {{$val['name']}} </option>
-        @endforeach
-      </select>
-    </div>
+   
 
     <div class="form-group">
       <label for="pwd"> Customer Name : </label>
@@ -71,6 +53,15 @@
       value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->text}} @endif">
     </div>
 
+     <div class="form-group">
+      <label for="sel1">Sales:</label>
+      <select class="form-control" id="sel1" name="sales">
+        <option value=""> Select sales </option>
+        @foreach($data['sales'] as $key=>$val)
+        <option value="{{$val['id']}}"> {{$val['name']}} </option>
+        @endforeach
+      </select>
+    </div>
 
     <div class="text-center">
       <button type="submit" class="btn btn-primary btn-block">

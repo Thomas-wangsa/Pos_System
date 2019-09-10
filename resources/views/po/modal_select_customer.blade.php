@@ -24,24 +24,16 @@
           
           <div class="form-group">
             <label for="staff_nama"> 
-              Category :
-            </label>
-            <select class="form-control" id="select_category">
-              <option value=""> Select Category </option>
-              @foreach($data['category'] as $key=>$val)
-              <option value="{{$val->id}}"> {{$val->name}} </option>
-              @endforeach
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="staff_nama"> 
               Customers :
             </label>
             <select class="form-control" id="customer_uuid" name="customer_uuid">
               <option value=""> Select Customer </option>
+              @foreach($data['customer'] as $key=>$val)
+              <option value="{{$val->uuid}}"> {{$val->name}} </option>
+              @endforeach
             </select>
           </div>
+
           <button type="submit" class="btn btn-block btn-warning">
             CREATE NEW PO 
           </button>
@@ -65,48 +57,5 @@
 </div>
 <!-- modal -->
 
-<script type="text/javascript">
-  $('#select_category').change(function(){
-    category_id = $('#select_category').val();
-    $('#customer_uuid').empty().append(
-      $("<option></option>")
-      .attr("value","")
-      .text("Select Customer")
-    );
-    var data = {
-      "category_id":category_id
-    };
-
-    $.ajaxSetup({
-      headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }
-    });
-
-
-    $.ajax({
-      type : "POST",
-      url: " {{ route('customer.get_customer_by_category_id') }}",
-      contentType: "application/json",
-      data : JSON.stringify(data),
-      success: function(result) {
-        response = JSON.parse(result);
-        if(response.error == true) {
-          alert(response.messages);
-        } else { 
-          
-          $.each(response.data, function(key, value) { 
-            $('#customer_uuid')
-              .append($("<option></option>")
-              .attr("value",value.uuid)
-              .text(value.name)
-            );
-          });
-        } 
-      }
-    });
-
-  });
-</script>
 
 

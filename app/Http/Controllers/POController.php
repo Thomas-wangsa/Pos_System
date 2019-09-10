@@ -31,20 +31,23 @@ class POController extends Controller
     public function index()
     {
         //$customer = Customer::all();
-        $category = Category::all();
+        
         $po = PO::leftjoin('customer','po.customer_id','=','customer.id')
             ->leftjoin('users','po.sales_id','=','users.id')
             ->leftjoin('po_status','po.status','=','po_status.id')
             ->select('po.*','customer.name AS customer_name','users.name AS sales_name','po_status.name AS status_name')
             ->get();
 
+        $customer = Customer::all();
+
 
         foreach($po as $key=>$val) {
             $po[$key]["total"] = SubPO::where('po_id',$val->id)->sum('total');
         }
-        $data['category'] = $category;
+        
         //$data['customer'] = $customer;
         $data['po'] = $po;
+        $data['customer'] = $customer;
         return view('po/index',compact('data'));
     }
 
@@ -54,13 +57,14 @@ class POController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
-    {
+    {   
+        $category = Category::all();
         $customer = Customer::where('uuid',$request->customer_uuid)->first();
 
 
         $data['customer'] = $customer;
-
-        // dd($customer);
+        $data['category'] = $category;
+        //dd($customer);
         return view('po/create',compact('data')); 
     }
 

@@ -69,6 +69,25 @@ Question :
 3. inv selalu di buat bareng sj atau gmn ? kalau bareng penomoran,date dan info2 lainnya gmn ?
 4. 
 
+----------------------
+1. Sales dari role sales/owner.
+2. Category pindah ke level PO.
+3. Tempo Pembayaran -> di isi di level PO : CASH,30D,60D ( Otomatis kwitnasi dari sini)
+4. no po = 1
+   no sj == no. kwitansi -> no/"00000"id-customer/BulanRomawi/Tahun -> 290/0300/IX/2019
+5. ada validasinya quantity di Delivery Order, 
+6. PO ada status = in-
+7. 
+-- 5. pas buat PO baru
 
 
-
+1. ubah UI -> 1 mggu
+2. full fitur semua -> 2 minggu
+3. category pindah ke po -> 3 hari
+4. tempo pembayaran -> 2 hari
+5. patern no surat jalan sama kwitansi - 3 hari
+6. validasi di surat jalan ke po - 3 hari
+7. report 1 mgu
+8. print + siapin fitur nya -> 2 minggu
+9. aut + role ->  1minggu
+10. fitur history di surat jalan -> 3 harui

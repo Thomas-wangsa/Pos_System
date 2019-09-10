@@ -104,8 +104,6 @@ class DatabaseSeeder extends Seeder
         $full_data = array();
         for($i=0;$i<=15;$i++) { 
             $customer_array = array(
-                "category_id"=>$faker->numberBetween(1,3),
-                "sales_id"=>$faker->numberBetween(2,4),
                 "name"=>$faker->company,
                 "phone"=>$faker->phoneNumber,
                 "owner"=>$faker->name,
@@ -113,6 +111,7 @@ class DatabaseSeeder extends Seeder
                 "note"=>$faker->text,
                 "relation_at"=>$faker->date,
                 "uuid"=>$faker->uuid,
+                "sales_id"=>$faker->numberBetween(2,4),
                 "created_by"=>1,
                 "updated_by"=>1,
                 "created_at"    => $faker->dateTime($max = 'now'),
