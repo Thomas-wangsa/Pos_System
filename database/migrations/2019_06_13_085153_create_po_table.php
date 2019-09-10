@@ -17,6 +17,7 @@ class CreatePoTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('customer_id');
             $table->unsignedInteger('sales_id')->nullable();
+            $table->unsignedInteger('category_id')->nullable();
             $table->string('number');
             $table->unsignedInteger('status')->default(1);
             $table->string('uuid',100)->unique(); 

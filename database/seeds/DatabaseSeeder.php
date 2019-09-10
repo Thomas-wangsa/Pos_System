@@ -129,6 +129,7 @@ class DatabaseSeeder extends Seeder
             $po = new PO;
             $po->customer_id = $faker->numberBetween(1,15);
             $po->sales_id = $faker->numberBetween(2,4);
+            $po->category_id = $faker->numberBetween(1,3);
             $po->number = "00".$faker->randomDigitNotNull()."/".$faker->company;
             $po->date = date("Y-m-d H:i:s");
             $po->note = $faker->text;

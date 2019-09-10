@@ -64,7 +64,6 @@ class POController extends Controller
 
         $data['customer'] = $customer;
         $data['category'] = $category;
-        //dd($customer);
         return view('po/create',compact('data')); 
     }
 
@@ -85,6 +84,7 @@ class POController extends Controller
         $po->number = $request->po['po_name'];
         $po->date = $request->po['po_date'];
         $po->note = $request->po['po_note'];
+        $po->category_id = $request->po['po_category'];
         $po->uuid = $customer->id."-".time()."-".$this->faker->uuid;
         $po->created_by = Auth::user()->id;
         $po->updated_by = Auth::user()->id;
