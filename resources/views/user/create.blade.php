@@ -36,9 +36,9 @@
       <label for="sel1">Select role :</label>
       <select class="form-control" name="role" id="sel1" required="">
         <option value="">Select Role</option>
-        <option value="1" @if(env('ENV_STATUS', 'development') == 'development') selected @endif>Admin</option>
-        <option value="2">Owner</option>
-        <option value="3">Sales</option>
+        @foreach($data['user_role'] as $val)
+        <option value="{{$val['id']}}"> {{$val['name']}}</option>
+        @endforeach
       </select>
     </div>
 

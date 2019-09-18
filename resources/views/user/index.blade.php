@@ -80,29 +80,16 @@
             {{$val['phone']}}
           </td>
           <td>
-            @switch($val['role']) 
-              @case(1)
-                admin
-              @break
-              @case(2)
-                owner
-              @break
-              @case(3)
-                sales
-              @break
-              @default
-                -
-            @endswitch
+            {{$val['role_name']}}
           </td>
           <td>
-              
-            <a href="#">  
-              <span class="glyphicon glyphicon-file"
-              style="cursor:pointer" 
-              title="detail {{$val['name']}}" 
-              >
-              </span>
-            </a>
+            <?php $uuid = $val['uuid']; ?>
+            <span class="glyphicon glyphicon-file"
+            style="cursor:pointer;color:#337ab7" 
+            title="detail {{$val['name']}}" 
+            onclick='get_detail("{{$uuid}}")' 
+            >
+            </span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
             <a href="#">
@@ -139,3 +126,16 @@
     </tbody>
   </table>
 @endsection
+
+
+<script type="text/javascript">
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+    
+  function get_detail(uuid) {
+    alert(uuid);
+  }
+</script>

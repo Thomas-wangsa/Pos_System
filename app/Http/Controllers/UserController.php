@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Http\Models\UserRole;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,7 +24,10 @@ class UserController extends Controller
      */
     public function index()
     {      
-        $users = User::all();
+        $users = User::leftjoin('user_role','user_role.id','=','users.role')
+                ->select('users.*','user_role.name AS role_name')
+                ->orderBy('users.id','ASC')
+                ->get();
         $data['users'] = $users;
         return view('user/index',compact('data'));
     }
@@ -35,6 +39,7 @@ class UserController extends Controller
      */
     public function create()
     {   
+        $data['user_role'] = UserRole::all();
         $data['faker'] = $this->faker;
         return view('user/create',compact('data'));
     }
@@ -106,5 +111,19 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function getUserByUUID(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        try{
+
+        }
+        //catch exception
+        catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
     }
 }
