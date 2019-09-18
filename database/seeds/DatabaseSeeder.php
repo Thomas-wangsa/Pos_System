@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 
 use App\User;
+use App\Http\Models\UserRole;
+
 use App\Http\Models\Category;
 use App\Http\Models\Customer;
 use App\Http\Models\PO;
@@ -26,6 +28,18 @@ class DatabaseSeeder extends Seeder
         $faker = Faker::create();
         // $this->call(UsersTableSeeder::class);
 
+
+        $role_array = array(
+            array('name'=>"owner"),
+            array('name'=>"admin"),
+            array('name'=>"sales")
+        );
+
+        foreach($role_array as $key => $value) {
+            UserRole::firstOrCreate($value);       
+        }
+
+
         $users_array = array(
             array(
                 "name"=>"superman",
@@ -33,7 +47,7 @@ class DatabaseSeeder extends Seeder
                 "phone"=>$faker->phoneNumber,
                 "uuid"=>$faker->uuid,
                 "password"=>bcrypt(123456),
-                "role"=>2,
+                "role"=>1,
                 "created_by"=>null,
                 "updated_by"=>null
             ),
@@ -44,8 +58,8 @@ class DatabaseSeeder extends Seeder
                 "uuid"=>$faker->uuid,
                 "password"=>bcrypt(123456),
                 "role"=>3,
-                "created_by"=>null,
-                "updated_by"=>null
+                "created_by"=>1,
+                "updated_by"=>1
             ),
             array(
                 "name"=>$faker->name,
@@ -54,8 +68,8 @@ class DatabaseSeeder extends Seeder
                 "uuid"=>$faker->uuid,
                 "password"=>bcrypt(123456),
                 "role"=>3,
-                "created_by"=>null,
-                "updated_by"=>null
+                "created_by"=>1,
+                "updated_by"=>1
             ),
             array(
                 "name"=>$faker->name,
@@ -64,14 +78,30 @@ class DatabaseSeeder extends Seeder
                 "uuid"=>$faker->uuid,
                 "password"=>bcrypt(123456),
                 "role"=>3,
-                "created_by"=>null,
-                "updated_by"=>null
+                "created_by"=>1,
+                "updated_by"=>1
             ),
         );
 
 
         foreach ($users_array as $key => $value) {
             User::firstOrCreate($value);       
+        }
+
+
+        for($i=1;$i<=100;$i++){
+
+            $data = array(
+                "name"=>$faker->name,
+                "email"=>$faker->email,
+                "phone"=>$faker->phoneNumber,
+                "uuid"=>$faker->uuid,
+                "password"=>bcrypt(123456),
+                "role"=>$faker->numberBetween(1,3),
+                "created_by"=>1,
+                "updated_by"=>1
+            );
+            User::firstOrCreate($data); 
         }
 
         $category_array = array(
