@@ -35,6 +35,21 @@
       value="{{$data['user']->phone}}">
     </div>
 
+    @if(Auth::user()->role == 1)
+    <div class="form-group">
+      <label for="sel1">Select role :</label>
+      <select class="form-control" name="role" id="sel1" required="">
+        <option value="">Select Role</option>
+        @foreach($data['user_role'] as $val)
+        <option value="{{$val['id']}}"
+        <?php if(Auth::user()->role == $val['id']) { echo "selected"; } ?>
+        > 
+          {{$val['name']}}
+        </option>
+        @endforeach
+      </select>
+    </div>
+    @endif
 
     <div class="text-center" style="margin-top: 50px">
       <button type="submit" class="btn btn-primary btn-block">

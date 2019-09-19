@@ -88,7 +88,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $data['user']       = User::where('uuid',$id)->first();
-        // $data['user_role'] = UserRole::all();
+        $data['user_role'] = UserRole::all();
         // $data['faker'] = $this->faker;
         return view('user/edit',compact('data'));
     }
@@ -103,6 +103,12 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::where('uuid',$id)->first();
+
+
+        if($request->role) {
+            $user->role = $request->role;
+        }
+
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
