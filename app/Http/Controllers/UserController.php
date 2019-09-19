@@ -39,7 +39,7 @@ class UserController extends Controller
      */
     public function create()
     {   
-        $data['user_role'] = UserRole::all();
+        $data['user_role'] = UserRole::whereIn('id',array(2,3))->get();
         $data['faker'] = $this->faker;
         return view('user/create',compact('data'));
     }
@@ -75,8 +75,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
+    {   
+        
     }
 
     /**
@@ -87,7 +87,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data['user']       = User::where('uuid',$id)->first();
+        // $data['user_role'] = UserRole::all();
+        // $data['faker'] = $this->faker;
+        return view('user/edit',compact('data'));
     }
 
     /**
@@ -99,7 +102,13 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::where('uuid',$id)->first();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->updated_by = Auth::user()->id;
+        $user->save();
+        return redirect()->route($this->redirectTo);
     }
 
     /**
@@ -109,15 +118,44 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        //
+    {   
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        try {
+
+            $user = User::where('uuid',$id)->first()->delete();
+  
+            $response['error'] = false;
+            return json_encode($response);
+        } catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+        
     }
 
 
-    public function getUserByUUID(Request $request) {
+    public function get_user_by_uuid(Request $request) {
         $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
 
         try{
+            $data = User::leftjoin('user_role','user_role.id','=','users.role')
+                ->leftjoin('users as ca','ca.id','=','users.created_by')
+                ->leftjoin('users as cu','cu.id','=','users.updated_by')
+                ->where('users.uuid',$request->uuid)
+                ->select('users.*','user_role.name AS role_name','ca.name AS created_by_name','cu.name AS updated_by_name')
+                ->first();
+
+            if($data == null) {
+                $response['messages'] = "no data user found!";
+                return json_encode($response);
+            }
+
+            if(count($data) > 0) {
+                $response['data'] = $data;
+                $response['error'] = False;
+                return json_encode($response);
+            }
 
         }
         //catch exception

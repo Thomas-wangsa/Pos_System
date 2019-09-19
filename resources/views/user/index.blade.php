@@ -83,16 +83,16 @@
             {{$val['role_name']}}
           </td>
           <td>
-            <?php $uuid = $val['uuid']; ?>
+            <?php $uuid = $val['uuid']; $name = $val['name'];?>
             <span class="glyphicon glyphicon-file"
             style="cursor:pointer;color:#337ab7" 
             title="detail {{$val['name']}}" 
-            onclick='get_detail("{{$uuid}}")' 
+            onclick='info("{{$uuid}}")' 
             >
             </span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <a href="#">
+            <a href="{{route('user.edit',$uuid)}}">
               <span class="glyphicon glyphicon-edit"
               style="color:green;cursor:pointer" 
               title="edit {{$val['name']}}"
@@ -101,14 +101,12 @@
             </a> 
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             
-
-            <a href="#">
-              <span class="glyphicon glyphicon-trash"
-              style="color:red;cursor:pointer" 
-              title="remove {{$val['name']}}"  
-              >
-              </span>
-            </a> 
+            <span class="glyphicon glyphicon-trash"
+            style="color:red;cursor:pointer" 
+            title="remove {{$val['name']}}"
+            onclick='destroy("{{$uuid}}","{{$name}}")'   
+            >
+            </span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
             <a href="#">
@@ -125,17 +123,35 @@
       @endif
     </tbody>
   </table>
+
+  @include('user.modal_info')
+
+
+  <script type="text/javascript">
+    function destroy(uuid,name) {
+      if (confirm('Apakah anda yakin ingin menghapus Akun '+name+' ?')) {
+        var payload = {"uuid":uuid,"_method": 'DELETE'};
+
+
+        $.ajax({
+          type : "POST",
+          url: " {!! url('user' ) !!}" + "/" + uuid,
+          contentType: "application/json",
+          data : JSON.stringify(payload),
+          success: function(result) {
+            response = JSON.parse(result);
+            if(response.error != true) {
+              window.location = "{{route('user.index')}}";
+            } else {
+              alert(response.messages);
+            }
+
+          }
+
+        });
+
+      }
+    }
+  </script>
 @endsection
 
-
-<script type="text/javascript">
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
-    
-  function get_detail(uuid) {
-    alert(uuid);
-  }
-</script>
