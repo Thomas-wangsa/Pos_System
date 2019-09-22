@@ -49,7 +49,15 @@
         @endforeach
       </select>
     </div>
+
+    <div class="form-group">
+      <label for="pwd"> Password : </label>
+      <input type="password" class="form-control" id="pwd"  name="password" maxlength="25" required=""
+      value="">
+    </div>
     @endif
+
+
 
     <div class="text-center" style="margin-top: 50px">
       <button type="submit" class="btn btn-primary btn-block">

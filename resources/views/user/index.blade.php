@@ -31,18 +31,54 @@
       <div class="form-group">
         <select class="form-control" name="search_filter">
           <option value=""> Filter By </option>
+          @foreach($data['user_role'] as $key=>$val)
+          <option value="{{$val->id}}"
+          @if($val->id == Request::get('search_filter')) 
+            selected
+          @endif  
+          > {{$val->name}} </option>
+          @endforeach
+          <option value="is_deleted"
+          @if('is_deleted' == Request::get('search_filter')) 
+            selected
+          @endif
+          > 
+          Deleted Users 
+          </option> 
         </select>
       </div>
 
       <div class="form-group">
           <select class="form-control" name="search_order">
             <option value=""> Sort By </option>
+            <option value="name"
+              @if('name' == Request::get('search_order')) 
+              selected
+            @endif
+            > 
+              Name 
+            </option>
+            <option value="email"
+              @if('email' == Request::get('search_order')) 
+              selected
+            @endif
+              > 
+              Email 
+            </option>
           </select>
       </div>
     
       <button type="submit" class="btn btn-info"> 
         Filter
       </button> 
+
+      @if(Request::get('search') == "on")
+      <button type="reset" 
+      class="btn"
+      onclick="reset_filter()"> 
+        Clear Filter 
+      </button>
+      @endif
     </form>
   </div>
   <div class="clearfix"> </div>
@@ -67,8 +103,9 @@
       @else 
         @foreach($data['users'] as $key=>$val)
         <tr>
-          <td>
-            {{$key+1}}
+          <td> 
+            {{ ($data['users']->currentpage()-1) 
+            * $data['users']->perpage() + $key + 1 }}
           </td>
           <td>
             {{$val['name']}}
@@ -84,45 +121,58 @@
           </td>
           <td>
             <?php $uuid = $val['uuid']; $name = $val['name'];?>
-            <span class="glyphicon glyphicon-file"
-            style="cursor:pointer;color:#337ab7" 
-            title="detail {{$val['name']}}" 
-            onclick='info("{{$uuid}}")' 
-            >
-            </span>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <a href="{{route('user.edit',$uuid)}}">
-              <span class="glyphicon glyphicon-edit"
-              style="color:green;cursor:pointer" 
-              title="edit {{$val['name']}}"
+            @if(Request::get('search_filter') == 'is_deleted')
+              <button class="btn btn-primary"
+              onclick="restore_user('{{$uuid}}')">
+                set active
+              </button>
+            @else 
+              <span class="glyphicon glyphicon-file"
+              style="cursor:pointer;color:#337ab7" 
+              title="detail {{$val['name']}}" 
+              onclick='info("{{$uuid}}")' 
               >
               </span>
-            </a> 
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            
-            <span class="glyphicon glyphicon-trash"
-            style="color:red;cursor:pointer" 
-            title="remove {{$val['name']}}"
-            onclick='destroy("{{$uuid}}","{{$name}}")'   
-            >
-            </span>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <a href="#">
-              <span class="glyphicon glyphicon-cog"
-              style="color:black;cursor:pointer" 
-              title="setting {{$val['name']}}"  
+              <a href="{{route('user.edit',$uuid)}}">
+                <span class="glyphicon glyphicon-edit"
+                style="color:green;cursor:pointer" 
+                title="edit {{$val['name']}}"
+                >
+                </span>
+              </a> 
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              
+              <span class="glyphicon glyphicon-trash"
+              style="color:red;cursor:pointer" 
+              title="remove {{$val['name']}}"
+              onclick='destroy("{{$uuid}}","{{$name}}")'   
               >
               </span>
-            </a> 
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @endif
+
           </td>
         </tr>
         @endforeach
       @endif
     </tbody>
   </table>
+
+  <div class="pull-right" style="margin-top: -15px!important"> 
+    {{ $data['users']->appends(
+      [
+      'search' => Request::get('search'),
+      'search_nama' => Request::get('search_nama'),
+      'search_filter' => Request::get('search_filter'),
+      'search_order' => Request::get('search_order')
+      ])
+
+    ->links() }}
+  </div>
+  <div class="clearfix"> </div>
 
   @include('user.modal_info')
 
@@ -152,6 +202,40 @@
 
       }
     }
+
+    function reset_filter() {
+      window.location = "{{route('user.index')}}";
+    }
+
+
+    function restore_user(uuid) {
+      $(document).ready(function(){
+        if (confirm('Apakah anda yakin ingin restore Akun ini ?')) {
+
+          var data = {
+            "uuid":uuid
+          };
+
+          $.ajax({
+            type : "POST",
+            url: " {{ route('user.restore_user_by_uuid') }}",
+            contentType: "application/json",
+            data : JSON.stringify(data),
+            success: function(result) {
+              response = JSON.parse(result);
+              if(response.error != true) {
+                window.location = "{{route('user.index')}}";
+              } else {
+                alert(response.messages);
+              }
+            },
+            error: function( jqXhr, textStatus, errorThrown ){
+                console.log( errorThrown );
+            }
+          });
+        } 
+      });
+    };
   </script>
 @endsection
 

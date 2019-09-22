@@ -22,13 +22,39 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {      
-        $users = User::leftjoin('user_role','user_role.id','=','users.role')
-                ->select('users.*','user_role.name AS role_name')
-                ->orderBy('users.id','ASC')
-                ->get();
+    public function index(Request $request)
+    {   
+
+
+        $users = User::leftjoin('user_role','user_role.id','=','users.role');
+
+        if($request->search == "on") { 
+
+
+            if($request->search_nama != null) { 
+                $users = $users->where('users.name','like',$request->search_nama."%");
+            }
+
+            if($request->search_filter != null) {
+                if($request->search_filter == "is_deleted") {
+                    $users =  User::onlyTrashed();
+                    $users = $users->leftjoin('user_role','user_role.id','=','users.role');
+                } else {
+                    $users = $users->where('user_role.id','=', $request->search_filter);
+                }
+            }
+
+        }
+
+        $users = $users->select('users.*','user_role.name AS role_name');
+
+        if($request->search_order != null) {
+                $users = $users->orderBy($request->search_order, 'asc');
+        }
+
+        $users = $users->paginate(10);
         $data['users'] = $users;
+        $data['user_role'] = UserRole::all();
         return view('user/index',compact('data'));
     }
 
@@ -109,6 +135,10 @@ class UserController extends Controller
             $user->role = $request->role;
         }
 
+        if($request->password) {
+            $user->password = bcrypt($request->password);
+        }
+
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
@@ -158,6 +188,27 @@ class UserController extends Controller
             }
 
             if(count($data) > 0) {
+                $response['data'] = $data;
+                $response['error'] = False;
+                return json_encode($response);
+            }
+
+        }
+        //catch exception
+        catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+    }
+
+
+    public function restore_user_by_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        try{
+            $data = User::withTrashed()->where('uuid',$request->uuid)->restore();
+
+            if($data) {
                 $response['data'] = $data;
                 $response['error'] = False;
                 return json_encode($response);
