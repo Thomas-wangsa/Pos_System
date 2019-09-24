@@ -9,6 +9,8 @@ use App\User;
 
 use App\Http\Models\Category;
 use App\Http\Models\Customer;
+use App\Http\Models\Customer_Status;
+
 use Faker\Factory as Faker;
 class CustomerController extends Controller
 {   
@@ -41,9 +43,12 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        $sales = User::where('role',3)->get();
+        $sales = User::orderBy('name','asc')->get();
+        $status = Customer_Status::all();
+
         $data['faker'] = $this->faker;
         $data['sales'] = $sales;
+        $data['status'] = $status;
         return view('customer/create',compact('data'));
     }
 
@@ -64,6 +69,7 @@ class CustomerController extends Controller
         $new_customer->owner = $request->owner;
         $new_customer->address = $request->address;
         $new_customer->relation_at = $request->relation_at;
+        $new_customer->status = $request->status;
         $new_customer->note = $request->note;
 
         $new_customer->uuid = time()."-".$this->faker->uuid;

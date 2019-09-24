@@ -13,7 +13,15 @@
   <form action="{{route('customer.store')}}" method="POST">
     {{ csrf_field() }}
 
-   
+    <div class="form-group">
+      <label for="sel1">Sales:</label>
+      <select class="form-control" id="sel1" name="sales">
+        <option value=""> Select sales </option>
+        @foreach($data['sales'] as $key=>$val)
+        <option value="{{$val['id']}}"> {{$val['name']}} </option>
+        @endforeach
+      </select>
+    </div> 
 
     <div class="form-group">
       <label for="pwd"> Customer Name : </label>
@@ -35,16 +43,26 @@
     </div>
 
     <div class="form-group">
-      <label for="pwd"> Relation From : </label>
-      <input type="text" class="form-control" id="pwd"  name="relation_at"
-      value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->date}} @endif">
-    </div>
-
-    <div class="form-group">
       <label for="pwd"> Address : </label>
       <input type="text" class="form-control" id="pwd"  name="address"
       value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->address}} @endif">
     </div>
+
+    <div class="form-group">
+      <label for="pwd"> Relation From : </label>
+      <input type="text" class="form-control datepicker_class" id="pwd"  name="relation_at"
+      value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->date}} @endif">
+    </div>
+
+    <div class="form-group">
+      <label for="sel1">Status :</label>
+      <select class="form-control" id="sel1" name="sales">
+        <option value=""> Select status </option>
+        @foreach($data['status'] as $key=>$val)
+        <option value="{{$val['id']}}"> {{$val['name']}} </option>
+        @endforeach
+      </select>
+    </div> 
 
 
     <div class="form-group">
@@ -53,15 +71,7 @@
       value="@if(env('ENV_STATUS', 'development') == 'development'){{$data['faker']->text}} @endif">
     </div>
 
-     <div class="form-group">
-      <label for="sel1">Sales:</label>
-      <select class="form-control" id="sel1" name="sales">
-        <option value=""> Select sales </option>
-        @foreach($data['sales'] as $key=>$val)
-        <option value="{{$val['id']}}"> {{$val['name']}} </option>
-        @endforeach
-      </select>
-    </div>
+    
 
     <div class="text-center">
       <button type="submit" class="btn btn-primary btn-block">

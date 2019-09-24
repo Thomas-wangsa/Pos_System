@@ -42,9 +42,9 @@ class DatabaseSeeder extends Seeder
 
 
         $customer_status_array = array(
-            array('name'=>"good","color":"blue"),
-            array('name'=>"warning","color":"yellow"),
-            array('name'=>"bad","color":"red"),
+            array('name'=>"good","color"=>"blue"),
+            array('name'=>"warning","color"=>"yellow"),
+            array('name'=>"bad","color"=>"red"),
         );
 
         foreach($customer_status_array as $key => $value) {

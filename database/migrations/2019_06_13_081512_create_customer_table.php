@@ -30,6 +30,11 @@ class CreateCustomerTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
+
+            $table->foreign('status', 'customer_status_byfkey')
+                ->references('id')->on('customer_status')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+
             $table->foreign('created_by', 'customer_created_byfkey')
                 ->references('id')->on('users')
                 ->onUpdate('CASCADE')->onDelete('RESTRICT');
@@ -38,7 +43,7 @@ class CreateCustomerTable extends Migration
                 ->references('id')->on('users')
                 ->onUpdate('CASCADE')->onDelete('RESTRICT');
 
-            $table->foreign('sales_id', 'customer_updated_byfkey')
+            $table->foreign('sales_id', 'customer_sales_id_byfkey')
                 ->references('id')->on('users')
                 ->onUpdate('CASCADE')->onDelete('RESTRICT');
         });
