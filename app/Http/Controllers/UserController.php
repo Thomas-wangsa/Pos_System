@@ -78,18 +78,24 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {   
-        $new_user = new User;   
+        try {
+            $new_user = new User;   
+            $new_user->name = $request->name;
+            $new_user->email = $request->email;
+            $new_user->phone = $request->phone;
+            $new_user->role = $request->role;
+            $new_user->password = bcrypt($request->password);
+            $new_user->uuid  = time()."-".$this->faker->uuid;
+            $new_user->created_by = Auth::user()->id;
+            $new_user->updated_by = Auth::user()->id;
 
-        $new_user->name = $request->name;
-        $new_user->email = $request->email;
-        $new_user->phone = $request->phone;
-        $new_user->role = $request->role;
-        $new_user->password = bcrypt($request->password);
-        $new_user->uuid  = time()."-".$this->faker->uuid;
-        $new_user->created_by = Auth::user()->id;
-        $new_user->updated_by = Auth::user()->id;
-
-        $new_user->save();
+            $new_user->save();
+            $request->session()->flash('alert-success', $new_user->name.' has been created');
+        } //catch exception
+        catch(Exception $e) {
+            $request->session()->flash('alert-danger', $e->getMessage());
+        }
+         
         return redirect()->route($this->redirectTo);
 
     }
@@ -127,16 +133,21 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
+    {   
         $user = User::where('uuid',$id)->first();
-
+        if($user==null) {
+            $request->session()->flash('alert-danger', 'user is not found!');
+            return redirect()->route($this->redirectTo);
+        }
 
         if($request->role) {
             $user->role = $request->role;
         }
 
         if($request->password) {
-            $user->password = bcrypt($request->password);
+            if($request->password != null) {
+                $user->password = bcrypt($request->password);
+            }
         }
 
         $user->name = $request->name;
@@ -144,6 +155,7 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->updated_by = Auth::user()->id;
         $user->save();
+        $request->session()->flash('alert-success', $user->name.' has been updated');
         return redirect()->route($this->redirectTo);
     }
 
