@@ -14,6 +14,7 @@ use App\Http\Models\Driver;
 use App\Http\Models\PO_Status;
 use App\Http\Models\Delivery_Order_Status;
 use App\Http\Models\Invoice_Status;
+use App\Http\Models\Customer_Status;
 
 use Faker\Factory as Faker;
 
@@ -39,6 +40,16 @@ class DatabaseSeeder extends Seeder
             UserRole::firstOrCreate($value);       
         }
 
+
+        $customer_status_array = array(
+            array('name'=>"good","color":"blue"),
+            array('name'=>"warning","color":"yellow"),
+            array('name'=>"bad","color":"red"),
+        );
+
+        foreach($customer_status_array as $key => $value) {
+            Customer_Status::firstOrCreate($value);       
+        }
 
         $users_array = array(
             array(
@@ -89,7 +100,7 @@ class DatabaseSeeder extends Seeder
         }
 
 
-        for($i=1;$i<=100;$i++){
+        for($i=1;$i<=20;$i++){
 
             $data = array(
                 "name"=>$faker->name,
@@ -132,7 +143,7 @@ class DatabaseSeeder extends Seeder
 
 
         $full_data = array();
-        for($i=0;$i<=15;$i++) { 
+        for($i=0;$i<=30;$i++) { 
             $customer_array = array(
                 "name"=>$faker->company,
                 "phone"=>$faker->phoneNumber,
@@ -141,7 +152,7 @@ class DatabaseSeeder extends Seeder
                 "note"=>$faker->text,
                 "relation_at"=>$faker->date,
                 "uuid"=>$faker->uuid,
-                "sales_id"=>$faker->numberBetween(2,4),
+                "sales_id"=>$faker->numberBetween(2,13),
                 "created_by"=>1,
                 "updated_by"=>1,
                 "created_at"    => $faker->dateTime($max = 'now'),

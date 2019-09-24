@@ -19,15 +19,28 @@ class CreateCustomerTable extends Migration
             $table->string('phone')->nullable();
             $table->string('owner')->nullable();
             $table->text('address')->nullable();
-            $table->unsignedInteger('created_by');
-            $table->unsignedInteger('updated_by');
+            $table->date('relation_at')->nullable();
+            $table->date('relation_end')->nullable();
+            $table->unsignedInteger('status')->default(1); 
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
             $table->unsignedInteger('sales_id')->nullable();
             $table->string('uuid',100)->unique(); 
             $table->string('note')->nullable();
-            $table->date('relation_at')->nullable();
-            $table->date('relation_end')->nullable();  
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('created_by', 'customer_created_byfkey')
+                ->references('id')->on('users')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+
+            $table->foreign('updated_by', 'customer_updated_byfkey')
+                ->references('id')->on('users')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+
+            $table->foreign('sales_id', 'customer_updated_byfkey')
+                ->references('id')->on('users')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
         });
     }
 
