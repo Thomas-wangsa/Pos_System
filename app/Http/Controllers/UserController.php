@@ -44,6 +44,11 @@ class UserController extends Controller
                 }
             }
 
+
+            if($request->uuid != null) {
+                $users = $users->where('users.uuid','=',$request->uuid);
+            }
+
         }
 
         $users = $users->select('users.*','user_role.name AS role_name');
@@ -91,12 +96,14 @@ class UserController extends Controller
 
             $new_user->save();
             $request->session()->flash('alert-success', $new_user->name.' has been created');
+            return redirect()->route($this->redirectTo,"search=on&uuid=".$new_user->uuid);
         } //catch exception
         catch(Exception $e) {
             $request->session()->flash('alert-danger', $e->getMessage());
+            return redirect()->route($this->redirectTo);
         }
          
-        return redirect()->route($this->redirectTo);
+        
 
     }
 
