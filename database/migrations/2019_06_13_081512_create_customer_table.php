@@ -22,9 +22,9 @@ class CreateCustomerTable extends Migration
             $table->unsignedInteger('status')->default(1);
             $table->date('relation_at')->nullable();
             $table->date('relation_end')->nullable(); 
-            $table->unsignedInteger('created_by')->nullable();
-            $table->unsignedInteger('updated_by')->nullable();
-            $table->unsignedInteger('sales_id')->nullable();
+            $table->unsignedInteger('created_by');
+            $table->unsignedInteger('updated_by');
+            $table->unsignedInteger('sales_id');
             $table->string('uuid',100)->unique(); 
             $table->string('note')->nullable();
             $table->timestamps();
