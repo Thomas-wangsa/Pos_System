@@ -141,6 +141,34 @@ class DatabaseSeeder extends Seeder
         }
 
 
+        $po_status_array = array(
+            array(
+                "name"=>"in-progress",
+                "color"=>"black",
+            ),
+            array(
+                "name"=>"cancel",
+                "color"=>"red",
+            ),
+            array(
+                "name"=>"success",
+                "color"=>"blue",
+            )
+        );
+
+
+        foreach ($po_status_array as $key => $value) {
+            PO_Status::firstOrCreate($value); 
+            Delivery_Order_Status::firstOrCreate($value);
+            Invoice_Status::firstOrCreate($value);      
+        }
+
+        $inv_status_array = array(
+            "name"=>"active",
+            "color"=>"black"
+        );
+        Invoice_Status::firstOrCreate($inv_status_array);
+
 
         $full_data = array();
         for($i=0;$i<=30;$i++) { 
@@ -172,7 +200,6 @@ class DatabaseSeeder extends Seeder
             $po->sales_id = $faker->numberBetween(2,4);
             $po->category_id = $faker->numberBetween(1,3);
             $po->number = "00".$faker->randomDigitNotNull()."/".$faker->company;
-            $po->date = date("Y-m-d H:i:s");
             $po->note = $faker->text;
             $po->uuid = $faker->uuid;
             $po->created_by = 1;
@@ -203,33 +230,7 @@ class DatabaseSeeder extends Seeder
 
 
 
-        $po_status_array = array(
-            array(
-                "name"=>"in-progress",
-                "color"=>"black",
-            ),
-            array(
-                "name"=>"cancel",
-                "color"=>"red",
-            ),
-            array(
-                "name"=>"success",
-                "color"=>"blue",
-            )
-        );
-
-
-        foreach ($po_status_array as $key => $value) {
-            PO_Status::firstOrCreate($value); 
-            Delivery_Order_Status::firstOrCreate($value);
-            Invoice_Status::firstOrCreate($value);      
-        }
-
-        $inv_status_array = array(
-            "name"=>"active",
-            "color"=>"black"
-        );
-        Invoice_Status::firstOrCreate($inv_status_array);
+        
 
 
         $driver_array = array(
