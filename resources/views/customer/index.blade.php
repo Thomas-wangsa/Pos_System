@@ -30,7 +30,13 @@
       
       <div class="form-group">
         <select class="form-control" name="search_filter">
-          <option value=""> Filter By </option>
+          <option value=""> Filter By Sales </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <select class="form-control" name="search_filter">
+          <option value=""> Filter By Status </option>
         </select>
       </div>
 
@@ -109,7 +115,8 @@
             <a href="#">
               <span class="glyphicon glyphicon-trash"
               style="color:red;cursor:pointer" 
-              title="remove {{$val['name']}}"  
+              title="remove {{$val['name']}}"
+              onclick='destroy("{{$uuid}}","{{$name}}")'  
               >
               </span>
             </a> 
@@ -132,4 +139,32 @@
   </table>
 
   @include('customer.modal_info')
+
+  <script type="text/javascript">
+    function destroy(uuid,name) {
+      if (confirm('Apakah anda yakin ingin menghapus Customer '+name+' ?')) {
+        var payload = {"uuid":uuid,"_method": 'DELETE'};
+
+
+        $.ajax({
+          type : "POST",
+          url: " {!! url('customer' ) !!}" + "/" + uuid,
+          contentType: "application/json",
+          data : JSON.stringify(payload),
+          success: function(result) {
+            response = JSON.parse(result);
+            if(response.error != true) {
+              alert("Deleted customer " +name+" success");
+              window.location = "{{route('customer.index')}}";
+            } else {
+              alert(response.messages);
+            }
+
+          }
+
+        });
+
+      }
+    }
+  </script>
 @endsection

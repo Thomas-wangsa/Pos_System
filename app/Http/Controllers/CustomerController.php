@@ -28,9 +28,9 @@ class CustomerController extends Controller
      */
     public function index()
     {   
-        $customer = Customer::leftjoin('users','users.id','=','customer.sales_id')
-                    ->select('customer.*','users.name AS sales_name')
-                    ->get();
+        $customer = Customer::leftjoin('users','users.id','=','customer.sales_id');
+        $customer = $customer->select('customer.*','users.name AS sales_name')
+        $customer = $customer->get();
         // dd($customer);
         $data['customer'] = $customer;
         return view('customer/index',compact('data'));
@@ -155,7 +155,18 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        try {
+
+            $customer = Customer::where('uuid',$id)->first()->delete();
+  
+            $response['error'] = false;
+            return json_encode($response);
+        } catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
     }
 
 

@@ -202,6 +202,7 @@
           success: function(result) {
             response = JSON.parse(result);
             if(response.error != true) {
+              alert("Deleted user " +name+" success");
               window.location = "{{route('user.index')}}";
             } else {
               alert(response.messages);
