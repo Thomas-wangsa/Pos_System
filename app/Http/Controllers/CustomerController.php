@@ -76,6 +76,7 @@ class CustomerController extends Controller
         $new_customer->created_by = Auth::user()->id;
         $new_customer->updated_by = Auth::user()->id;
         $new_customer->save();
+        $request->session()->flash('alert-success', $new_customer->name.' has been created');
         return redirect()->route($this->redirectTo);
     }
 
@@ -85,9 +86,9 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($uuid)
     {
-        //
+        
     }
 
     /**
@@ -96,9 +97,22 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function edit($uuid)
+    {   
+        $sales = User::orderBy('name','asc')->get();
+        $status = Customer_Status::all();
+        $customer = Customer::where('uuid',$uuid)->first();
+
+        if($customer == null) {
+            $request->session()->flash('alert-danger', 'customer is not found!');
+            return redirect()->route($this->redirectTo);
+        }
+
+        $data['customer'] = $customer;
+        $data['sales'] = $sales;
+        $data['status'] = $status;
+        $data['faker'] = $this->faker;
+        return view('customer/edit',compact('data'));
     }
 
     /**
@@ -110,7 +124,27 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $customer = Customer::where('uuid',$id)->first();
+        if($customer==null) {
+            $request->session()->flash('alert-danger', 'customer is not found!');
+            return redirect()->route($this->redirectTo);
+        }
+
+        $customer->sales_id = $request->sales;
+        $customer->name = $request->name;
+        
+        $customer->phone = $request->phone;
+        $customer->owner = $request->owner;
+        $customer->address = $request->address;
+        $customer->relation_at = $request->relation_at;
+        $customer->relation_end = $request->relation_end;
+        $customer->status = $request->status;
+        $customer->note = $request->note;
+
+        $customer->updated_by = Auth::user()->id;
+        $customer->save();
+        $request->session()->flash('alert-success', $customer->name.' has been updated');
+        return redirect()->route($this->redirectTo);
     }
 
     /**
@@ -142,6 +176,35 @@ class CustomerController extends Controller
 
             $response['messages'] = "no data found!";
             return json_encode($response);
+        }
+        //catch exception
+        catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+    }
+
+
+    public function get_customer_by_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+        try {
+            $data = Customer::leftjoin('users as sales','sales.id','=','customer.sales_id')
+            ->leftjoin('users as cb','cb.id','=','customer.created_by')
+            ->leftjoin('users as cu','cu.id','=','customer.updated_by')
+            ->leftjoin('customer_status as cs','cs.id','=','customer.status')
+            ->where('customer.uuid',$request->uuid)
+            ->select('customer.*','sales.name AS sales_name','cb.name AS created_by_name','cu.name AS updated_by_name','cs.name AS status_name')
+            ->first();
+
+            if($data == null) {
+                $response['messages'] = "no data customer found!";
+                return json_encode($response);
+            } else {
+                $response['data'] = $data;
+                $response['error'] = False;
+                return json_encode($response);
+            }
+
         }
         //catch exception
         catch(Exception $e) {

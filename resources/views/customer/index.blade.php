@@ -85,17 +85,18 @@
           </td>
           
           <td>
-        
+            <?php $uuid = $val['uuid']; $name = $val['name'];?>
             <a href="#">  
               <span class="glyphicon glyphicon-file"
               style="cursor:pointer" 
               title="detail {{$val['name']}}" 
+              onclick='info("{{$uuid}}")' 
               >
               </span>
             </a>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <a href="#">
+            <a href="{{route('customer.edit',$uuid)}}">
               <span class="glyphicon glyphicon-edit"
               style="color:green;cursor:pointer" 
               title="edit {{$val['name']}}"
@@ -129,4 +130,6 @@
       @endif
     </tbody>
   </table>
+
+  @include('customer.modal_info')
 @endsection
