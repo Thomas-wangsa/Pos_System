@@ -26,13 +26,54 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {   
+        $sales = User::orderBy('name','asc')->withTrashed()->get();
+        $customer_status = Customer_Status::all();
         $customer = Customer::leftjoin('users','users.id','=','customer.sales_id');
-        $customer = $customer->select('customer.*','users.name AS sales_name')
-        $customer = $customer->get();
+
+
+
+        if($request->search == "on") { 
+
+            if($request->search_nama != null) { 
+                $customer = $customer->where('customer.name','like',$request->search_nama."%");
+            }
+
+
+            if($request->search_sales != null) {
+                $customer = $customer->where('customer.sales_id','=', $request->search_sales);
+                
+            }
+
+            if($request->search_status != null) {
+                if($request->search_status == "is_deleted") {
+                    $customer =  Customer::onlyTrashed();
+                    $customer = $customer->leftjoin('users','users.id','=','customer.sales_id');
+                } else {
+                    $customer = $customer->where('customer.status','=', $request->search_status);
+                }
+            }
+
+
+
+            if($request->uuid != null) {
+                $customer = $customer->where('customer.uuid','=',$request->uuid);
+            }
+
+        }
+        $customer = $customer->select('customer.*','users.name AS sales_name');
+
+        if($request->search_order != null) {
+                $customer = $customer->orderBy($request->search_order, 'asc');
+        }
+
+
+        $customer = $customer->paginate(10);
         // dd($customer);
         $data['customer'] = $customer;
+        $data['sales'] = $sales;
+        $data['customer_status'] = $customer_status;
         return view('customer/index',compact('data'));
     }
 
@@ -60,24 +101,32 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {   
-        $new_customer = new Customer;
 
-        $new_customer->sales_id = $request->sales;
-        $new_customer->name = $request->name;
+        try {
+            $new_customer = new Customer;
+
+            $new_customer->sales_id = $request->sales;
+            $new_customer->name = $request->name;
+            
+            $new_customer->phone = $request->phone;
+            $new_customer->owner = $request->owner;
+            $new_customer->address = $request->address;
+            $new_customer->relation_at = $request->relation_at;
+            $new_customer->status = $request->status;
+            $new_customer->note = $request->note;
+
+            $new_customer->uuid = time()."-".$this->faker->uuid;
+            $new_customer->created_by = Auth::user()->id;
+            $new_customer->updated_by = Auth::user()->id;
+            $new_customer->save();
+            $request->session()->flash('alert-success', $new_customer->name.' has been created');
+            return redirect()->route($this->redirectTo,"search=on&uuid=".$new_customer->uuid);
+        }
+        catch(Exception $e) {
+            $request->session()->flash('alert-danger', $e->getMessage());
+            return redirect()->route($this->redirectTo);
+        }
         
-        $new_customer->phone = $request->phone;
-        $new_customer->owner = $request->owner;
-        $new_customer->address = $request->address;
-        $new_customer->relation_at = $request->relation_at;
-        $new_customer->status = $request->status;
-        $new_customer->note = $request->note;
-
-        $new_customer->uuid = time()."-".$this->faker->uuid;
-        $new_customer->created_by = Auth::user()->id;
-        $new_customer->updated_by = Auth::user()->id;
-        $new_customer->save();
-        $request->session()->flash('alert-success', $new_customer->name.' has been created');
-        return redirect()->route($this->redirectTo);
     }
 
     /**
@@ -144,7 +193,7 @@ class CustomerController extends Controller
         $customer->updated_by = Auth::user()->id;
         $customer->save();
         $request->session()->flash('alert-success', $customer->name.' has been updated');
-        return redirect()->route($this->redirectTo);
+        return redirect()->route($this->redirectTo,"search=on&uuid=".$customer->uuid);
     }
 
     /**
@@ -211,6 +260,27 @@ class CustomerController extends Controller
                 $response['messages'] = "no data customer found!";
                 return json_encode($response);
             } else {
+                $response['data'] = $data;
+                $response['error'] = False;
+                return json_encode($response);
+            }
+
+        }
+        //catch exception
+        catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+    }
+
+
+    public function restore_customer_by_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        try{
+            $data = Customer::withTrashed()->where('uuid',$request->uuid)->restore();
+
+            if($data) {
                 $response['data'] = $data;
                 $response['error'] = False;
                 return json_encode($response);

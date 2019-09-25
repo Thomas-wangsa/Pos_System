@@ -20,6 +20,12 @@
 			CREATE NEW USER PAGE
 			@elseif(Route::current()->getName() == 'user.edit')
 			EDIT USER PAGE
+			@elseif(Route::current()->getName() == 'customer.index')
+			CUSTOMER PAGE
+			@elseif(Route::current()->getName() == 'customer.create')
+			CREATE NEW CUSTOMER PAGE
+			@elseif(Route::current()->getName() == 'customer.edit')
+			EDIT CUSTOMER PAGE
 			@endif
 			
 		</h3>

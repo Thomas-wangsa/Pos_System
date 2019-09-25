@@ -1,10 +1,19 @@
 @extends('layouts.main')
 
 @section('content')
+  @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+    @if(Session::has('alert-' . $msg))
+      <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }} 
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">
+          &times;
+        </a>
+     </p>
+    @endif
+  @endforeach
   <div style="margin-top: 15px">
     <div class="pull-left">
       <a href="{{route('customer.create')}}">
-        <button type="button" class="btn btn-md btn-primary">
+        <button type="button" class="btn btn-md btn-warning">
           <span class="glyphicon glyphicon-plus"></span>
           New Customer
         </button>
@@ -29,26 +38,67 @@
       </div>
       
       <div class="form-group">
-        <select class="form-control" name="search_filter">
+        <select class="form-control" name="search_sales">
           <option value=""> Filter By Sales </option>
+          @foreach($data['sales'] as $key=>$val)
+          <option value="{{$val->id}}"
+          @if($val->id == Request::get('search_sales')) 
+            selected
+          @endif  
+          > {{$val->name}} </option>
+          @endforeach
         </select>
       </div>
 
       <div class="form-group">
-        <select class="form-control" name="search_filter">
+        <select class="form-control" name="search_status">
           <option value=""> Filter By Status </option>
+          @foreach($data['customer_status'] as $key=>$val)
+          <option value="{{$val->id}}"
+          @if($val->id == Request::get('search_status')) 
+            selected
+          @endif  
+          > {{$val->name}} </option>
+          @endforeach
+          <option value="is_deleted"
+          @if('is_deleted' == Request::get('search_status')) 
+            selected
+          @endif
+          > 
+          Deleted Customer 
         </select>
       </div>
 
       <div class="form-group">
           <select class="form-control" name="search_order">
             <option value=""> Sort By </option>
+            <option value="name"
+              @if('name' == Request::get('search_order')) 
+              selected
+            @endif
+            > 
+              Name 
+            </option>
+            <option value="owner"
+              @if('owner' == Request::get('search_order')) 
+              selected
+            @endif
+              > 
+              Owner 
+            </option>
           </select>
       </div>
     
       <button type="submit" class="btn btn-info"> 
         Filter
-      </button> 
+      </button>
+      @if(Request::get('search') == "on")
+      <button type="reset" 
+      class="btn"
+      onclick="reset_filter()"> 
+        Clear Filter 
+      </button>
+      @endif 
     </form>
   </div>
   <div class="clearfix"> </div>
@@ -58,7 +108,7 @@
     <thead>
       <tr>
         <th> No </th>
-        <th> Name </th>
+        <th> Customer Name </th>
         <th> Owner </th>
         <th> Phone </th>
         <th> Sales </th>
@@ -73,8 +123,9 @@
       @else 
         @foreach($data['customer'] as $key=>$val)
         <tr>
-          <td>
-            {{$key+1}}
+          <td> 
+            {{ ($data['customer']->currentpage()-1) 
+            * $data['customer']->perpage() + $key + 1 }}
           </td>
           <td>
             {{$val['name']}}
@@ -92,44 +143,51 @@
           
           <td>
             <?php $uuid = $val['uuid']; $name = $val['name'];?>
-            <a href="#">  
-              <span class="glyphicon glyphicon-file"
-              style="cursor:pointer" 
-              title="detail {{$val['name']}}" 
-              onclick='info("{{$uuid}}")' 
-              >
-              </span>
-            </a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @if(Request::get('search_status') == 'is_deleted')
+              <button class="btn btn-primary"
+              onclick="restore('{{$uuid}}')">
+                restore customer
+              </button>
+            @else 
+              <a href="#">  
+                <span class="glyphicon glyphicon-file"
+                style="cursor:pointer" 
+                title="detail {{$val['name']}}" 
+                onclick='info("{{$uuid}}")' 
+                >
+                </span>
+              </a>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <a href="{{route('customer.edit',$uuid)}}">
-              <span class="glyphicon glyphicon-edit"
-              style="color:green;cursor:pointer" 
-              title="edit {{$val['name']}}"
-              >
-              </span>
-            </a> 
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            
+              <a href="{{route('customer.edit',$uuid)}}">
+                <span class="glyphicon glyphicon-edit"
+                style="color:green;cursor:pointer" 
+                title="edit {{$val['name']}}"
+                >
+                </span>
+              </a> 
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              
 
-            <a href="#">
-              <span class="glyphicon glyphicon-trash"
-              style="color:red;cursor:pointer" 
-              title="remove {{$val['name']}}"
-              onclick='destroy("{{$uuid}}","{{$name}}")'  
-              >
-              </span>
-            </a> 
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            
-            <a href="{{route('po.create')}}?customer_uuid={{$val['uuid']}}">  
-              <span class="glyphicon glyphicon-file"
-              style="cursor:pointer" 
-              title="detail {{$val['name']}}" 
-              >
-              </span>
-            </a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <a href="#">
+                <span class="glyphicon glyphicon-trash"
+                style="color:red;cursor:pointer" 
+                title="remove {{$val['name']}}"
+                onclick='destroy("{{$uuid}}","{{$name}}")'  
+                >
+                </span>
+              </a> 
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              
+              <a href="{{route('po.create')}}?customer_uuid={{$val['uuid']}}">  
+                <span class="glyphicon glyphicon-file"
+                style="cursor:pointer" 
+                title="detail {{$val['name']}}" 
+                >
+                </span>
+              </a>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @endif
                 
           </td>
         </tr>
@@ -137,6 +195,20 @@
       @endif
     </tbody>
   </table>
+
+  <div class="pull-right" style="margin-top: -15px!important"> 
+    {{ $data['customer']->appends(
+      [
+      'search' => Request::get('search'),
+      'search_nama' => Request::get('search_nama'),
+      'search_sales' => Request::get('search_sales'),
+      'search_status' => Request::get('search_status'),
+      'search_order' => Request::get('search_order')
+      ])
+
+    ->links() }}
+  </div>
+  <div class="clearfix"> </div>
 
   @include('customer.modal_info')
 
@@ -166,5 +238,40 @@
 
       }
     }
+
+    function reset_filter() {
+      window.location = "{{route('customer.index')}}";
+    }
+
+
+    function restore(uuid) {
+      $(document).ready(function(){
+        if (confirm('Apakah anda yakin ingin restore Akun ini ?')) {
+
+          var data = {
+            "uuid":uuid
+          };
+
+          $.ajax({
+            type : "POST",
+            url: " {{ route('customer.restore_customer_by_uuid') }}",
+            contentType: "application/json",
+            data : JSON.stringify(data),
+            success: function(result) {
+              response = JSON.parse(result);
+              if(response.error != true) {
+                alert("restore customer success");
+                window.location = "{{route('customer.index')}}";
+              } else {
+                alert(response.messages);
+              }
+            },
+            error: function( jqXhr, textStatus, errorThrown ){
+                console.log( errorThrown );
+            }
+          });
+        } 
+      });
+    };
   </script>
 @endsection

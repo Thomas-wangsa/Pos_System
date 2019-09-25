@@ -99,7 +99,7 @@
     <thead>
       <tr>
         <th> No </th>
-        <th> Name </th>
+        <th> User Name </th>
         <th> Email </th>
         <th> Phone </th>
         <th> Role </th>
@@ -136,7 +136,7 @@
             @if(Request::get('search_filter') == 'is_deleted')
               <button class="btn btn-primary"
               onclick="restore_user('{{$uuid}}')">
-                set active
+                restore user
               </button>
             @else 
               <span class="glyphicon glyphicon-file"
@@ -236,6 +236,7 @@
             success: function(result) {
               response = JSON.parse(result);
               if(response.error != true) {
+                alert("restore user success");
                 window.location = "{{route('user.index')}}";
               } else {
                 alert(response.messages);

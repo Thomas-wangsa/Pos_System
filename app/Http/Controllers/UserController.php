@@ -163,7 +163,7 @@ class UserController extends Controller
         $user->updated_by = Auth::user()->id;
         $user->save();
         $request->session()->flash('alert-success', $user->name.' has been updated');
-        return redirect()->route($this->redirectTo);
+        return redirect()->route($this->redirectTo,"search=on&uuid=".$user->uuid);
     }
 
     /**
