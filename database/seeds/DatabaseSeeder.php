@@ -19,7 +19,8 @@ use App\Http\Models\Customer_Status;
 use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
-{
+{   
+
     /**
      * Run the database seeds.
      *
@@ -30,38 +31,12 @@ class DatabaseSeeder extends Seeder
         // $this->call(UsersTableSeeder::class);
 
 
-        $role_array = array(
-            array('name'=>"owner"),
-            array('name'=>"admin"),
-            array('name'=>"sales")
-        );
-
-        foreach($role_array as $key => $value) {
-            UserRole::firstOrCreate($value);       
-        }
+        $this->init();
 
 
-        $customer_status_array = array(
-            array('name'=>"good","color"=>"blue"),
-            array('name'=>"warning","color"=>"yellow"),
-            array('name'=>"bad","color"=>"red"),
-        );
-
-        foreach($customer_status_array as $key => $value) {
-            Customer_Status::firstOrCreate($value);       
-        }
+        
 
         $users_array = array(
-            array(
-                "name"=>"superman",
-                "email"=>"admin@gmail.com",
-                "phone"=>$faker->phoneNumber,
-                "uuid"=>$faker->uuid,
-                "password"=>bcrypt(123456),
-                "role"=>1,
-                "created_by"=>null,
-                "updated_by"=>null
-            ),
             array(
                 "name"=>$faker->name,
                 "email"=>"sales1@gmail.com",
@@ -141,33 +116,7 @@ class DatabaseSeeder extends Seeder
         }
 
 
-        $po_status_array = array(
-            array(
-                "name"=>"in-progress",
-                "color"=>"black",
-            ),
-            array(
-                "name"=>"cancel",
-                "color"=>"red",
-            ),
-            array(
-                "name"=>"success",
-                "color"=>"blue",
-            )
-        );
-
-
-        foreach ($po_status_array as $key => $value) {
-            PO_Status::firstOrCreate($value); 
-            Delivery_Order_Status::firstOrCreate($value);
-            Invoice_Status::firstOrCreate($value);      
-        }
-
-        $inv_status_array = array(
-            "name"=>"active",
-            "color"=>"black"
-        );
-        Invoice_Status::firstOrCreate($inv_status_array);
+        
 
 
         $full_data = array();
@@ -255,4 +204,86 @@ class DatabaseSeeder extends Seeder
 
 
     }
+
+
+
+
+    public function init() {
+        $faker = Faker::create();
+
+
+        $role_array = array(
+            array('name'=>"owner"),
+            array('name'=>"admin"),
+            array('name'=>"sales")
+        );
+
+        foreach($role_array as $key => $value) {
+            UserRole::firstOrCreate($value);       
+        }
+
+
+        $customer_status_array = array(
+            array('name'=>"good","color"=>"blue"),
+            array('name'=>"warning","color"=>"yellow"),
+            array('name'=>"bad","color"=>"red"),
+        );
+
+        foreach($customer_status_array as $key => $value) {
+            Customer_Status::firstOrCreate($value);       
+        }
+
+
+
+        $user = array(
+                "name"=>"superman",
+                "email"=>"admin@gmail.com",
+                "phone"=>$faker->phoneNumber,
+                "uuid"=>$faker->uuid,
+                "password"=>bcrypt(123456),
+                "role"=>1,
+                "created_by"=>null,
+                "updated_by"=>null
+            );
+
+        User::firstOrCreate($user); 
+
+
+
+        $po_status_array = array(
+            array(
+                "name"=>"draft",
+                "color"=>"yellow",
+            ),
+            array(
+                "name"=>"in-progress",
+                "color"=>"black",
+            ),
+            array(
+                "name"=>"cancel",
+                "color"=>"red",
+            ),
+            array(
+                "name"=>"success",
+                "color"=>"blue",
+            )
+        );
+
+
+        foreach ($po_status_array as $key => $value) {
+            PO_Status::firstOrCreate($value); 
+            Delivery_Order_Status::firstOrCreate($value);
+            Invoice_Status::firstOrCreate($value);      
+        }
+
+        $inv_status_array = array(
+            "name"=>"active",
+            "color"=>"black"
+        );
+        Invoice_Status::firstOrCreate($inv_status_array);
+
+
+
+    }
+
 }

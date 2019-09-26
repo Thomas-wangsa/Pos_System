@@ -18,6 +18,7 @@ class POController extends Controller
 {   
     protected $faker;
     protected $redirectTo      = 'po.index';
+    protected $po_label        = 'the-brothers';
 
     public function __construct(){
         $this->faker    = Faker::create();
@@ -59,11 +60,22 @@ class POController extends Controller
     public function create(Request $request)
     {   
         $category = Category::all();
-        $customer = Customer::where('uuid',$request->customer_uuid)->first();
+        $customer = Customer::leftjoin('users','users.id','=','customer.sales_id')
+                ->where('customer.uuid',$request->customer_uuid)
+                ->select('customer.*','users.name AS sales_name')
+                ->first();
 
+        $current_last_po_id = PO::orderBy('id','desc')->limit(1)->value('id');
+        $next_id = 1;
+        if($current_last_po_id != null) {
+            $next_id += $current_last_po_id;
+        }
+
+        $patern_po_name = $next_id."/".$this->po_label."/".date("Y");
 
         $data['customer'] = $customer;
         $data['category'] = $category;
+        $data['patern_po_name'] = $patern_po_name;
         return view('po/create',compact('data')); 
     }
 
@@ -75,6 +87,7 @@ class POController extends Controller
      */
     public function store(Request $request)
     {   
+        dd($request);
         $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
         $customer = Customer::where('uuid',$request->customer_uuid)->first();
 
