@@ -59,24 +59,36 @@ class POController extends Controller
      */
     public function create(Request $request)
     {   
-        $category = Category::all();
-        $customer = Customer::leftjoin('users','users.id','=','customer.sales_id')
-                ->where('customer.uuid',$request->customer_uuid)
-                ->select('customer.*','users.name AS sales_name')
-                ->first();
+        try {
+            $category = Category::all();
+            $customer = Customer::leftjoin('users','users.id','=','customer.sales_id')
+                    ->where('customer.uuid',$request->customer_uuid)
+                    ->select('customer.*','users.name AS sales_name')
+                    ->first();
 
-        $current_last_po_id = PO::orderBy('id','desc')->limit(1)->value('id');
-        $next_id = 1;
-        if($current_last_po_id != null) {
-            $next_id += $current_last_po_id;
+            if($customer == null) {
+                $request->session()->flash('alert-danger', 'customer is not found!');
+                return redirect()->route($this->redirectTo);
+            }
+
+            $current_last_po_id = PO::orderBy('id','desc')->limit(1)->value('id');
+            $next_id = 1;
+            if($current_last_po_id != null) {
+                $next_id += $current_last_po_id;
+            }
+
+            $patern_po_name = $next_id."/".$this->po_label."/".date("Y");
+
+            $data['customer'] = $customer;
+            $data['category'] = $category;
+            $data['patern_po_name'] = $patern_po_name;
+            return view('po/create',compact('data')); 
         }
-
-        $patern_po_name = $next_id."/".$this->po_label."/".date("Y");
-
-        $data['customer'] = $customer;
-        $data['category'] = $category;
-        $data['patern_po_name'] = $patern_po_name;
-        return view('po/create',compact('data')); 
+        catch(Exception $e) {
+            $request->session()->flash('alert-danger', $e->getMessage());
+            return redirect()->route($this->redirectTo);
+        }
+        
     }
 
     /**
@@ -87,48 +99,40 @@ class POController extends Controller
      */
     public function store(Request $request)
     {   
-        dd($request);
-        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
-        $customer = Customer::where('uuid',$request->customer_uuid)->first();
+        try {
+            $customer = Customer::where('uuid',$request->customer_uuid)->first();
+            if($customer == null) {
+                $request->session()->flash('alert-danger', 'customer is not found!');
+                return redirect()->route($this->redirectTo);
+            }
 
-        $po = new PO;
-        $po->customer_id = $customer->id;
-        $po->sales_id = $customer->sales_id;
-        $po->number = $request->po['po_name'];
-        $po->date = $request->po['po_date'];
-        $po->note = $request->po['po_note'];
-        $po->category_id = $request->po['po_category'];
-        $po->uuid = $customer->id."-".time()."-".$this->faker->uuid;
-        $po->created_by = Auth::user()->id;
-        $po->updated_by = Auth::user()->id;
-        $po->save();
-        // return view('po/create',compact('data')); 
-        // dd($request->subData);
+            $exits = PO::where('number',$request->po_name)->first();
+            if($exits) {
+                $request->session()->flash('alert-danger', $request->po_name." already exits");
+                return redirect()->route($this->redirectTo);
+            }
 
-        $full_data = array();
-        for($i=0;$i<count($request->subData);$i++) { 
-            $sub_po_array = array(
-                "po_id"=>$po->id,
-                "quantity"=>$request->subData[$i]['quantity'],
-                "name"=>$request->subData[$i]['name'],
-                "price"=>$request->subData[$i]['price'],
-                "total"=>$request->subData[$i]['price'] * $request->subData[$i]['quantity'],
-                "status"=>$request->subData[$i]['status'],
-                "note"=>$request->subData[$i]['note'],
-                "uuid"=>$po->id."-".time()."-".$this->faker->uuid,
-                "created_by"=>Auth::user()->id,
-                "updated_by"=>Auth::user()->id,
-                "created_at"=>date("Y-m-d H:i:s"),
-                "updated_at"=>date("Y-m-d H:i:s"), 
-            );
+            $po = new PO;
+            $po->number = $request->po_name;
+            $po->customer_id = $customer->id;
+            $po->sales_id = $customer->sales_id;
+            $po->category_id = $request->po_category;
+            $po->uuid = $customer->id."-".time()."-".$this->faker->uuid;
+            $po->created_by = Auth::user()->id;
+            $po->updated_by = Auth::user()->id;
+            $po->save();
 
-            array_push($full_data,$sub_po_array);
-
+            if($request->po_status == "submit") {
+                $request->session()->flash('alert-warning', $po->number.' has been created');
+            } else {
+                $request->session()->flash('alert-success', 'PO : '. $po->number.' has been created');
+            }
+            return redirect()->route($this->redirectTo,"search=on&uuid=".$po->uuid);
         }
-        SubPO::insert($full_data);
-
-        $response['error'] = false;
-        return json_encode($response);
+        catch(Exception $e) {
+            $request->session()->flash('alert-danger', $e->getMessage());
+            return redirect()->route($this->redirectTo);
+        }
     }
 
     /**
@@ -230,40 +234,35 @@ class POController extends Controller
             }
 
 
-            $data["sub_po"] = SubPO::where('po_id',$data['po']->id)->get();
+            // $data["sub_po"] = SubPO::where('po_id',$data['po']->id)->get();
 
-            if(count($data['sub_po']) < 1) {
-                $response['messages'] = "no detail po found!";
-                return json_encode($response);
-            }
-
-
-            $data["delivery_order"] = Delivery_Order::leftjoin('delivery_order_status',
-                'delivery_order_status.id','=','delivery_order.status')
-                ->where('delivery_order.po_id',$data['po']->id)
-                ->select('delivery_order.*','delivery_order_status.name AS status_name')
-                ->get();
-
-            $data["invoice"] = Invoice::leftjoin('invoice_status',
-                'invoice_status.id','=','invoice.status')
-                ->where('invoice.po_id',$data['po']->id)
-                ->select('invoice.*','invoice_status.name AS status_name')
-                ->get();
-
-            // if(count($data["invoice"]) > 0 ) {
-            //     foreach($data["invoice"] as $key=>$val) {
-                    
-            //     }
+            // if(count($data['sub_po']) < 1) {
+            //     $response['messages'] = "no detail po found!";
+            //     return json_encode($response);
             // }
 
 
-            if(count($data) > 0) {
-                $response['data'] = $data;
-                $response['error'] = False;
-                return json_encode($response);
-            }
+            // $data["delivery_order"] = Delivery_Order::leftjoin('delivery_order_status',
+            //     'delivery_order_status.id','=','delivery_order.status')
+            //     ->where('delivery_order.po_id',$data['po']->id)
+            //     ->select('delivery_order.*','delivery_order_status.name AS status_name')
+            //     ->get();
 
-            $response['messages'] = "no data found!";
+            // $data["invoice"] = Invoice::leftjoin('invoice_status',
+            //     'invoice_status.id','=','invoice.status')
+            //     ->where('invoice.po_id',$data['po']->id)
+            //     ->select('invoice.*','invoice_status.name AS status_name')
+            //     ->get();
+
+
+            // if(count($data) > 0) {
+            //     $response['data'] = $data;
+            //     $response['error'] = False;
+            //     return json_encode($response);
+            // }
+
+            $response['data'] = $data;
+            $response['error'] = False;
             return json_encode($response);
         }
         //catch exception

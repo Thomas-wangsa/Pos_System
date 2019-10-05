@@ -1,6 +1,18 @@
 @extends('layouts.main')
 
 @section('content')
+
+  @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+      @if(Session::has('alert-' . $msg))
+
+      <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }} 
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">
+          &times;
+        </a>
+     </p>
+      @endif
+  @endforeach
+
   <div style="margin-top: 15px">
     <div class="pull-left">
       <button type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target="#modal_select_customer">

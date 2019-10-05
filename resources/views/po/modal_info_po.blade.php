@@ -36,14 +36,8 @@
 						        <th> sales name </th>
 						        <td id="modal_info_sales_name">  </td>
 						      </tr>
-						      
-
-						      <tr>
-						        <th> date </th>
-						        <td id="modal_info_date"> test </td>
-						      </tr>		
-						     
-			
+						     		
+						    
 						      <tr class="info">
 						        <th> status </th>
 						        <td id="modal_info_status_name">  </td>
@@ -151,7 +145,6 @@
 		$('#modal_info_number').html("-");
 		$('#modal_info_customer_name').html("-");
 		$('#modal_info_sales_name').html("-");
-		$('#modal_info_date').html("-");
 		$('#modal_info_status_name').html("-");
 		$('#modal_info_created_by').html("-");
 		$('#modal_info_updated_by').html("-");
@@ -173,90 +166,83 @@
 					$('#modal_info_number').html(response.data.po.number);
 					$('#modal_info_customer_name').html(response.data.po.customer_name);
 					$('#modal_info_sales_name').html(response.data.po.sales_name);
-					$('#modal_info_date').html(response.data.po.date);
 					$('#modal_info_status_name').html(response.data.po.status_name);
 					$('#modal_info_created_by').html(response.data.po.created_by_name+" : "+response.data.po.created_at);
 					$('#modal_info_updated_by').html(response.data.po.updated_by_name+" : "+response.data.po.updated_at);
 					$('#modal_info_note').html(response.data.po.note);
 
-					if(response.data.sub_po.length > 0) {
-						$.each(response.data.sub_po, function (key,val) {
+					// if(response.data.sub_po.length > 0) {
+					// 	$.each(response.data.sub_po, function (key,val) {
 
-							var append_rows = "<tr> " +
-												"<td> " +
-												(key+1) +
-												"</td> " +
-												"<td> " +
-												val.quantity +
-												"</td> " +
-												"<td> " +
-												val.name +
-												"</td> " +
-												"<td> " +
-												"Rp. " + val.price.toLocaleString() +
-												"</td> " +
-												"<td> " +
-												"Rp. " + val.total.toLocaleString() +
-												"</td> " +
-											  "<tr>";
-							$('#info_sub_tbody').append(append_rows);
-						});
-					}
-
-
-					if(response.data.delivery_order.length > 0) {
-						$.each(response.data.delivery_order, function (key,val) {
-
-							var append_rows = "<tr> " +
-												"<td> " +
-												(key+1) +
-												"</td> " +
-												"<td> " +
-												val.number +
-												"</td> " +
-												"<td> " +
-												val.date +
-												"</td> " +
-												"<td> " +
-												val.status_name +
-												"</td> " +
-											  "<tr>";
-							$('#info_delivery_order_tbody').append(append_rows);
-						});
-					} else {
-						$('#info_delivery_order_tbody').append("<tr> <td colspan='6'> no delivery order found! </td></tr>");
-					}
+					// 		var append_rows = "<tr> " +
+					// 							"<td> " +
+					// 							(key+1) +
+					// 							"</td> " +
+					// 							"<td> " +
+					// 							val.quantity +
+					// 							"</td> " +
+					// 							"<td> " +
+					// 							val.name +
+					// 							"</td> " +
+					// 							"<td> " +
+					// 							"Rp. " + val.price.toLocaleString() +
+					// 							"</td> " +
+					// 							"<td> " +
+					// 							"Rp. " + val.total.toLocaleString() +
+					// 							"</td> " +
+					// 						  "<tr>";
+					// 		$('#info_sub_tbody').append(append_rows);
+					// 	});
+					// }
 
 
-					if(response.data.invoice.length > 0) {
-						$.each(response.data.delivery_order, function (key,val) {
+					// if(response.data.delivery_order.length > 0) {
+					// 	$.each(response.data.delivery_order, function (key,val) {
 
-							var append_rows = "<tr> " +
-												"<td> " +
-												(key+1) +
-												"</td> " +
-												"<td> " +
-												val.number +
-												"</td> " +
-												"<td> " +
-												val.date +
-												"</td> " +
-												"<td> " +
-												val.status_name +
-												"</td> " +
-											  "<tr>";
-							$('#info_invoice_tbody').append(append_rows);
-						});
-					} else {
-						$('#info_invoice_tbody').append("<tr> <td colspan='6'> no invoice found! </td></tr>");
-					}
-
-					// $.each(response.data, function (key,val) {
+					// 		var append_rows = "<tr> " +
+					// 							"<td> " +
+					// 							(key+1) +
+					// 							"</td> " +
+					// 							"<td> " +
+					// 							val.number +
+					// 							"</td> " +
+					// 							"<td> " +
+					// 							val.date +
+					// 							"</td> " +
+					// 							"<td> " +
+					// 							val.status_name +
+					// 							"</td> " +
+					// 						  "<tr>";
+					// 		$('#info_delivery_order_tbody').append(append_rows);
+					// 	});
+					// } else {
+					// 	$('#info_delivery_order_tbody').append("<tr> <td colspan='6'> no delivery order found! </td></tr>");
+					// }
 
 
-					// });
-					// $('#modal_info_po_number').html(response.data.po.number);
-					// alert(response.data.po.number);
+					// if(response.data.invoice.length > 0) {
+					// 	$.each(response.data.delivery_order, function (key,val) {
+
+					// 		var append_rows = "<tr> " +
+					// 							"<td> " +
+					// 							(key+1) +
+					// 							"</td> " +
+					// 							"<td> " +
+					// 							val.number +
+					// 							"</td> " +
+					// 							"<td> " +
+					// 							val.date +
+					// 							"</td> " +
+					// 							"<td> " +
+					// 							val.status_name +
+					// 							"</td> " +
+					// 						  "<tr>";
+					// 		$('#info_invoice_tbody').append(append_rows);
+					// 	});
+					// } else {
+					// 	$('#info_invoice_tbody').append("<tr> <td colspan='6'> no invoice found! </td></tr>");
+					// }
+
 					$('#modal_info').modal('show');
 				} else {
 					alert(response.messages);

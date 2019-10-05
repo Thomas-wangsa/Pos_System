@@ -23,7 +23,7 @@
 
 		  <div class="form-group">
 		    <label class="control-label" for="customer_name"> Customer Name :  </label>
-		    <input type="text" class="form-control" value="{{$data['customer']->sales_name}}" readonly="">
+		    <input type="text" class="form-control" value="{{$data['customer']->name}}" readonly="">
 		  </div>
 
 		  <div class="form-group">
@@ -33,7 +33,7 @@
 
 		  <div class="form-group">
 		    <label class="control-label" for="po_name"> PO Numbers :</label>
-		    <input type="text" class="form-control" id="po_name" name="po_name" value="{{$data['patern_po_name']}}" disabled="">
+		    <input type="text" class="form-control" id="po_name" name="po_name" value="{{$data['patern_po_name']}}" readonly="">
 		  </div>
 
 		  <div class="form-group">
@@ -48,12 +48,12 @@
 
 		  <div class="form-group">
 		    <label class="control-label" for="note"> Note :</label>
-		    <textarea class="form-control" rows="5" id="note" name="note"></textarea>
+		    <textarea class="form-control" rows="5" id="note" name="po_note"></textarea>
 		  </div>
 
 		  <div class="form-group"> 
 		    <div class="col-md-6">
-		      <button type="submit" class="btn btn-primary btn-block" name="po_status" value="submit"> Set Item </button>
+		      <button type="submit" class="btn btn-primary btn-block" name="po_status" value="submit"> Submit and set item </button>
 		    </div>
 		  </div>
 
