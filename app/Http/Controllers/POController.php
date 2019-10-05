@@ -43,7 +43,19 @@ class POController extends Controller
 
 
         foreach($po as $key=>$val) {
-            $po[$key]["total"] = SubPO::where('po_id',$val->id)->sum('total');
+            $po[$key]["total"] = 0;
+
+            $sub_po_data = SubPO::where('po_id',$val->id)->get();
+
+            if(count($sub_po_data) > 0) {
+                $sub_po_data_total = 0;
+                foreach($sub_po_data as $sub_po_key=>$sub_po_val) {
+                    $sub_po_data_total += $sub_po_val["quantity"] * $sub_po_val["price"];
+                }
+                $po[$key]["total"] = $sub_po_data_total;
+            }
+
+            
         }
         
         //$data['customer'] = $customer;

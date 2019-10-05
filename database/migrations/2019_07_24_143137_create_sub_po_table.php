@@ -15,18 +15,35 @@ class CreateSubPoTable extends Migration
     {
         Schema::create('sub_po', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('po_id');
             $table->unsignedInteger('quantity');
             $table->string('name');
             $table->unsignedInteger('price');
-            $table->unsignedInteger('total');
-            $table->unsignedInteger('status')->default(1);
-            $table->string('uuid',100)->unique(); 
+            $table->unsignedInteger('status')->default(2);
+            $table->unsignedInteger('po_id');
             $table->text('note')->nullable();
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
+            $table->string('uuid',100)->unique(); 
             $table->timestamps();
             $table->softDeletes();
+
+
+            $table->foreign('po_id', 'sub_po_id_byfkey')
+                ->references('id')->on('po')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+
+            $table->foreign('status', 'sub_po_status_byfkey')
+                ->references('id')->on('sub_po_status')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+
+            $table->foreign('created_by', 'sub_po_created_by_byfkey')
+                ->references('id')->on('users')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+
+
+            $table->foreign('updated_by', 'sub_po_updated_by_byfkey')
+                ->references('id')->on('users')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
         });
     }
 
