@@ -9,9 +9,11 @@ use App\Http\Models\Category;
 use App\Http\Models\Customer;
 use App\Http\Models\PO;
 use App\Http\Models\SubPO;
+
 use App\Http\Models\Driver;
 
 use App\Http\Models\PO_Status;
+use App\Http\Models\Sub_PO_Status
 use App\Http\Models\Delivery_Order_Status;
 use App\Http\Models\Invoice_Status;
 use App\Http\Models\Customer_Status;
@@ -281,6 +283,27 @@ class DatabaseSeeder extends Seeder
             "color"=>"black"
         );
         Invoice_Status::firstOrCreate($inv_status_array);
+
+
+
+        $sub_po_status_array = array(
+            array(
+                "name"=>"urgent",
+                "color"=>"red",
+            ),
+            array(
+                "name"=>"normal",
+                "color"=>"black",
+            ),
+            array(
+                "name"=>"low",
+                "color"=>"gray",
+            )
+        );
+
+        foreach ($sub_po_status_array as $key => $value) {
+            Sub_PO_Status::firstOrCreate($value);     
+        }
 
 
 
