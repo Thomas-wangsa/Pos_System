@@ -108,7 +108,7 @@ class POController extends Controller
 
             $exits = PO::where('number',$request->po_name)->first();
             if($exits) {
-                $request->session()->flash('alert-danger', $request->po_name." already exits");
+                $request->session()->flash('alert-danger',"create new PO failed : ". $request->po_name." already exits");
                 return redirect()->route($this->redirectTo);
             }
 
@@ -117,16 +117,13 @@ class POController extends Controller
             $po->customer_id = $customer->id;
             $po->sales_id = $customer->sales_id;
             $po->category_id = $request->po_category;
+            $po->note = $request->po_note;
             $po->uuid = $customer->id."-".time()."-".$this->faker->uuid;
             $po->created_by = Auth::user()->id;
             $po->updated_by = Auth::user()->id;
             $po->save();
 
-            if($request->po_status == "submit") {
-                $request->session()->flash('alert-warning', $po->number.' has been created');
-            } else {
-                $request->session()->flash('alert-success', 'PO : '. $po->number.' has been created');
-            }
+            $request->session()->flash('alert-success', 'PO : '. $po->number.' has been created');
             return redirect()->route($this->redirectTo,"search=on&uuid=".$po->uuid);
         }
         catch(Exception $e) {
@@ -271,4 +268,50 @@ class POController extends Controller
             return json_encode($response);
         }
     } 
+
+
+    public function submit_po_by_customer_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        try {
+
+            $customer = Customer::where('uuid',$request->customer_uuid)->first();
+            if($customer == null) {
+                $response['messages'] = "customer is not found!";
+                return json_encode($response);
+            }
+
+            $exits = PO::where('number',$request->po_name)->first();
+            if($exits) {
+                $response['messages'] = "create new PO failed : ". $request->po_name." already exits";
+                return json_encode($response);
+            }
+
+            $po_category = Category::where('id',$request->po_category)->first();
+            if($po_category == null) {
+                $response['messages'] = "category is not found!";
+                return json_encode($response);
+            }
+
+            $po = new PO;
+            $po->number = $request->po_name;
+            $po->customer_id = $customer->id;
+            $po->sales_id = $customer->sales_id;
+            $po->category_id = $request->po_category;
+            $po->note = $request->po_note;
+            $po->uuid = $customer->id."-".time()."-".$this->faker->uuid;
+            $po->created_by = Auth::user()->id;
+            $po->updated_by = Auth::user()->id;
+            $po->save();
+
+            $response['error'] = false;
+            $response['data'] = $po;
+            return json_encode($response);
+        }
+        //catch exception
+        catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+    }
 }

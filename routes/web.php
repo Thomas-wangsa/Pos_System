@@ -39,6 +39,12 @@ Route::post('ajax/restore_customer_by_uuid','CustomerController@restore_customer
 
 
 Route::resource('/po', 'POController');
+Route::post('ajax/get_po_by_customer_uuid','POController@get_po_by_customer_uuid')->name('po.get_po_by_customer_uuid');
+Route::post('ajax/get_po_by_uuid','POController@get_po_by_uuid')->name('po.get_po_by_uuid');
+Route::post('ajax/submit_po_by_customer_uuid','POController@submit_po_by_customer_uuid')->name('po.submit_po_by_customer_uuid');
+
+
+
 Route::resource('/do', 'DOController');
 Route::resource('/invoice', 'InvoiceController');
 
@@ -47,7 +53,5 @@ Route::resource('/config', 'ConfigController');
 
 
 
-Route::post('ajax/get_po_by_customer_uuid','POController@get_po_by_customer_uuid')->name('po.get_po_by_customer_uuid');
-Route::post('ajax/get_po_by_uuid','POController@get_po_by_uuid')->name('po.get_po_by_uuid');
 Route::post('ajax/get_delivery_order_by_uuid','DOController@get_do_by_uuid')->name('do.get_do_by_uuid');
 Route::post('ajax/get_invoice_by_uuid','InvoiceController@get_invoice_by_uuid')->name('invoice.get_invoice_by_uuid');
