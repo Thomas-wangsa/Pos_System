@@ -48,7 +48,7 @@
 
 		  <div class="form-group">
 		    <label class="control-label" for="note"> Note :</label>
-		    <textarea class="form-control" rows="5" id="po_note" name="po_note"></textarea>
+		    <textarea class="form-control" rows="4" id="po_note" name="po_note"></textarea>
 		  </div>
 
 		  <div class="form-group"> 
@@ -175,7 +175,9 @@
 			data += "</select> ";
 			data += "</td>";
 			data += '<td>  <textarea class="form-control" rows="3" id="item_note_'+no_items+'"></textarea> </td>';
-			data += "<td> 1 </td>";
+			data += '<td>'+
+						'<button class="btn btn-primary" onclick="save_item('+no_items+')"> save item </button>'+
+					'</td>';
 			data += "</tr>";
 			$('#po_tbody').append(data);
 		}
@@ -188,10 +190,10 @@
 				$('#item_price_'+current_no_items).val(0);
 				alert("price is not correct!");
 			}
-			format_price = this_value.toLocaleString();
-			alert(format_price);
-			// $('#item_price_'+current_no_items).val(format_price);
+		}
 
+		function save_item(current_no_items) {
+			alert(current_no_items);
 		}
 	</script>
 
