@@ -153,22 +153,45 @@
 			$('#btn_add_items').prop('disabled', true);
 			data = "<tr> ";
 			data += "<td>"+no_items+"</td>";
-			data += '<td> <input type="number" class="form-control" id="item_quantity_'+no_items+'" value="1"> </td>';
+			data += '<td width="30px"> <input type="number" class="form-control" id="item_quantity_'+no_items+'" value="1"> </td>';
 			data += '<td> <input type="text" class="form-control" id="item_name_'+no_items+'"> </td>';
-			data += '<td> <input type="number" class="form-control" id="item_price_'+no_items+'"> </td>';
+			data += '<td width="60px">'+
+					'<input type="number" onchange=adjust_value(this,'+no_items+') class="form-control" id="item_price_'+no_items+'">'+
+					'</td>';
 			data += "<td> ";
 			data += '<select class="form-control" id="item_status'+no_items+'"> ';
 
 			@foreach($data['sub_po_status'] as $key=>$val)
-				data += "<option> aaa </option>";
+				data += '<option value='+
+							"{{$val['id']}} " +
+							@if($val['id'] == 2) 
+							'selected' +
+							@endif
+						'>';
+				data += '{{$val["name"]}}';
+				data += "</option>" ;
 			@endforeach
 
 			data += "</select> ";
 			data += "</td>";
-			data += "<td> 1 </td>";
+			data += '<td>  <textarea class="form-control" rows="3" id="item_note_'+no_items+'"></textarea> </td>';
 			data += "<td> 1 </td>";
 			data += "</tr>";
 			$('#po_tbody').append(data);
+		}
+
+
+		function adjust_value(price,current_no_items) {
+			this_value = price.value;
+
+			if(this_value < 1) {
+				$('#item_price_'+current_no_items).val(0);
+				alert("price is not correct!");
+			}
+			format_price = this_value.toLocaleString();
+			alert(format_price);
+			// $('#item_price_'+current_no_items).val(format_price);
+
 		}
 	</script>
 
