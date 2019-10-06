@@ -385,4 +385,58 @@ class POController extends Controller
             return json_encode($response);
         }
     }
+
+    public function update_sub_po_by_sub_po_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+        try {
+
+            $sub_po = SubPO::where('uuid',$request->sub_po_uuid)->first();
+            if($sub_po == null) {
+                $response['messages'] = "sub po is not found!";
+                return json_encode($response);
+            }
+
+            $item_quantity = $request->item_quantity;
+            if($item_quantity < 1) {
+                $response['messages'] = "item quantity is not correct : ".$request->item_quantity." qty";
+                return json_encode($response);
+            }
+
+            $item_name = $request->item_name;
+            if($item_name == null) {
+                $response['messages'] = "item name not found!";
+                return json_encode($response);
+            }
+
+            $item_price = $request->item_price;
+            if($item_price < 1) {
+                $response['messages'] = "item price is not correct : ".$request->item_price;
+                return json_encode($response);
+            }
+
+            $item_status = Sub_PO_Status::find($request->item_status);
+            if($item_status == null) {
+                $response['messages'] = "item status is not found!";
+                return json_encode($response);
+            }
+
+            $sub_po->quantity = $item_quantity;
+            $sub_po->name = $item_name;
+            $sub_po->price = $item_price;
+            $sub_po->status = $item_status->id;
+            $sub_po->updated_by = Auth::user()->id;
+            $sub_po->note = $request->item_note;
+            $sub_po->save();
+
+            $response['error'] = false;
+            $response['data'] = $sub_po;
+
+            return json_encode($response);
+
+
+        } catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+    }
 }

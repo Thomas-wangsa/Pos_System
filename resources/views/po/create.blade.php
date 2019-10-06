@@ -280,7 +280,57 @@
 
 
 		function update_item(current_no_items) {
-			
+			sub_po_uuid = $('#item_sub_po_uuid_'+current_no_items).html();
+			item_quantity = $('#item_quantity_'+current_no_items).val();
+			item_name = $('#item_name_'+current_no_items).val();
+			item_price = $('#item_price_'+current_no_items).val();
+			item_status = $('#item_status_'+current_no_items).val();
+			item_note = $('#item_note_'+current_no_items).val();
+
+			if(sub_po_uuid == null || sub_po_uuid == "") {
+				alert("error : sub_po_uuid is null");
+				return;
+			} else if(item_name == null || item_name == "") {
+				alert("please input the item name");
+				return;
+			} else if(item_quantity == null || item_quantity < 1) {
+				alert("error : quantity is not correct");
+				return;
+			} else if(item_price == null || item_price < 1) {
+				alert("please input the item price");
+				return;
+			}
+
+			var payload = {
+				"sub_po_uuid":sub_po_uuid,
+				"item_quantity":item_quantity,
+				"item_name":item_name,
+				"item_price":item_price,
+				"item_status":item_status,
+				"item_note":item_note
+			}
+
+			$.ajax({
+				type : "POST",
+				url: " {{ route('po.update_sub_po_by_sub_po_uuid') }}",
+				contentType: "application/json",
+				data : JSON.stringify(payload),
+				success: function(result) {
+					response = JSON.parse(result);
+					if(response.error != true) {
+						$('#item_quantity_'+current_no_items).prop('disabled', true);
+						$('#item_name_'+current_no_items).prop('disabled', true);
+						$('#item_price_'+current_no_items).prop('disabled', true);
+						$('#item_status_'+current_no_items).prop('disabled', true);
+						$('#item_note_'+current_no_items).prop('disabled', true);
+						$('#item_edit_btn_'+current_no_items).show();
+						$('#item_update_btn_'+current_no_items).addClass("hide");
+					} else {
+						alert(response.messages);
+					}
+				}
+			});
+
 		}
 	</script>
 
