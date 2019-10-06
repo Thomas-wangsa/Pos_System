@@ -38,6 +38,7 @@ class POController extends Controller
             ->leftjoin('users','po.sales_id','=','users.id')
             ->leftjoin('po_status','po.status','=','po_status.id')
             ->select('po.*','customer.name AS customer_name','users.name AS sales_name','po_status.name AS status_name')
+            ->orderBy('po.created_at','asc')
             ->get();
 
         $customer = Customer::all();
@@ -164,9 +165,25 @@ class POController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($uuid)
     {
-        //
+        try {
+            $po = PO::where('uuid',$uuid)->first();
+            if($po == null) {
+                $request->session()->flash('alert-danger', 'po is not found!');
+                return redirect()->route($this->redirectTo);
+            }
+
+            $data['customer'] = Customer::all();
+            $data['sub_po_status'] = Sub_PO_Status::all();
+            $data['category'] = Category::all();
+            $data['po'] = $po;
+            return view('po/edit',compact('data')); 
+        }
+        catch(Exception $e) {
+            $request->session()->flash('alert-danger', $e->getMessage());
+            return redirect()->route($this->redirectTo);
+        }
     }
 
     /**
@@ -444,5 +461,47 @@ class POController extends Controller
         }
     }
 
+
+    function update_po_by_po_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+        try {
+
+            $po = PO::where('uuid',$request->po_uuid)->first();
+            if($po == null) {
+                $response['messages'] = "po is not found!";
+                return json_encode($response);
+            }
+
+            $customer = Customer::find($request->po_customer_id);
+            if($customer == null) {
+                $response['messages'] = "customer is not found!";
+                return json_encode($response);
+            }
+
+            $po_category = Category::where('id',$request->po_category)->first();
+            if($po_category == null) {
+                $response['messages'] = "category is not found!";
+                return json_encode($response);
+            }
+
+            $po->customer_id = $customer->id;
+            $po->sales_id = $customer->sales_id;
+            $po->category_id = $request->po_category;
+            $po->note = $request->po_note;
+            $po->updated_by = Auth::user()->id;
+            $po->save();
+
+
+            $response['error'] = false;
+            $response['data'] = $po;
+
+            return json_encode($response);
+
+
+        } catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+    }
 
 }

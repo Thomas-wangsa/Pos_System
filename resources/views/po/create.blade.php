@@ -20,6 +20,11 @@
 		  {{ csrf_field() }}
 
 		  <input type="hidden" class="form-control"  id="customer_uuid" name="customer_uuid" value="{{$data['customer']->uuid}}">
+		  
+		  <div class="form-group">
+		    <label class="control-label" for="po_name"> PO Numbers :</label>
+		    <input type="text" class="form-control" id="po_name" name="po_name" value="{{$data['patern_po_name']}}" readonly="">
+		  </div>
 
 		  <div class="form-group">
 		    <label class="control-label" for="customer_name"> Customer Name :  </label>
@@ -29,11 +34,6 @@
 		  <div class="form-group">
 		    <label class="control-label" for="sales_name"> Sales Name :</label>
 		    <input type="text" class="form-control" value="{{$data['customer']->sales_name}}" readonly="">
-		  </div>
-
-		  <div class="form-group">
-		    <label class="control-label" for="po_name"> PO Numbers :</label>
-		    <input type="text" class="form-control" id="po_name" name="po_name" value="{{$data['patern_po_name']}}" readonly="">
 		  </div>
 
 		  <div class="form-group">
