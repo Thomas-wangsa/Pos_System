@@ -93,6 +93,9 @@
           </td>
           <td>
             
+           
+
+
             <a href="#" onclick="info('{{$uuid}}')">  
               <span class="glyphicon glyphicon-file"
               style="cursor:pointer" 

@@ -178,7 +178,7 @@
 			data += "</td>";
 			data += '<td>  <textarea class="form-control" rows="3" id="item_note_'+no_items+'"></textarea> </td>';
 			data += '<td>'+
-					'<span id="item_sub_po_uuid_'+no_items+'" class=""> </span>' +
+					'<span id="item_sub_po_uuid_'+no_items+'" class="hide"> </span>' +
 					'<button class="btn btn-primary" onclick="save_item('+no_items+')" id="item_save_btn_'+no_items+'"> '+
 						'save item '+
 					'</button>'+

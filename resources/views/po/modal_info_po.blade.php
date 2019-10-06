@@ -36,7 +36,10 @@
 						        <th> sales name </th>
 						        <td id="modal_info_sales_name">  </td>
 						      </tr>
-						     		
+						      <tr>
+						        <th> grand total </th>
+						        <td id="modal_info_grand_total">  </td>
+						      </tr>
 						    
 						      <tr class="info">
 						        <th> status </th>
@@ -149,6 +152,7 @@
 		$('#modal_info_created_by').html("-");
 		$('#modal_info_updated_by').html("-");
 		$('#modal_info_note').html("-");
+		$('#modal_info_grand_total').html("-");
 
 		$('#info_sub_tbody').empty();
 		$('#info_delivery_order_tbody').empty();
@@ -170,30 +174,31 @@
 					$('#modal_info_created_by').html(response.data.po.created_by_name+" : "+response.data.po.created_at);
 					$('#modal_info_updated_by').html(response.data.po.updated_by_name+" : "+response.data.po.updated_at);
 					$('#modal_info_note').html(response.data.po.note);
+					$('#modal_info_grand_total').html("Rp. " + response.data.po.grand_total.toLocaleString());
 
-					// if(response.data.sub_po.length > 0) {
-					// 	$.each(response.data.sub_po, function (key,val) {
+					if(response.data.sub_po.length > 0) {
+						$.each(response.data.sub_po, function (key,val) {
 
-					// 		var append_rows = "<tr> " +
-					// 							"<td> " +
-					// 							(key+1) +
-					// 							"</td> " +
-					// 							"<td> " +
-					// 							val.quantity +
-					// 							"</td> " +
-					// 							"<td> " +
-					// 							val.name +
-					// 							"</td> " +
-					// 							"<td> " +
-					// 							"Rp. " + val.price.toLocaleString() +
-					// 							"</td> " +
-					// 							"<td> " +
-					// 							"Rp. " + val.total.toLocaleString() +
-					// 							"</td> " +
-					// 						  "<tr>";
-					// 		$('#info_sub_tbody').append(append_rows);
-					// 	});
-					// }
+							var append_rows = "<tr> " +
+												"<td> " +
+												(key+1) +
+												"</td> " +
+												"<td> " +
+												val.quantity +
+												"</td> " +
+												"<td> " +
+												val.name +
+												"</td> " +
+												"<td> " +
+												"Rp. " + val.price.toLocaleString() +
+												"</td> " +
+												"<td> " +
+												"Rp. " + val.total.toLocaleString() +
+												"</td> " +
+											  "<tr>";
+							$('#info_sub_tbody').append(append_rows);
+						});
+					}
 
 
 					// if(response.data.delivery_order.length > 0) {

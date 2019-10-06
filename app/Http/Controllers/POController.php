@@ -244,14 +244,18 @@ class POController extends Controller
                 $response['messages'] = "no data po found!";
                 return json_encode($response);
             }
+            $data["po"]['grand_total'] = 0;
 
-
-            // $data["sub_po"] = SubPO::where('po_id',$data['po']->id)->get();
-
-            // if(count($data['sub_po']) < 1) {
-            //     $response['messages'] = "no detail po found!";
-            //     return json_encode($response);
-            // }
+            $data['sub_po'] = SubPO::where('po_id',$data['po']->id)->get();
+            if(count($data['sub_po']) > 0) {
+                $grand_total = 0;
+                foreach($data['sub_po'] as $key=>$val) {
+                    $sub_total = $val['quantity'] * $val['price'];
+                    $data['sub_po'][$key]['total'] = $sub_total;
+                    $grand_total += $sub_total;
+                }
+                $data["po"]['grand_total'] = $grand_total;
+            }
 
 
             // $data["delivery_order"] = Delivery_Order::leftjoin('delivery_order_status',

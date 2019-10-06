@@ -148,7 +148,8 @@
               onclick="restore('{{$uuid}}')">
                 restore customer
               </button>
-            @else 
+            @else
+
               <a href="#">  
                 <span class="glyphicon glyphicon-file"
                 style="cursor:pointer" 
@@ -273,5 +274,7 @@
         } 
       });
     };
+
+
   </script>
 @endsection
