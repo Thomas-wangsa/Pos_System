@@ -72,7 +72,7 @@
 		    	add items 
 		    </button>
 
-		    <span id="new_po_uuid"> po_uuid </span> 
+		    <span id="new_po_uuid" class="hide"> </span> 
 
 			<table class="table table-bordered table-striped">
 				<thead>
@@ -153,13 +153,15 @@
 			$('#btn_add_items').prop('disabled', true);
 			data = "<tr> ";
 			data += "<td>"+no_items+"</td>";
-			data += '<td width="30px"> <input type="number" class="form-control" id="item_quantity_'+no_items+'" value="1"> </td>';
+			data += '<td width="30px">'+
+					'<input type="number" onchange=adjust_quantity(this,'+no_items+') class="form-control" id="item_quantity_'+no_items+'" value="1">'+
+					'</td>';
 			data += '<td> <input type="text" class="form-control" id="item_name_'+no_items+'"> </td>';
 			data += '<td width="60px">'+
-					'<input type="number" onchange=adjust_value(this,'+no_items+') class="form-control" id="item_price_'+no_items+'">'+
+					'<input type="number" onchange=adjust_value(this,'+no_items+') class="form-control" id="item_price_'+no_items+'" value="1000">'+
 					'</td>';
 			data += "<td> ";
-			data += '<select class="form-control" id="item_status'+no_items+'"> ';
+			data += '<select class="form-control" id="item_status_'+no_items+'"> ';
 
 			@foreach($data['sub_po_status'] as $key=>$val)
 				data += '<option value='+
@@ -176,12 +178,29 @@
 			data += "</td>";
 			data += '<td>  <textarea class="form-control" rows="3" id="item_note_'+no_items+'"></textarea> </td>';
 			data += '<td>'+
-						'<button class="btn btn-primary" onclick="save_item('+no_items+')"> save item </button>'+
+					'<span id="item_sub_po_uuid_'+no_items+'" class=""> </span>' +
+					'<button class="btn btn-primary" onclick="save_item('+no_items+')" id="item_save_btn_'+no_items+'"> '+
+						'save item '+
+					'</button>'+
+					'<button class="btn btn-warning hide" onclick="edit_item('+no_items+')" id="item_edit_btn_'+no_items+'"> '+
+						' edit item '+
+					'</button>'+
+					'<button class="btn btn-success hide" onclick="update_item('+no_items+')" id="item_update_btn_'+no_items+'">'+
+						' update item '+
+					'</button>'+
 					'</td>';
 			data += "</tr>";
 			$('#po_tbody').append(data);
 		}
 
+		function adjust_quantity(qty,current_no_items) {
+			this_value = qty.value;
+
+			if(this_value < 1) {
+				$('#item_quantity_'+current_no_items).val(1);
+				alert("quantity is not correct!");
+			}
+		}
 
 		function adjust_value(price,current_no_items) {
 			this_value = price.value;
@@ -193,7 +212,75 @@
 		}
 
 		function save_item(current_no_items) {
-			alert(current_no_items);
+			po_uuid = $('#new_po_uuid').html();
+			item_quantity = $('#item_quantity_'+current_no_items).val();
+			item_name = $('#item_name_'+current_no_items).val();
+			item_price = $('#item_price_'+current_no_items).val();
+			item_status = $('#item_status_'+current_no_items).val();
+			item_note = $('#item_note_'+current_no_items).val();
+
+			if(new_po_uuid == null || new_po_uuid == "") {
+				alert("error : po_uuid is null");
+				return;
+			} else if(item_name == null || item_name == "") {
+				alert("please input the item name");
+				return;
+			} else if(item_quantity == null || item_quantity < 1) {
+				alert("error : quantity is not correct");
+				return;
+			} else if(item_price == null || item_price < 1) {
+				alert("please input the item price");
+				return;
+			}
+
+			var payload = {
+				"po_uuid":po_uuid,
+				"item_quantity":item_quantity,
+				"item_name":item_name,
+				"item_price":item_price,
+				"item_status":item_status,
+				"item_note":item_note
+			}
+
+			$.ajax({
+				type : "POST",
+				url: " {{ route('po.submit_sub_po_by_po_uuid') }}",
+				contentType: "application/json",
+				data : JSON.stringify(payload),
+				success: function(result) {
+					response = JSON.parse(result);
+					if(response.error != true) {
+						$('#item_quantity_'+current_no_items).prop('disabled', true);
+						$('#item_name_'+current_no_items).prop('disabled', true);
+						$('#item_price_'+current_no_items).prop('disabled', true);
+						$('#item_status_'+current_no_items).prop('disabled', true);
+						$('#item_note_'+current_no_items).prop('disabled', true);
+						$('#item_save_btn_'+current_no_items).hide();
+						$('#item_edit_btn_'+current_no_items).removeClass("hide");
+						no_items = no_items + 1;
+						$('#item_sub_po_uuid_'+current_no_items).html(response.data.uuid);
+						$('#btn_add_items').prop('disabled', false);
+					} else {
+						alert(response.messages);
+					}
+				}
+			});
+		}
+
+
+		function edit_item(current_no_items) {
+			$('#item_quantity_'+current_no_items).prop('disabled', false);
+			$('#item_name_'+current_no_items).prop('disabled', false);
+			$('#item_price_'+current_no_items).prop('disabled', false);
+			$('#item_status_'+current_no_items).prop('disabled', false);
+			$('#item_note_'+current_no_items).prop('disabled', false);
+			$('#item_edit_btn_'+current_no_items).hide();
+			$('#item_update_btn_'+current_no_items).removeClass("hide");
+		}
+
+
+		function update_item(current_no_items) {
+			
 		}
 	</script>
 
