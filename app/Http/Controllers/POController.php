@@ -7,6 +7,7 @@ use App\Http\Models\Category;
 use App\Http\Models\Customer;
 use App\Http\Models\PO;
 use App\Http\Models\SubPO;
+use App\Http\Models\Sub_PO_Status;
 use App\Http\Models\Delivery_Order;
 use App\Http\Models\Invoice;
 use App\Http\Models\Invoice_Status;
@@ -73,6 +74,7 @@ class POController extends Controller
     {   
         try {
             $category = Category::all();
+            $sub_po_status = Sub_PO_Status::all();
             $customer = Customer::leftjoin('users','users.id','=','customer.sales_id')
                     ->where('customer.uuid',$request->customer_uuid)
                     ->select('customer.*','users.name AS sales_name')
@@ -92,6 +94,7 @@ class POController extends Controller
             $patern_po_name = $next_id."/".$this->po_label."/".date("Y");
 
             $data['customer'] = $customer;
+            $data['sub_po_status'] = $sub_po_status;
             $data['category'] = $category;
             $data['patern_po_name'] = $patern_po_name;
             return view('po/create',compact('data')); 

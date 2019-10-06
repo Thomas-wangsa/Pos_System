@@ -156,7 +156,15 @@
 			data += '<td> <input type="number" class="form-control" id="item_quantity_'+no_items+'" value="1"> </td>';
 			data += '<td> <input type="text" class="form-control" id="item_name_'+no_items+'"> </td>';
 			data += '<td> <input type="number" class="form-control" id="item_price_'+no_items+'"> </td>';
-			data += "<td> 1 </td>";
+			data += "<td> ";
+			data += '<select class="form-control" id="item_status'+no_items+'"> ';
+
+			@foreach($data['sub_po_status'] as $key=>$val)
+				data += "<option> aaa </option>";
+			@endforeach
+
+			data += "</select> ";
+			data += "</td>";
 			data += "<td> 1 </td>";
 			data += "<td> 1 </td>";
 			data += "</tr>";
