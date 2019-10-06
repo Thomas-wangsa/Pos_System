@@ -253,10 +253,6 @@ class DatabaseSeeder extends Seeder
 
         $po_status_array = array(
             array(
-                "name"=>"draft",
-                "color"=>"yellow",
-            ),
-            array(
                 "name"=>"in-progress",
                 "color"=>"black",
             ),

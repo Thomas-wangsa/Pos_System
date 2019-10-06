@@ -52,16 +52,9 @@
 		  </div>
 
 		  <div class="form-group"> 
-		    <div class="col-md-6">
-		      <div class="btn btn-primary btn-block" id="po_set_submit" onclick="submit_po()"> Submit and set item </div>
-		    </div>
+		     <div class="btn btn-primary btn-block" id="po_set_submit" onclick="submit_po()"> Submit and set item </div>
 		  </div>
 
-		  <div class="form-group"> 
-		    <div class="col-md-6">
-		      <button type="submit" id="po_set_draft" class="btn btn-warning btn-block"> Set as Draft </button>
-		    </div>
-		  </div>
 		  <div class="clearfix"> </div>
 		</form>
 
@@ -90,7 +83,15 @@
 				</tbody>
 			</table>
 
-			<button class="btn btn-block btn-primary hide" id="submit_detail_po" onclick="set_submit_detail_po()"> submit detail PO </button>
+			<div style="margin: 10px auto">
+			    <a href="{{route('po.index')}}">
+			      <button class="btn btn-block btn-primary hide" id="submit_detail_po">
+			        <span class="glyphicon glyphicon-chevron-left "></span>
+			        Back to PO page
+			      </button>
+			    </a>
+		  	</div>
+
 		</div>
 
 	</div>
@@ -335,34 +336,6 @@
 			});
 		}
 
-		function set_submit_detail_po() {
-			po_uuid = $('#new_po_uuid').html();
-
-			if(po_uuid == null || po_uuid == "") {
-				alert("error : po_uuid is null");
-				return;
-			}
-
-			var payload = {
-				"po_uuid":po_uuid
-			}
-
-			$.ajax({
-				type : "POST",
-				url: " {{ route('po.set_po_to_inprogress_by_po_uuid') }}",
-				contentType: "application/json",
-				data : JSON.stringify(payload),
-				success: function(result) {
-					response = JSON.parse(result);
-					if(response.error != true) {
-						window.location = "{{route('po.index')}}";
-					} else {
-						alert(response.messages);
-					}
-				}
-			});
-
-		}
 	</script>
 
   
