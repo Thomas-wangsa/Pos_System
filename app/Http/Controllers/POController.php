@@ -443,4 +443,27 @@ class POController extends Controller
             return json_encode($response);
         }
     }
+
+
+    public function set_po_to_inprogress_by_po_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        try {
+            $po = PO::where('uuid',$request->po_uuid)->first();
+            if($po == null) {
+                $response['messages'] = "po is not found!";
+                return json_encode($response);
+            }
+
+            $po->status = 2;
+            $po->updated_by = Auth::user()->id;
+            $po->save();
+            $response['error'] = false;
+            $response['data'] = $po;
+            return json_encode($response);
+        } catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+    }
 }

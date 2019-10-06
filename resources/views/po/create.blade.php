@@ -89,6 +89,8 @@
 				<tbody id="po_tbody">
 				</tbody>
 			</table>
+
+			<button class="btn btn-block btn-primary hide" id="submit_detail_po" onclick="set_submit_detail_po()"> submit detail PO </button>
 		</div>
 
 	</div>
@@ -219,7 +221,7 @@
 			item_status = $('#item_status_'+current_no_items).val();
 			item_note = $('#item_note_'+current_no_items).val();
 
-			if(new_po_uuid == null || new_po_uuid == "") {
+			if(po_uuid == null || po_uuid == "") {
 				alert("error : po_uuid is null");
 				return;
 			} else if(item_name == null || item_name == "") {
@@ -257,6 +259,7 @@
 						$('#item_note_'+current_no_items).prop('disabled', true);
 						$('#item_save_btn_'+current_no_items).hide();
 						$('#item_edit_btn_'+current_no_items).removeClass("hide");
+						$('#submit_detail_po').removeClass("hide");
 						no_items = no_items + 1;
 						$('#item_sub_po_uuid_'+current_no_items).html(response.data.uuid);
 						$('#btn_add_items').prop('disabled', false);
@@ -325,6 +328,34 @@
 						$('#item_note_'+current_no_items).prop('disabled', true);
 						$('#item_edit_btn_'+current_no_items).show();
 						$('#item_update_btn_'+current_no_items).addClass("hide");
+					} else {
+						alert(response.messages);
+					}
+				}
+			});
+		}
+
+		function set_submit_detail_po() {
+			po_uuid = $('#new_po_uuid').html();
+
+			if(po_uuid == null || po_uuid == "") {
+				alert("error : po_uuid is null");
+				return;
+			}
+
+			var payload = {
+				"po_uuid":po_uuid
+			}
+
+			$.ajax({
+				type : "POST",
+				url: " {{ route('po.set_po_to_inprogress_by_po_uuid') }}",
+				contentType: "application/json",
+				data : JSON.stringify(payload),
+				success: function(result) {
+					response = JSON.parse(result);
+					if(response.error != true) {
+						window.location = "{{route('po.index')}}";
 					} else {
 						alert(response.messages);
 					}

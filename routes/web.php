@@ -44,6 +44,7 @@ Route::post('ajax/get_po_by_uuid','POController@get_po_by_uuid')->name('po.get_p
 Route::post('ajax/submit_po_by_customer_uuid','POController@submit_po_by_customer_uuid')->name('po.submit_po_by_customer_uuid');
 Route::post('ajax/submit_sub_po_by_po_uuid','POController@submit_sub_po_by_po_uuid')->name('po.submit_sub_po_by_po_uuid');
 Route::post('ajax/update_sub_po_by_sub_po_uuid','POController@update_sub_po_by_sub_po_uuid')->name('po.update_sub_po_by_sub_po_uuid');
+Route::post('ajax/set_po_to_inprogress_by_po_uuid','POController@set_po_to_inprogress_by_po_uuid')->name('po.set_po_to_inprogress_by_po_uuid');
 
 
 
