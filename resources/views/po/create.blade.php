@@ -153,13 +153,18 @@
 		}
 
 		function add_items() {
+			<?php $faker_name = $data['faker']->name; ?>
 			$('#btn_add_items').prop('disabled', true);
 			data = "<tr> ";
 			data += "<td>"+no_items+"</td>";
 			data += '<td width="30px">'+
 					'<input type="number" onchange=adjust_quantity(this,'+no_items+') class="form-control" id="item_quantity_'+no_items+'" value="1">'+
 					'</td>';
-			data += '<td> <input type="text" class="form-control" id="item_name_'+no_items+'"> </td>';
+			data += '<td>'+
+						'<input type="text" class="form-control" '+
+						"value='@if(env('ENV_STATUS', 'development') == 'development'){{$faker_name}} @endif'" +
+						' id="item_name_'+no_items+'">'+
+					'</td>';
 			data += '<td width="60px">'+
 					'<input type="number" onchange=adjust_value(this,'+no_items+') class="form-control" id="item_price_'+no_items+'" value="1000">'+
 					'</td>';

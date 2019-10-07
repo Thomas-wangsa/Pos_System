@@ -39,8 +39,10 @@ Route::post('ajax/restore_customer_by_uuid','CustomerController@restore_customer
 
 
 Route::resource('/po', 'POController');
+Route::get('po/edit_sub_po','POController@edit_sub_po')->name('po.edit_sub_po');
 Route::post('ajax/get_po_by_customer_uuid','POController@get_po_by_customer_uuid')->name('po.get_po_by_customer_uuid');
 Route::post('ajax/get_po_by_uuid','POController@get_po_by_uuid')->name('po.get_po_by_uuid');
+
 Route::post('ajax/submit_po_by_customer_uuid','POController@submit_po_by_customer_uuid')->name('po.submit_po_by_customer_uuid');
 Route::post('ajax/update_po_by_po_uuid','POController@update_po_by_po_uuid')->name('po.update_po_by_po_uuid');
 

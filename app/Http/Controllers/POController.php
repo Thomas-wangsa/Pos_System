@@ -98,6 +98,7 @@ class POController extends Controller
             $data['sub_po_status'] = $sub_po_status;
             $data['category'] = $category;
             $data['patern_po_name'] = $patern_po_name;
+            $data['faker'] = $this->faker;
             return view('po/create',compact('data')); 
         }
         catch(Exception $e) {
@@ -174,10 +175,13 @@ class POController extends Controller
                 return redirect()->route($this->redirectTo);
             }
 
+            $sub_po = SubPO::where('po_id',$po->id)->get();
+
             $data['customer'] = Customer::all();
             $data['sub_po_status'] = Sub_PO_Status::all();
             $data['category'] = Category::all();
             $data['po'] = $po;
+            $data['sub_po'] = $sub_po;
             return view('po/edit',compact('data')); 
         }
         catch(Exception $e) {

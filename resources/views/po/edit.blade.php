@@ -57,12 +57,74 @@
 		    <textarea class="form-control" rows="4" id="po_note" name="po_note">{{$data['po']['note']}}</textarea>
 		  </div>
 
-		  <div class="form-group"> 
-		     <div class="btn btn-primary btn-block" id="po_set_submit" onclick="update_po()"> Update PO </div>
-		  </div>
-
 		  <div class="clearfix"> </div>
 		</form>
+
+		<div id="main_section_body" class="main_section_body">
+
+		    <button class="btn btn-danger" id="btn_add_items" style="margin-bottom: 5px" onclick="add_items()"> 
+		    	<span class="glyphicon glyphicon-plus"></span>
+		    	add items 
+		    </button>
+
+		    <span id="new_po_uuid" class="hide"> </span> 
+
+			<table class="table table-bordered table-striped">
+				<thead>
+					<tr> 
+						<th> No </th>
+						<th width="100px"> Quantity </th>
+						<th> Name </th>
+						<th width="150px"> Price </th>
+						<th> Status </th>
+						<th> Additional Note </th>
+						<th> Action </th>
+					</tr>
+				</thead>
+				<tbody id="po_tbody">
+					@if(count($data['sub_po']) > 0)
+					<?php $no = 1;?>
+					@foreach($data['sub_po'] as $key=>$val)
+					<tr>
+						<td> {{$no}} </td>
+						<td>
+							<input type="number" class="form-control" id="item_quantity_{{$no}}"
+							onchange="adjust_quantity(this,'{{$no}}')"  
+							value="{{$val->quantity}}" disabled="">
+						</td>
+						<td>
+							<input type="text" class="form-control"
+							value="{{$val->name}}" disabled=""> 
+							 
+						</td>
+						<td> 
+							<input type="number" class="form-control" id="item_quantity_{{$no}}"
+							onchange="adjust_quantity(this,'{{$no}}')"  
+							value="{{$val->price}}" disabled="">
+						</td>
+					</tr>
+					<?php $no++; ?>
+					@endforeach
+					@else
+					<tr>
+						<td> no items found !</td>
+					</tr>
+					@endif
+				</tbody>
+			</table>
+
+			<div style="margin: 10px auto">
+			    <a href="{{route('po.index')}}">
+			      <button class="btn btn-block btn-primary hide" id="submit_detail_po">
+			        <span class="glyphicon glyphicon-chevron-left "></span>
+			        Back to PO page
+			      </button>
+			    </a>
+		  	</div>
+
+		</div>
+
+		<div class="btn btn-primary btn-block" id="po_set_submit" onclick="update_po()"> Update PO </div>
 
 	</div>
 
@@ -101,7 +163,16 @@
 					}
 				}
 			});
+		}
 
+
+		function adjust_value(price,current_no_items) {
+			this_value = price.value;
+
+			if(this_value < 1) {
+				$('#item_price_'+current_no_items).val(0);
+				alert("price is not correct!");
+			}
 		}
 	</script>
 

@@ -71,7 +71,7 @@
 								<tr>
 									<td> no </td>
 									<td> qty </td>
-									<td> desc </td>
+									<td> name </td>
 									<td> price </td>
 									<td> total </td>
 								</tr>
