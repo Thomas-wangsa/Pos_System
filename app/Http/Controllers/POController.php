@@ -182,6 +182,7 @@ class POController extends Controller
             $data['category'] = Category::all();
             $data['po'] = $po;
             $data['sub_po'] = $sub_po;
+            $data['faker'] = $this->faker;
             return view('po/edit',compact('data')); 
         }
         catch(Exception $e) {
@@ -210,7 +211,23 @@ class POController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        try {
+
+            $sub_po = SubPO::where('uuid',$id)->first();
+            if($sub_po == null) {
+                $response['messages'] = "item is not found!";
+                return json_encode($response);
+            }
+
+            $sub_po->delete();
+            $response['error'] = false;
+            return json_encode($response);
+        } catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
     }
 
 
@@ -508,4 +525,23 @@ class POController extends Controller
         }
     }
 
+
+    function restore_sub_po_by_sub_po_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        try {
+            $sub_po = SubPO::withTrashed()->where('uuid',$request->sub_po_uuid)->first();
+            if($sub_po == null) {
+                $response['messages'] = "item is not found!";
+                return json_encode($response);
+            }
+
+            $sub_po->restore();
+            $response['error'] = false;
+            return json_encode($response);
+        } catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+    }
 }

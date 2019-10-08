@@ -65,6 +65,9 @@
 
     th,td {text-align: center}
     .table>tbody>tr>td,.table>thead>tr>th {vertical-align: middle}
+    textarea {
+    resize: none;
+    }
   </style>
 </head>
 <body>

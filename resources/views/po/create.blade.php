@@ -196,6 +196,13 @@
 					'<button class="btn btn-success hide" onclick="update_item('+no_items+')" id="item_update_btn_'+no_items+'">'+
 						' update item '+
 					'</button>'+
+					'&nbsp;<button class="btn btn-danger hide" onclick="delete_item('+no_items+')" id="item_delete_btn_'+no_items+'">'+
+						' delete item '+
+					'</button>'+
+					'</button>'+
+					'&nbsp;<button class="btn btn-warning hide" onclick="restore_item('+no_items+')" id="item_restore_btn_'+no_items+'">'+
+						' restore item '+
+					'</button>'+
 					'</td>';
 			data += "</tr>";
 			$('#po_tbody').append(data);
@@ -265,6 +272,7 @@
 						$('#item_note_'+current_no_items).prop('disabled', true);
 						$('#item_save_btn_'+current_no_items).hide();
 						$('#item_edit_btn_'+current_no_items).removeClass("hide");
+						$('#item_delete_btn_'+current_no_items).removeClass("hide");
 						$('#submit_detail_po').removeClass("hide");
 						no_items = no_items + 1;
 						$('#item_sub_po_uuid_'+current_no_items).html(response.data.uuid);
@@ -277,6 +285,68 @@
 		}
 
 
+		function delete_item(current_no_items) {
+			if (confirm('Apakah anda yakin ingin menghapus item ini ?')) {
+				sub_po_uuid = $('#item_sub_po_uuid_'+current_no_items).html();
+				if(sub_po_uuid == null || sub_po_uuid == "") {
+					alert("error : sub_po_uuid is null");
+					return;
+				}
+
+				var payload = {"sub_po_uuid":sub_po_uuid,"_method": 'DELETE'};
+
+				$.ajax({
+		          type : "POST",
+		          url: " {!! url('po' ) !!}" + "/" + sub_po_uuid,
+		          contentType: "application/json",
+		          data : JSON.stringify(payload),
+		          success: function(result) {
+		            response = JSON.parse(result);
+		            if(response.error != true) {
+		            	$('#item_edit_btn_'+current_no_items).hide();
+						$('#item_delete_btn_'+current_no_items).hide();
+						$('#item_restore_btn_'+current_no_items).removeClass("hide");
+		            } else {
+		              alert(response.messages);
+		            }
+		          }
+		        });
+		    }
+		}
+
+
+		function restore_item(current_no_items) {
+	       	if (confirm('Apakah anda yakin ingin restore item ini ?')) {
+	       		sub_po_uuid = $('#item_sub_po_uuid_'+current_no_items).html();
+				if(sub_po_uuid == null || sub_po_uuid == "") {
+					alert("error : sub_po_uuid is null");
+					return;
+				}
+
+				var payload = {"sub_po_uuid":sub_po_uuid};
+
+				$.ajax({
+		          type : "POST",
+		          url: " {{ route('po.restore_sub_po_by_sub_po_uuid') }}",
+		          contentType: "application/json",
+		          data : JSON.stringify(payload),
+		          success: function(result) {
+		            response = JSON.parse(result);
+		            if(response.error != true) {
+		            	$('#item_edit_btn_'+current_no_items).show();
+						$('#item_delete_btn_'+current_no_items).show();
+						$('#item_restore_btn_'+current_no_items).addClass("hide");
+		            } else {
+		              alert(response.messages);
+		            }
+		          }
+		        });
+	 
+	          	
+	        } 
+	    };
+
+
 		function edit_item(current_no_items) {
 			$('#item_quantity_'+current_no_items).prop('disabled', false);
 			$('#item_name_'+current_no_items).prop('disabled', false);
@@ -284,6 +354,7 @@
 			$('#item_status_'+current_no_items).prop('disabled', false);
 			$('#item_note_'+current_no_items).prop('disabled', false);
 			$('#item_edit_btn_'+current_no_items).hide();
+			$('#item_delete_btn_'+current_no_items).hide();
 			$('#item_update_btn_'+current_no_items).removeClass("hide");
 		}
 
@@ -333,6 +404,7 @@
 						$('#item_status_'+current_no_items).prop('disabled', true);
 						$('#item_note_'+current_no_items).prop('disabled', true);
 						$('#item_edit_btn_'+current_no_items).show();
+						$('#item_delete_btn_'+current_no_items).show();
 						$('#item_update_btn_'+current_no_items).addClass("hide");
 					} else {
 						alert(response.messages);
@@ -341,6 +413,10 @@
 			});
 		}
 
+
+		function formatNumber(num) {
+  			return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+		}
 	</script>
 
   

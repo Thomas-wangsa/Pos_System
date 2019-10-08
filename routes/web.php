@@ -48,6 +48,7 @@ Route::post('ajax/update_po_by_po_uuid','POController@update_po_by_po_uuid')->na
 
 Route::post('ajax/submit_sub_po_by_po_uuid','POController@submit_sub_po_by_po_uuid')->name('po.submit_sub_po_by_po_uuid');
 Route::post('ajax/update_sub_po_by_sub_po_uuid','POController@update_sub_po_by_sub_po_uuid')->name('po.update_sub_po_by_sub_po_uuid');
+Route::post('ajax/restore_sub_po_by_sub_po_uuid','POController@restore_sub_po_by_sub_po_uuid')->name('po.restore_sub_po_by_sub_po_uuid');
 
 
 
