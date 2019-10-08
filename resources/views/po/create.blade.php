@@ -2,8 +2,11 @@
 
 @section('content')
 <style type="text/css">
+  .unselectable{
+   background-color: #ddd;
+   cursor: not-allowed;
+  }
 </style>
-	
 
 	<div style="margin: 10px auto">
 	    <a href="{{route('po.index')}}">
@@ -155,7 +158,7 @@
 		function add_items() {
 			<?php $faker_name = $data['faker']->name; ?>
 			$('#btn_add_items').prop('disabled', true);
-			data = "<tr> ";
+			data = '<tr id="tr_no_'+no_items+'"> ';
 			data += "<td>"+no_items+"</td>";
 			data += '<td width="30px">'+
 					'<input type="number" onchange=adjust_quantity(this,'+no_items+') class="form-control" id="item_quantity_'+no_items+'" value="1">'+
@@ -306,6 +309,8 @@
 		            	$('#item_edit_btn_'+current_no_items).hide();
 						$('#item_delete_btn_'+current_no_items).hide();
 						$('#item_restore_btn_'+current_no_items).removeClass("hide");
+						$('#tr_no_'+current_no_items).addClass('unselectable');
+
 		            } else {
 		              alert(response.messages);
 		            }
@@ -336,6 +341,7 @@
 		            	$('#item_edit_btn_'+current_no_items).show();
 						$('#item_delete_btn_'+current_no_items).show();
 						$('#item_restore_btn_'+current_no_items).addClass("hide");
+						$('#tr_no_'+current_no_items).removeClass('unselectable');
 		            } else {
 		              alert(response.messages);
 		            }
