@@ -36,15 +36,19 @@ class POController extends Controller
     {
         //$customer = Customer::all();
         $po_status = PO_Status::all();
-        $po = PO::leftjoin('customer','po.customer_id','=','customer.id')
-            ->leftjoin('users','po.sales_id','=','users.id')
-            ->leftjoin('po_status','po.status','=','po_status.id')
-            ->select('po.*','customer.name AS customer_name','users.name AS sales_name','po_status.name AS status_name')
-            ->orderBy('po.created_at','asc')
-            ->get();
-
         $customer = Customer::all();
 
+
+        $po = PO::leftjoin('customer','po.customer_id','=','customer.id')
+            ->leftjoin('users','po.sales_id','=','users.id')
+            ->leftjoin('po_status','po.status','=','po_status.id');
+            
+
+        
+        $po = $po->select('po.*','customer.name AS customer_name','users.name AS sales_name','po_status.name AS status_name');
+
+        $po = $po->orderBy('po.created_at','desc');
+        $po = $po->get();
 
         foreach($po as $key=>$val) {
             $po[$key]["total"] = 0;
