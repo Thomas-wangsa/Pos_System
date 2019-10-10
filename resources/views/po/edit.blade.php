@@ -2,6 +2,10 @@
 
 @section('content')
 <style type="text/css">
+  .unselectable{
+   background-color: #ddd;
+   cursor: not-allowed;
+  }
 </style>
 	
 
@@ -69,7 +73,7 @@
 
 		    <span id="new_po_uuid" class="hide">{{$data['po']['uuid']}}</span> 
 
-			<table class="table table-bordered table-striped">
+			<table class="table table-bordered">
 				<thead>
 					<tr> 
 						<th> No </th>
@@ -85,7 +89,7 @@
 					<?php $no = 1;?>
 					@if(count($data['sub_po']) > 0)
 					@foreach($data['sub_po'] as $key=>$val)
-					<tr>
+					<tr id="tr_no_{{$no}}">
 						<td> {{$no}} </td>
 						<td>
 							<input type="number" class="form-control" id="item_quantity_{{$no}}"
@@ -93,12 +97,12 @@
 							value="{{$val->quantity}}" disabled="">
 						</td>
 						<td>
-							<input type="text" class="form-control"
+							<input type="text" class="form-control" id="item_name_{{$no}}"
 							value="{{$val->name}}" disabled=""> 
 							 
 						</td>
 						<td> 
-							<input type="number" class="form-control" id="item_name_{{$no}}"
+							<input type="number" class="form-control" id="item_price_{{$no}}"
 							onchange="adjust_quantity(this,'{{$no}}')"  
 							value="{{$val->price}}" disabled="">
 						</td>
@@ -114,22 +118,31 @@
 							</select>
 						</td>
 						<td>
-							<textarea class="form-control" rows="3" id="item_note_'+no_items+'" disabled="">{{$val->note}}</textarea>
+							<textarea class="form-control" rows="3" id="item_note_{{$no}}" disabled="">{{$val->note}}</textarea>
 						</td>
 						<td> 
-							<span id="item_sub_po_uuid_{{$no}}" class="hide"> </span>
-							<button class="btn btn-warning" onclick="edit_item('{{$no}}')" id="item_edit_btn_{{$no}}"> 
+							<span id="item_sub_po_uuid_{{$no}}" class="hide">{{$val->uuid}}</span>
+							<button class="btn btn-warning <?php if($val->deleted_at != null) { echo "hide"; } ?>" 
+							onclick="edit_item('{{$no}}')" id="item_edit_btn_{{$no}}"> 
 								edit item
 							</button>
 							<button class="btn btn-success hide" onclick="update_item('{{$no}}')" id="item_update_btn_{{$no}}">
 								update item
+							</button>
+							<button class="btn btn-danger <?php if($val->deleted_at != null) { echo "hide"; } ?>" 
+							onclick="delete_item('{{$no}}')" id="item_delete_btn_{{$no}}">
+								delete item
+							</button>
+							<button class="btn btn-primary <?php if($val->deleted_at == null) { echo "hide"; } ?>" 
+							onclick="restore_item('{{$no}}')" id="item_restore_btn_{{$no}}">
+								restore item
 							</button>
 						</td>
 					</tr>
 					<?php $no++; ?>
 					@endforeach
 					@else
-					<tr>
+					<tr id="tr_no_item_found">
 						<td colspan="10"> no items found !</td>
 					</tr>
 					@endif
@@ -185,6 +198,7 @@
 		function add_items() {
 			<?php $faker_name = $data['faker']->name; ?>
 			$('#btn_add_items').prop('disabled', true);
+			$('#tr_no_item_found').hide();
 			data = "<tr> ";
 			data += "<td>"+no_items+"</td>";
 			data += '<td width="30px">'+
@@ -225,6 +239,13 @@
 					'</button>'+
 					'<button class="btn btn-success hide" onclick="update_item('+no_items+')" id="item_update_btn_'+no_items+'">'+
 						' update item '+
+					'</button>'+
+					'&nbsp;<button class="btn btn-danger hide" onclick="delete_item('+no_items+')" id="item_delete_btn_'+no_items+'">'+
+						' delete item '+
+					'</button>'+
+					'</button>'+
+					'&nbsp;<button class="btn btn-primary hide" onclick="restore_item('+no_items+')" id="item_restore_btn_'+no_items+'">'+
+						' restore item '+
 					'</button>'+
 					'</td>';
 			data += "</tr>";
@@ -277,6 +298,7 @@
 						$('#item_note_'+current_no_items).prop('disabled', true);
 						$('#item_save_btn_'+current_no_items).hide();
 						$('#item_edit_btn_'+current_no_items).removeClass("hide");
+						$('#item_delete_btn_'+current_no_items).removeClass("hide");
 						$('#submit_detail_po').removeClass("hide");
 						no_items = no_items + 1;
 						$('#item_sub_po_uuid_'+current_no_items).html(response.data.uuid);
@@ -288,6 +310,72 @@
 			});
 		}
 
+		function delete_item(current_no_items) {
+			if (confirm('Apakah anda yakin ingin menghapus item ini ?')) {
+				sub_po_uuid = $('#item_sub_po_uuid_'+current_no_items).html();
+				if(sub_po_uuid == null || sub_po_uuid == "") {
+					alert("error : sub_po_uuid is null");
+					return;
+				}
+
+				var payload = {"sub_po_uuid":sub_po_uuid,"_method": 'DELETE'};
+
+				$.ajax({
+		          type : "POST",
+		          url: " {!! url('po' ) !!}" + "/" + sub_po_uuid,
+		          contentType: "application/json",
+		          data : JSON.stringify(payload),
+		          success: function(result) {
+		            response = JSON.parse(result);
+		            if(response.error != true) {
+		            	$('#item_edit_btn_'+current_no_items).hide();
+						$('#item_delete_btn_'+current_no_items).hide();
+						$('#item_restore_btn_'+current_no_items).removeClass("hide");
+						$('#tr_no_'+current_no_items).addClass('unselectable');
+
+		            } else {
+		              alert(response.messages);
+		            }
+		          }
+		        });
+		    }
+		}
+
+
+		function restore_item(current_no_items) {
+	       	if (confirm('Apakah anda yakin ingin restore item ini ?')) {
+	       		sub_po_uuid = $('#item_sub_po_uuid_'+current_no_items).html();
+				if(sub_po_uuid == null || sub_po_uuid == "") {
+					alert("error : sub_po_uuid is null");
+					return;
+				}
+
+				var payload = {"sub_po_uuid":sub_po_uuid};
+
+				$.ajax({
+		          type : "POST",
+		          url: " {{ route('po.restore_sub_po_by_sub_po_uuid') }}",
+		          contentType: "application/json",
+		          data : JSON.stringify(payload),
+		          success: function(result) {
+		            response = JSON.parse(result);
+		            if(response.error != true) {
+		            	$('#item_edit_btn_'+current_no_items).show();
+		            	$('#item_edit_btn_'+current_no_items).removeClass("hide");
+						$('#item_delete_btn_'+current_no_items).show();
+						$('#item_delete_btn_'+current_no_items).removeClass("hide");
+						$('#item_restore_btn_'+current_no_items).addClass("hide");
+						$('#tr_no_'+current_no_items).removeClass('unselectable');
+		            } else {
+		              alert(response.messages);
+		            }
+		          }
+		        });
+	 
+	          	
+	        } 
+	    };
+
 		function edit_item(current_no_items) {
 			$('#item_quantity_'+current_no_items).prop('disabled', false);
 			$('#item_name_'+current_no_items).prop('disabled', false);
@@ -295,6 +383,7 @@
 			$('#item_status_'+current_no_items).prop('disabled', false);
 			$('#item_note_'+current_no_items).prop('disabled', false);
 			$('#item_edit_btn_'+current_no_items).hide();
+			$('#item_delete_btn_'+current_no_items).hide();
 			$('#item_update_btn_'+current_no_items).removeClass("hide");
 		}
 
@@ -344,6 +433,7 @@
 						$('#item_status_'+current_no_items).prop('disabled', true);
 						$('#item_note_'+current_no_items).prop('disabled', true);
 						$('#item_edit_btn_'+current_no_items).show();
+						$('#item_delete_btn_'+current_no_items).show();
 						$('#item_update_btn_'+current_no_items).addClass("hide");
 					} else {
 						alert(response.messages);

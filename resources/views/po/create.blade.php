@@ -70,7 +70,7 @@
 
 		    <span id="new_po_uuid" class="hide"> </span> 
 
-			<table class="table table-bordered table-striped">
+			<table class="table table-bordered">
 				<thead>
 					<tr> 
 						<th> No </th>
@@ -203,7 +203,7 @@
 						' delete item '+
 					'</button>'+
 					'</button>'+
-					'&nbsp;<button class="btn btn-warning hide" onclick="restore_item('+no_items+')" id="item_restore_btn_'+no_items+'">'+
+					'&nbsp;<button class="btn btn-primary hide" onclick="restore_item('+no_items+')" id="item_restore_btn_'+no_items+'">'+
 						' restore item '+
 					'</button>'+
 					'</td>';

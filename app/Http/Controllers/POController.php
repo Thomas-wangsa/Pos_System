@@ -175,7 +175,7 @@ class POController extends Controller
                 return redirect()->route($this->redirectTo);
             }
 
-            $sub_po = SubPO::where('po_id',$po->id)->get();
+            $sub_po = SubPO::withTrashed()->where('po_id',$po->id)->get();
 
             $data['customer'] = Customer::all();
             $data['sub_po_status'] = Sub_PO_Status::all();
