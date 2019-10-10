@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Models\Category;
 use App\Http\Models\Customer;
 use App\Http\Models\PO;
+use App\Http\Models\PO_Status;
+
 use App\Http\Models\SubPO;
 use App\Http\Models\Sub_PO_Status;
 use App\Http\Models\Delivery_Order;
@@ -33,7 +35,7 @@ class POController extends Controller
     public function index()
     {
         //$customer = Customer::all();
-        
+        $po_status = PO_Status::all();
         $po = PO::leftjoin('customer','po.customer_id','=','customer.id')
             ->leftjoin('users','po.sales_id','=','users.id')
             ->leftjoin('po_status','po.status','=','po_status.id')
@@ -62,6 +64,7 @@ class POController extends Controller
         
         //$data['customer'] = $customer;
         $data['po'] = $po;
+        $data['po_status'] = $po_status;
         $data['customer'] = $customer;
         return view('po/index',compact('data'));
     }
@@ -184,6 +187,46 @@ class POController extends Controller
             $data['sub_po'] = $sub_po;
             $data['faker'] = $this->faker;
             return view('po/edit',compact('data')); 
+        }
+        catch(Exception $e) {
+            $request->session()->flash('alert-danger', $e->getMessage());
+            return redirect()->route($this->redirectTo);
+        }
+    }
+
+
+    public function edit_status_po(Request $request) {
+        try {
+            $po = PO::where('uuid',$request->po_uuid)->first();
+            if($po == null) {
+                $request->session()->flash('alert-danger', 'po is not found!');
+                return redirect()->route($this->redirectTo);
+            }
+
+
+            $po_status = PO_Status::find($request->status);
+            if($po_status == null) {
+                $request->session()->flash('alert-danger', 'po status is not found!');
+                return redirect()->route($this->redirectTo);
+            }
+
+
+            $po->status = $po_status->id;
+            $po->updated_by = Auth::user()->id;
+            $po->save();
+
+            $request->session()->flash('alert-success', 'PO : '. $po->number.' has been updated');
+            return redirect()->route($this->redirectTo,"search=on&uuid=".$po->uuid);
+
+            // $sub_po = SubPO::withTrashed()->where('po_id',$po->id)->get();
+
+            // $data['customer'] = Customer::all();
+            // $data['sub_po_status'] = Sub_PO_Status::all();
+            // $data['category'] = Category::all();
+            // $data['po'] = $po;
+            // $data['sub_po'] = $sub_po;
+            // $data['faker'] = $this->faker;
+            // return view('po/edit',compact('data')); 
         }
         catch(Exception $e) {
             $request->session()->flash('alert-danger', $e->getMessage());

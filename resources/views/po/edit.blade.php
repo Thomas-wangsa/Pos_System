@@ -89,7 +89,7 @@
 					<?php $no = 1;?>
 					@if(count($data['sub_po']) > 0)
 					@foreach($data['sub_po'] as $key=>$val)
-					<tr id="tr_no_{{$no}}">
+					<tr id="tr_no_{{$no}}" class="<?php if($val->deleted_at != null) { echo "unselectable"; } ?>">
 						<td> {{$no}} </td>
 						<td>
 							<input type="number" class="form-control" id="item_quantity_{{$no}}"

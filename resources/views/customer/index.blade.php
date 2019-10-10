@@ -181,9 +181,9 @@
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               
               <a href="{{route('po.create')}}?customer_uuid={{$val['uuid']}}">  
-                <span class="glyphicon glyphicon-file"
-                style="cursor:pointer" 
-                title="detail {{$val['name']}}" 
+                <span class="glyphicon glyphicon-play-circle"
+                style="cursor:pointer;color:black" 
+                title="create new PO" 
                 >
                 </span>
               </a>

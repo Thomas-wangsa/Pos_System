@@ -96,7 +96,7 @@
             <a href="#" onclick="info('{{$uuid}}')">  
               <span class="glyphicon glyphicon-file"
               style="cursor:pointer" 
-              title="detail {{$val['name']}}" 
+              title="detail PO {{$val['number']}}" 
               >
               </span>
             </a>
@@ -105,26 +105,26 @@
             <a href="{{route('po.edit',$uuid)}}">
               <span class="glyphicon glyphicon-edit"
               style="color:green;cursor:pointer" 
-              title="edit {{$val['name']}}"
+              title="edit PO {{$val['number']}}"
               >
               </span>
             </a> 
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             
 
-            <a href="#">
-              <span class="glyphicon glyphicon-trash"
-              style="color:red;cursor:pointer" 
-              title="remove {{$val['name']}}"  
+            <a href="#" onclick="select_sub_po_status('{{$uuid}}')">
+              <span class="glyphicon glyphicon-check"
+              style="cursor:pointer;color:red" 
+              title="set flag PO {{$val['number']}}"  
               >
               </span>
             </a> 
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
             <a href="{{route('do.create')}}?po_uuid={{$val['uuid']}}">  
-              <span class="glyphicon glyphicon-file"
-              style="cursor:pointer" 
-              title="detail {{$val['name']}}" 
+              <span class="glyphicon glyphicon-play-circle"
+              style="cursor:pointer;color:black" 
+              title="create new DO & Invoice for PO {{$val['number']}}" 
               >
               </span>
             </a>
@@ -147,5 +147,6 @@
 </script>
 
   @include('po.modal_select_customer')
+  @include('po.modal_select_po_status')
   @include('po.modal_info_po')
 @endsection
