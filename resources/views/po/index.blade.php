@@ -37,22 +37,78 @@
           value="{{Request::get('search_nama')}}">
         </div>
       </div>
+
+
+      <div class="form-group">
+        <select class="form-control" name="search_customer">
+          <option value=""> Filter By Customer </option>
+          @foreach($data['all_customer'] as $key=>$val)
+          <option value="{{$val->id}}"
+          @if($val->id == Request::get('search_customer')) 
+            selected
+          @endif  
+          > {{$val->name}} </option>
+          @endforeach
+        </select>
+      </div>
+
+      <div class="form-group">
+        <select class="form-control" name="search_sales">
+          <option value=""> Filter By Sales </option>
+          @foreach($data['sales'] as $key=>$val)
+          <option value="{{$val->id}}"
+          @if($val->id == Request::get('search_sales')) 
+            selected
+          @endif  
+          > {{$val->name}} </option>
+          @endforeach
+        </select>
+      </div>
+
       
       <div class="form-group">
-        <select class="form-control" name="search_filter">
-          <option value=""> Filter By </option>
+        <select class="form-control" name="search_status">
+          <option value=""> Filter By Status </option>
+          @foreach($data['po_status'] as $key=>$val)
+          <option value="{{$val->id}}"
+          @if($val->id == Request::get('search_status')) 
+            selected
+          @endif  
+          > {{$val->name}} </option>
+          @endforeach
         </select>
       </div>
 
       <div class="form-group">
           <select class="form-control" name="search_order">
             <option value=""> Sort By </option>
+            <option value="oldest_po"
+              @if('oldest_po' == Request::get('search_order')) 
+              selected
+            @endif
+            > 
+              Oldest PO 
+            </option>
+            <option value="status"
+              @if('status' == Request::get('search_order')) 
+              selected
+            @endif
+              > 
+              Status 
+            </option>
           </select>
       </div>
     
       <button type="submit" class="btn btn-info"> 
         Filter
-      </button> 
+      </button>
+      @if(Request::get('search') == "on")
+      <button type="reset" 
+      class="btn"
+      onclick="reset_filter()"> 
+        Clear Filter 
+      </button>
+      @endif 
     </form>
   </div>
   <div class="clearfix"> </div>
@@ -78,7 +134,8 @@
         <?php $uuid = $val["uuid"];?>
         <tr>
           <td>
-            {{$key+1}}
+            {{ ($data['po']->currentpage()-1) 
+            * $data['po']->perpage() + $key + 1 }}
           </td>
           <td>
             {{$val['number']}}
@@ -136,6 +193,20 @@
       @endif
     </tbody>
   </table>
+  <div class="pull-right" style="margin-top: -15px!important"> 
+    {{ $data['po']->appends(
+      [
+      'search' => Request::get('search'),
+      'search_nama' => Request::get('search_nama'),
+      'search_customer' => Request::get('search_customer'),
+      'search_sales' => Request::get('search_sales'),
+      'search_status' => Request::get('search_status'),
+      'search_order' => Request::get('search_order')
+      ])
+
+    ->links() }}
+  </div>
+  <div class="clearfix"> </div>
 
 
 <script type="text/javascript">
@@ -144,6 +215,9 @@
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
+  function reset_filter() {
+      window.location = "{{route('po.index')}}";
+    }
 </script>
 
   @include('po.modal_select_customer')

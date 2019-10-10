@@ -66,6 +66,7 @@
           @endif
           > 
           Deleted Customer 
+          </option>
         </select>
       </div>
 

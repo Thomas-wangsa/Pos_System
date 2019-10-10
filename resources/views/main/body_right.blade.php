@@ -26,6 +26,12 @@
 			CREATE NEW CUSTOMER PAGE
 			@elseif(Route::current()->getName() == 'customer.edit')
 			EDIT CUSTOMER PAGE
+			@elseif(Route::current()->getName() == 'po.index')
+			PO PAGE
+			@elseif(Route::current()->getName() == 'po.create')
+			CREATE NEW PO PAGE
+			@elseif(Route::current()->getName() == 'po.edit')
+			EDIT PO PAGE
 			@endif
 			
 		</h3>

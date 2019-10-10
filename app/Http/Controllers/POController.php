@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\User;
 
 use Illuminate\Http\Request;
 use App\Http\Models\Category;
@@ -32,23 +33,63 @@ class POController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //$customer = Customer::all();
         $po_status = PO_Status::all();
-        $customer = Customer::all();
+        $sales = User::orderBy('name','asc')->withTrashed()->get();
+        $all_customer = Customer::orderBy('name','asc')->withTrashed()->get();
+        $customer = Customer::orderBy('name','asc')->get();
 
 
         $po = PO::leftjoin('customer','po.customer_id','=','customer.id')
             ->leftjoin('users','po.sales_id','=','users.id')
             ->leftjoin('po_status','po.status','=','po_status.id');
-            
+
+
+        if($request->search == "on") { 
+
+            if($request->search_nama != null) { 
+                $po = $po->where('po.number','like',$request->search_nama."%");
+            }
+
+            if($request->search_customer != null) {
+                $po = $po->where('po.customer_id','=', $request->search_customer);
+                
+            }
+
+            if($request->search_sales != null) {
+                $po = $po->where('po.sales_id','=', $request->search_sales);
+                
+            }
+
+            if($request->search_status != null) {
+                $po = $po->where('po.status','=', $request->search_status);
+            }
+
+
+
+            if($request->uuid != null) {
+                $po = $po->where('po.uuid','=',$request->uuid);
+            }
+
+        }
 
         
         $po = $po->select('po.*','customer.name AS customer_name','users.name AS sales_name','po_status.name AS status_name');
 
-        $po = $po->orderBy('po.created_at','desc');
-        $po = $po->get();
+        if($request->search_order != null) {
+            if($request->search_order == "oldest_po") {
+                $po = $po->orderBy('po.created_at', 'asc');
+            } else {
+                $po = $po->orderBy('po.status', 'asc');
+            }
+            
+        } else {
+            $po = $po->orderBy('po.created_at','desc');
+        }
+        
+        $po = $po->paginate(20);
 
         foreach($po as $key=>$val) {
             $po[$key]["total"] = 0;
@@ -70,6 +111,8 @@ class POController extends Controller
         $data['po'] = $po;
         $data['po_status'] = $po_status;
         $data['customer'] = $customer;
+        $data['all_customer'] = $all_customer;
+        $data['sales'] = $sales;
         return view('po/index',compact('data'));
     }
 
