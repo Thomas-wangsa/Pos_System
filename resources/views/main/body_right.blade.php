@@ -32,6 +32,12 @@
 			CREATE NEW PO PAGE
 			@elseif(Route::current()->getName() == 'po.edit')
 			EDIT PO PAGE
+			@elseif(Route::current()->getName() == 'config.index')
+			CONFIG PAGE
+			@elseif(Route::current()->getName() == 'config.edit_config')
+			EDIT CATEGORY PAGE
+			@elseif(Route::current()->getName() == 'config.edit_driver')
+			EDIT DRIVER PAGE
 			@endif
 			
 		</h3>
