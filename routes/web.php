@@ -64,6 +64,7 @@ Route::post('/adhoc/update_config', 'ConfigController@update_config')->name('con
 Route::get('/adhoc/edit_driver', 'ConfigController@edit_driver')->name('config.edit_driver');
 Route::post('/adhoc/update_driver', 'ConfigController@update_driver')->name('config.update_driver');
 Route::get('/adhoc/delete_config', 'ConfigController@delete_config')->name('config.delete_config');
+Route::get('/adhoc/restore_config', 'ConfigController@restore_config')->name('config.restore_config');
 
 
 

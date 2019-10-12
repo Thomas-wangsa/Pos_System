@@ -275,4 +275,40 @@ class ConfigController extends Controller
             return redirect($this->redirectTo);
         }
     }
+
+    public function restore_config(Request $request) {
+        $type = $request->type;
+
+        if($type != 1 && $type != 2) {
+            $request->session()->flash('alert-danger', "Restore Failed : Type is undefined!");
+            return redirect($this->redirectTo);
+        }
+
+
+        if($type == 1) {
+            $category = Category::withTrashed()->where('uuid',$request->uuid)->first();
+            
+            if($category == null) {
+                $request->session()->flash('alert-danger', "Data not found!");
+                return redirect($this->redirectTo);
+            }
+            $category->restore();
+            $request->session()->flash('alert-success', 'Category : '. $category->name.' already restore');
+            return redirect($this->redirectTo."?search=on&search_nama=&search_filter=1");
+        } else if ($type == 2) {
+            $driver = Driver::withTrashed()->where('uuid',$request->uuid)->first();
+
+             if($driver == null) {
+                $request->session()->flash('alert-danger', "Data not found!");
+                return redirect($this->redirectTo);
+            }
+            $driver->restore();
+
+            $request->session()->flash('alert-success', 'Driver : '. $driver->name.' already restore');
+            return redirect($this->redirectTo."?search=on&search_nama=&search_filter=2");
+        } else {
+            $request->session()->flash('alert-danger', "Restore Failed : Out of scope");
+            return redirect($this->redirectTo);
+        }
+    }
 }

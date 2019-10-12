@@ -15,7 +15,7 @@ class CreateDriverTable extends Migration
     {
         Schema::create('driver', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('detail');
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();

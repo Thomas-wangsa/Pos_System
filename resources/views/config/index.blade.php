@@ -128,22 +128,31 @@
                     <br/>
                     {{$val->updated_at}}
                   </td>
-                  <td> 
-                    <div class="btn-group-vertical"> 
-                    <button 
-                    class="btn btn-warning"
-                    onclick="edit_config('{{$type}}','{{$val->uuid}}')"
+                  <td>
+                    @if($val->deleted_at != null)
+                    <button class="btn btn-primary"
+                    onclick="restore_config('{{$type}}','{{$val->uuid}}')"
                     >
-                      Edit {{ucwords($category_value)}} Config
+                      restore config
                     </button>
+                    @else
+ 
+                      <div class="btn-group-vertical"> 
+                      <button 
+                      class="btn btn-warning"
+                      onclick="edit_config('{{$type}}','{{$val->uuid}}')"
+                      >
+                        Edit {{ucwords($category_value)}} Config
+                      </button>
 
-                    <button 
-                    class="btn btn-danger"
-                    onclick="delete_config('{{$type}}','{{$val->uuid}}')"
-                    >
-                      Delete {{ucwords($category_value)}} Config
-                    </button>
-                    </div>
+                      <button 
+                      class="btn btn-danger"
+                      onclick="delete_config('{{$type}}','{{$val->uuid}}')"
+                      >
+                        Delete {{ucwords($category_value)}} Config
+                      </button>
+                      </div>
+                    @endif
                   </td>
                 </tr>
                 <?php $no++;?>
@@ -175,7 +184,11 @@
       }
     }
 
-
+    function restore_config(type,uuid) {
+      if (confirm('Apakah anda yakin ingin restore data ini ?')) {
+        window.location = "{{route('config.restore_config')}}"+"?type="+type+"&uuid="+uuid;
+      }
+    }
 
     function reset_filter() {
       window.location = "{{route('config.index')}}";
