@@ -139,7 +139,7 @@
 
                     <button 
                     class="btn btn-danger"
-                    onclick="edit_config('{{$type}}','{{$val->id}}')"
+                    onclick="delete_config('{{$type}}','{{$val->uuid}}')"
                     >
                       Delete {{ucwords($category_value)}} Config
                     </button>
@@ -167,6 +167,15 @@
         alert("ERROR, undefined type");
       }
     }
+
+
+    function delete_config(type,uuid) {
+      if (confirm('Apakah anda yakin ingin menghapus data ini ?')) {
+        window.location = "{{route('config.delete_config')}}"+"?type="+type+"&uuid="+uuid;
+      }
+    }
+
+
 
     function reset_filter() {
       window.location = "{{route('config.index')}}";

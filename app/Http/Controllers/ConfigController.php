@@ -40,11 +40,11 @@ class ConfigController extends Controller
                 switch ($request->search_filter) {
                     case '1':
                         if($request->search_nama != null) {$rows = Category::GetConfig($request->search_nama)->get();}
-                        else {$rows = Category::GetConfig()->get();}
+                        else {$rows = Category::GetConfig()->withTrashed()->get();}
                         break;
                     case '2':
                         if($request->search_nama != null) {$rows = Driver::GetConfig($request->search_nama)->get();}
-                        else {$rows = Driver::GetConfig()->get();}
+                        else {$rows = Driver::GetConfig()->withTrashed()->get();}
                         break;
                     default:
                         $request->session()->flash('alert-danger', "Out Of Scope Category value : $request->config_category");
@@ -97,6 +97,7 @@ class ConfigController extends Controller
                 $data  = new Category;
                 $data->name      = $request->config_main;
                 $data->detail    = $request->config_additional;
+                $data->uuid      = time()."-".$this->faker->uuid;
 
                 break;
             case '2':
@@ -111,6 +112,8 @@ class ConfigController extends Controller
                 $data  = new Driver;
                 $data->name      = $request->config_main;
                 $data->detail    = $request->config_additional;
+                $data->uuid      = time()."-".$this->faker->uuid;
+
 
                 break;
             default:
@@ -234,5 +237,42 @@ class ConfigController extends Controller
         $driver->save(); 
         $request->session()->flash('alert-success', 'Driver : '. $driver->name.' already updated');
         return redirect($this->redirectTo."?search=on&search_nama=&search_filter=2");
+    }
+
+
+    public function delete_config(Request $request) {
+        $type = $request->type;
+
+        if($type != 1 && $type != 2) {
+            $request->session()->flash('alert-danger', "Delete Failed : Type is undefined!");
+            return redirect($this->redirectTo);
+        }
+
+
+        if($type == 1) {
+            $category = Category::where('uuid',$request->uuid)->first();
+            
+            if($category == null) {
+                $request->session()->flash('alert-danger', "Data not found!");
+                return redirect($this->redirectTo);
+            }
+            $category->delete();
+            $request->session()->flash('alert-success', 'Category : '. $category->name.' already deleted');
+            return redirect($this->redirectTo."?search=on&search_nama=&search_filter=1");
+        } else if ($type == 2) {
+            $driver = Driver::where('uuid',$request->uuid)->first();
+
+             if($driver == null) {
+                $request->session()->flash('alert-danger', "Data not found!");
+                return redirect($this->redirectTo);
+            }
+            $driver->delete();
+
+            $request->session()->flash('alert-success', 'Driver : '. $driver->name.' already deleted');
+            return redirect($this->redirectTo."?search=on&search_nama=&search_filter=2");
+        } else {
+            $request->session()->flash('alert-danger', "Delete Failed : Out of scope");
+            return redirect($this->redirectTo);
+        }
     }
 }
