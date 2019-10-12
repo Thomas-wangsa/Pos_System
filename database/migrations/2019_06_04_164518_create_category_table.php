@@ -19,6 +19,7 @@ class CreateCategoryTable extends Migration
             $table->string('detail');
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
+            $table->string('uuid',100)->unique();
             $table->timestamps();
             $table->softDeletes();
         });

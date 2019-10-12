@@ -79,7 +79,7 @@ class ConfigController extends Controller
     {
         $request->validate([
             'config_main'  => 'required|max:30',
-            'config_additional'  => 'required|max:30',
+            'config_additional'  => 'required|max:300',
             'config_category'  => 'required|max:30',
         ]);
 
@@ -89,7 +89,7 @@ class ConfigController extends Controller
                 $data_exists = Category::where('name', $request->config_main)->first();
 
                 if($data_exists) {
-                    $request->session()->flash('alert-danger', "Data already exists in Group1 : $request->config_main");
+                    $request->session()->flash('alert-danger', "Data already exists in Category : $request->config_main");
                     return redirect($this->redirectTo);
                 }
 
@@ -103,7 +103,7 @@ class ConfigController extends Controller
                 $data_exists = Driver::where('name', $request->config_main)->first();
 
                 if($data_exists) {
-                    $request->session()->flash('alert-danger', "Data already exists in Group2 : $request->config_main");
+                    $request->session()->flash('alert-danger', "Data already exists in Driver : $request->config_main");
                     return redirect($this->redirectTo);
                 }
 
@@ -176,5 +176,63 @@ class ConfigController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function edit_config(Request $request) {
+        $data_exists = Category::where('uuid', $request->uuid)->first();
+
+        if($data_exists == null) {
+            $request->session()->flash('alert-danger', "Data not found!");
+            return redirect($this->redirectTo);
+        }
+
+
+        $data['category'] = $data_exists;
+        return view('config/edit_config',compact('data'));
+    }
+
+    public function update_config(Request $request) {
+        $category = Category::where('uuid', $request->uuid)->first();
+
+        if($category == null) {
+            $request->session()->flash('alert-danger', "Update Failed : Data not found!");
+            return redirect($this->redirectTo);
+        }
+
+        $category->name     = $request->name;
+        $category->detail   = $request->detail;
+        $category->save(); 
+        $request->session()->flash('alert-success', 'Config : '. $category->name.' already updated');
+        return redirect($this->redirectTo."?search=on&search_nama=&search_filter=1");
+    }
+
+
+    public function edit_driver(Request $request) {
+        $data_exists = Driver::where('uuid', $request->uuid)->first();
+
+        if($data_exists == null) {
+            $request->session()->flash('alert-danger', "Data not found!");
+            return redirect($this->redirectTo);
+        }
+
+
+        $data['driver'] = $data_exists;
+        return view('config/edit_driver',compact('data'));
+    }
+
+     public function update_driver(Request $request) {
+        $driver = Driver::where('uuid', $request->uuid)->first();
+
+        if($driver == null) {
+            $request->session()->flash('alert-danger', "Update Failed : Data not found!");
+            return redirect($this->redirectTo);
+        }
+
+        $driver->name     = $request->name;
+        $driver->detail   = $request->detail;
+        $driver->save(); 
+        $request->session()->flash('alert-success', 'Driver : '. $driver->name.' already updated');
+        return redirect($this->redirectTo."?search=on&search_nama=&search_filter=2");
     }
 }

@@ -199,7 +199,7 @@
 			<?php $faker_name = $data['faker']->name; ?>
 			$('#btn_add_items').prop('disabled', true);
 			$('#tr_no_item_found').hide();
-			data = "<tr> ";
+			data = '<tr id="tr_no_'+no_items+'"> ';
 			data += "<td>"+no_items+"</td>";
 			data += '<td width="30px">'+
 					'<input type="number" onchange=adjust_quantity(this,'+no_items+') class="form-control" id="item_quantity_'+no_items+'" value="1">'+

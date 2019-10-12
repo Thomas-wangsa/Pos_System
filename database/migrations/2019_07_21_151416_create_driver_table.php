@@ -17,10 +17,20 @@ class CreateDriverTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('detail');
-            $table->unsignedInteger('created_by');
-            $table->unsignedInteger('updated_by');
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
+            $table->string('uuid',100)->unique();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('created_by', 'driver_created_by_byfkey')
+                ->references('id')->on('users')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+
+
+            $table->foreign('updated_by', 'driver_updated_by_byfkey')
+                ->references('id')->on('users')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
         });
     }
 

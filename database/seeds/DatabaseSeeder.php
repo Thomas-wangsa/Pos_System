@@ -97,19 +97,22 @@ class DatabaseSeeder extends Seeder
                 "name"=>"sofa",
                 "detail"=>"sofaku",
                 "created_by"=>1,
-                "updated_by"=>1
+                "updated_by"=>1,
+                "uuid"=>$faker->uuid
             ),
             array(
                 "name"=>"kasur",
                 "detail"=>"kasur",
                 "created_by"=>1,
-                "updated_by"=>1
+                "updated_by"=>1,
+                "uuid"=>$faker->uuid
             ),
             array(
                 "name"=>"piring",
                 "detail"=>"piring",
                 "created_by"=>1,
-                "updated_by"=>1
+                "updated_by"=>1,
+                "uuid"=>$faker->uuid
             )
         );
 
@@ -189,12 +192,14 @@ class DatabaseSeeder extends Seeder
                 "detail"=>"B 9022",
                 "created_by"=>1,
                 "updated_by"=>1,
+                "uuid"=>$faker->uuid
             ),
             array(
                 "name"=>"syamsu",
                 "detail"=>"B 9023",
                 "created_by"=>1,
                 "updated_by"=>1,
+                "uuid"=>$faker->uuid
             ),
         );
 

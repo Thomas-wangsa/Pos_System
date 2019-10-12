@@ -1,6 +1,15 @@
 @extends('layouts.main')
 
 @section('content')
+  @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+    @if(Session::has('alert-' . $msg))
+      <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }} 
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">
+          &times;
+        </a>
+     </p>
+    @endif
+  @endforeach
   <div style="margin-top: 15px">
     <div id="helper_header">
 
@@ -68,7 +77,7 @@
             <thead>
                <tr>
                   <th> No </th>
-                  <th> Category </th>
+                  <th> Type </th>
                   <th> Name </th>
                   <th> Detail </th>
                   <th> Created By </th>
@@ -78,7 +87,7 @@
           </thead>
           <tbody>
             @if($data['rows'] == null ) 
-              <td colspan="10" class="text-center"> Please select the category </td>
+              <td colspan="10" class="text-center"> Please select the type config </td>
             @elseif(count($data['rows']) < 1)
               <td colspan="10" class="text-center"> Data not found! </td>
             @else 
@@ -94,6 +103,8 @@
                     @default
                       @break
                 @endswitch
+
+                <?php $type= Request::get('search_filter');?>
 
                 @foreach($data['rows'] as $key=>$val)
                 <tr>
@@ -117,20 +128,22 @@
                     <br/>
                     {{$val->updated_at}}
                   </td>
-                  <td>  
+                  <td> 
+                    <div class="btn-group-vertical"> 
                     <button 
                     class="btn btn-warning"
-                    onclick="edit_config('{{$val->id}}','{{$val->$val_name}}','{{$val->$val_detail}}')"
+                    onclick="edit_config('{{$type}}','{{$val->uuid}}')"
                     >
                       Edit {{ucwords($category_value)}} Config
                     </button>
 
                     <button 
                     class="btn btn-danger"
-                    onclick="edit_config('{{$val->id}}','{{$val->$val_name}}','{{$val->$val_detail}}')"
+                    onclick="edit_config('{{$type}}','{{$val->id}}')"
                     >
                       Delete {{ucwords($category_value)}} Config
                     </button>
+                    </div>
                   </td>
                 </tr>
                 <?php $no++;?>
@@ -142,4 +155,22 @@
     </div>
   </div>
   @include('config.modal_new_config')
+
+  <script type="text/javascript">
+    
+    function edit_config(type,uuid) {
+      if(type == 1) {
+        window.location = "{{route('config.edit_config')}}"+"?uuid="+uuid;
+      } else if(type == 2) {
+        window.location = "{{route('config.edit_driver')}}"+"?uuid="+uuid;
+      } else {
+        alert("ERROR, undefined type");
+      }
+    }
+
+    function reset_filter() {
+      window.location = "{{route('config.index')}}";
+    }
+
+  </script>
 @endsection

@@ -59,6 +59,10 @@ Route::resource('/invoice', 'InvoiceController');
 
 
 Route::resource('/config', 'ConfigController');
+Route::get('/adhoc/edit_config', 'ConfigController@edit_config')->name('config.edit_config');
+Route::post('/adhoc/update_config', 'ConfigController@update_config')->name('config.update_config');
+Route::get('/adhoc/edit_driver', 'ConfigController@edit_driver')->name('config.edit_driver');
+Route::post('/adhoc/update_driver', 'ConfigController@update_driver')->name('config.update_driver');
 
 
 
