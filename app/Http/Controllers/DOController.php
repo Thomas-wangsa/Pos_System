@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Models\Category;
+use App\Http\Models\Customer;
+
 use App\Http\Models\PO;
 use App\Http\Models\SubPO;
 use App\Http\Models\Driver;
@@ -34,15 +36,16 @@ class DOController extends Controller
     public function index()
     {
         //$customer = Customer::all();
-        $category = Category::all();
-        $data['category'] = $category;
-        $data['do'] = Delivery_Order::leftjoin('po','po.id','=','delivery_order.po_id')
-                    ->leftjoin('driver','driver.id','=','delivery_order.driver_id')
-                    ->leftjoin('delivery_order_status','delivery_order_status.id','=','delivery_order.status')
-                    ->select('delivery_order.*','po.number AS po_number','driver.name AS driver_name','delivery_order_status.name AS status_name')
-                    ->get();
+        // $category = Category::all();
+        // $data['category'] = $category;
+        // $data['do'] = Delivery_Order::leftjoin('po','po.id','=','delivery_order.po_id')
+        //             ->leftjoin('driver','driver.id','=','delivery_order.driver_id')
+        //             ->leftjoin('delivery_order_status','delivery_order_status.id','=','delivery_order.status')
+        //             ->select('delivery_order.*','po.number AS po_number','driver.name AS driver_name','delivery_order_status.name AS status_name')
+        //             ->get();
         //$data['customer'] = $customer;
         //dd($data);
+        $data['do'] = Delivery_Order::all();
         return view('do/index',compact('data'));
     }
 
@@ -53,17 +56,19 @@ class DOController extends Controller
      */
     public function create(Request $request)
     {   
-        $po = PO::where('uuid',$request->po_uuid)->first();
+        // $po = PO::where('uuid',$request->po_uuid)->first();
 
 
-        $sub_po = SubPO::where('po_id',$po->id)->get();
-        //$customer = Customer::all();
-        $data['po'] = $po;
-        $data['sub_po'] = $sub_po;
-        $data['do'] = Delivery_Order::all();
-        $data['driver'] = Driver::all();
-        //$data['customer'] = $customer;
-        //dd($data);
+        // $sub_po = SubPO::where('po_id',$po->id)->get();
+        // //$customer = Customer::all();
+        // $data['po'] = $po;
+        // $data['sub_po'] = $sub_po;
+        // $data['do'] = Delivery_Order::all();
+        // $data['driver'] = Driver::all();
+        // //$data['customer'] = $customer;
+        // //dd($data);
+
+        $data['customer'] = Customer::all();
         return view('do/create',compact('data'));
     }
 

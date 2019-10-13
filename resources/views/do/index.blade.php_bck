@@ -1,15 +1,12 @@
 @extends('layouts.main')
 
 @section('content')
-
   <div style="margin-top: 15px">
     <div class="pull-left">
-      <a href="{{route('do.create')}}">
-        <button type="button" class="btn btn-md btn-primary">
-          <span class="glyphicon glyphicon-plus"></span>
-          New Delivery Order
-        </button>
-      </a>
+      <button type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target="#modal_select_po">
+        <span class="glyphicon glyphicon-plus"></span>
+        New Delivery_Order
+      </button>
     </div>
     <div class="clearfix"> </div>
   </div>
@@ -121,4 +118,7 @@
       @endif
     </tbody>
   </table>
+
+  @include('do.modal_select_po')
+  @include('do.modal_info_do')
 @endsection
