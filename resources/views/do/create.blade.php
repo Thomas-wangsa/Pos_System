@@ -63,6 +63,8 @@
 			<tbody id="do_tbody">
 			</tbody>
 		</table>
+
+		<div class="btn btn-primary btn-block hide" id="create_delivery_order_btn"> create delivery order </div>
   	</div>
 
 
@@ -74,6 +76,9 @@
   		});
   		$('#do_customer').change(function(){
 		    customer_uuid = $('#do_customer').val();
+		    $('#do_tbody').empty();
+		    $('#create_delivery_order_btn').addClass("hide");
+		    $('#do_sales').val("-");
 		    $('#do_po').empty().append(
 		      $("<option></option>")
 		      .attr("value","")
@@ -107,6 +112,8 @@
 
 		$('#do_po').change(function(){
 			$('#do_tbody').empty();
+			$('#create_delivery_order_btn').addClass("hide");
+			$('#do_sales').val("-");
 			po_uuid = $('#do_po').val();
 			$('#do_sales').val("-");
 			var data = {"po_uuid":po_uuid}
@@ -149,6 +156,7 @@
 								  			"<tr>";
 								no_items ++;
 								$('#do_tbody').append(append_rows);
+								$('#create_delivery_order_btn').removeClass("hide");
 		          			});
 
 		          		} else {
