@@ -41,16 +41,14 @@ Route::post('ajax/restore_customer_by_uuid','CustomerController@restore_customer
 Route::resource('/po', 'POController');
 Route::get('po/edit_sub_po','POController@edit_sub_po')->name('po.edit_sub_po');
 Route::post('po/edit_status_po','POController@edit_status_po')->name('po.edit_status_po');
-
 Route::post('ajax/get_po_by_customer_uuid','POController@get_po_by_customer_uuid')->name('po.get_po_by_customer_uuid');
 Route::post('ajax/get_po_by_uuid','POController@get_po_by_uuid')->name('po.get_po_by_uuid');
-
 Route::post('ajax/submit_po_by_customer_uuid','POController@submit_po_by_customer_uuid')->name('po.submit_po_by_customer_uuid');
 Route::post('ajax/update_po_by_po_uuid','POController@update_po_by_po_uuid')->name('po.update_po_by_po_uuid');
-
 Route::post('ajax/submit_sub_po_by_po_uuid','POController@submit_sub_po_by_po_uuid')->name('po.submit_sub_po_by_po_uuid');
 Route::post('ajax/update_sub_po_by_sub_po_uuid','POController@update_sub_po_by_sub_po_uuid')->name('po.update_sub_po_by_sub_po_uuid');
 Route::post('ajax/restore_sub_po_by_sub_po_uuid','POController@restore_sub_po_by_sub_po_uuid')->name('po.restore_sub_po_by_sub_po_uuid');
+Route::post('ajax/get_sales_subpo_by_po_uuid','POController@get_sales_subpo_by_po_uuid')->name('po.get_sales_subpo_by_po_uuid');
 
 
 

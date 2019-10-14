@@ -60,15 +60,13 @@ class DOController extends Controller
 
 
         // $sub_po = SubPO::where('po_id',$po->id)->get();
-        // //$customer = Customer::all();
         // $data['po'] = $po;
         // $data['sub_po'] = $sub_po;
         // $data['do'] = Delivery_Order::all();
-        // $data['driver'] = Driver::all();
-        // //$data['customer'] = $customer;
+        $data['driver'] = Driver::all();
+        $data['customer'] = Customer::orderBy('name','asc')->get();
         // //dd($data);
 
-        $data['customer'] = Customer::all();
         return view('do/create',compact('data'));
     }
 

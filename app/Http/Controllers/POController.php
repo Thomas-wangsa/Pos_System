@@ -634,4 +634,41 @@ class POController extends Controller
             return json_encode($response);
         }
     }
+
+
+    function get_sales_subpo_by_po_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+
+        try {
+            $data = array('sales'=>null,"sub_po"=>[]);
+            $po = PO::where('uuid',$request->po_uuid)->first();
+            if($po == null) {
+                $response['messages'] = "po is not found!";
+                return json_encode($response);
+            }
+
+
+            $sales = User::find($po->sales_id);
+            if($sales == null) {
+                $response['messages'] = "sales is not found!";
+                return json_encode($response);
+            }
+            $data['sales'] = $sales;
+
+
+            $sub_po = SubPO::where('po_id',$po->id)->get();
+            if(count($sub_po) > 0) {
+                $data['sub_po'] = $sub_po;
+            }
+
+            $response['error'] = false;
+            $response['data'] = $data;
+            return json_encode($response);
+        } catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+
+    }
 }
