@@ -3,6 +3,11 @@
 @section('content')
 <style type="text/css">
 	.main_section {margin-top: 20px}
+
+	.unselectable{
+   background-color: #ddd;
+   cursor: not-allowed;
+  }
 </style>
 	<div style="margin: 10px auto">
 	    <a href="{{route('do.index')}}">
@@ -120,17 +125,25 @@
 		          		if(response.data.sub_po.length > 0) {
 		          			no_items = 1;
 		          			$.each(response.data.sub_po, function (key,val) {
-		          				var append_rows = "<tr> " +
-												"<td> " +
-												(key+1) +
-												"</td> " +
-												"<td> " +
-												'<input type="number"  onchange=adjust_quantity(this,'+no_items+') class="form-control" id="item_quantity_'+no_items+'" value="'+val.quantity+'">'+
-												"</td> " +
-												"<td> " +
-												val.name +
-												"</td> " +
-											  "<tr>";
+		          				var append_rows = '<tr id="tr_no_'+no_items+'" class="unselectable"> ' +
+									"<td> " +
+									(key+1) +
+									"</td> " +
+									"<td> " +
+									'<input type="number"  onchange=adjust_quantity(this,'+no_items+') class="form-control" id="item_quantity_'+no_items+'" value="'+val.quantity+'">'+
+									"</td> " +
+									"<td> " +
+									val.name +
+									"</td> " +
+									"<td> " +
+									'<button class="btn btn-primary" onclick="pick_item('+no_items+')" id="pick_item_btn_'+no_items+'"> '+
+										'pick item '+
+									'</button>'+
+									'<button class="btn btn-danger hide" onclick="remove_item('+no_items+')" id="remove_item_btn_'+no_items+'"> '+
+										'remove item '+
+									'</button>'+
+									"</td> " +
+								  			"<tr>";
 								no_items ++;
 								$('#do_tbody').append(append_rows);
 		          			});
@@ -152,6 +165,18 @@
 				$('#item_quantity_'+current_no_items).val(1);
 				alert("quantity is not correct!");
 			}
+		}
+
+		function pick_item(current_no_items) {
+			$('#tr_no_'+current_no_items).removeClass('unselectable');
+			$('#pick_item_btn_'+current_no_items).addClass('hide');
+			$('#remove_item_btn_'+current_no_items).removeClass('hide');
+		}
+
+		function remove_item(current_no_items) {
+			$('#tr_no_'+current_no_items).addClass('unselectable');
+			$('#pick_item_btn_'+current_no_items).removeClass('hide');
+			$('#remove_item_btn_'+current_no_items).addClass('hide');
 		}
   	</script>
 @endsection
