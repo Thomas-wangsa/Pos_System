@@ -64,7 +64,7 @@
 			</tbody>
 		</table>
 
-		<div class="btn btn-primary btn-block hide" id="create_delivery_order_btn"> create delivery order </div>
+		<div class="btn btn-primary btn-block hide" id="create_delivery_order_btn" onclick="submit_delivery_order()"> create delivery order </div>
   	</div>
 
 
@@ -168,6 +168,34 @@
 			});
 		});
 
+
+		function submit_delivery_order() {
+			if (confirm('Are you sure to create this delivery_order ?')) { 
+				driver_id = $('#do_driver').val();
+				po_uuid = $('#do_po').val();
+
+				if(driver_id == null || driver_id == "") {
+					alert("please select the driver!");
+					return;
+				} else if(po_uuid == null || po_uuid == "") {
+					alert("please select the po");
+					return;
+				}
+
+				full_data = [];
+				for(i=1;i<no_items;i++) {
+					item = {
+						"sub_po_uuid":$('#item_uuid_'+i).val(),
+						"quantity":$('#item_quantity_'+i).val(),
+						"active":$('#item_active_'+i).html()
+					}
+					full_data.push(item);
+				}
+
+				
+
+			}
+		}
 
 		function adjust_quantity(qty,current_no_items) {
 			this_value = qty.value;
