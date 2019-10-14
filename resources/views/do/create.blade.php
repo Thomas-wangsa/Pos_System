@@ -126,7 +126,10 @@
 		          			no_items = 1;
 		          			$.each(response.data.sub_po, function (key,val) {
 		          				var append_rows = '<tr id="tr_no_'+no_items+'" class="unselectable"> ' +
+
 									"<td> " +
+									'<input type="text"  class="form-control hide" id=item_uuid_'+no_items+'" value="'+val.uuid+'">'+
+									'<span id="item_active_'+no_items+'" class="hide">0</span>' +
 									(key+1) +
 									"</td> " +
 									"<td> " +
@@ -171,12 +174,14 @@
 			$('#tr_no_'+current_no_items).removeClass('unselectable');
 			$('#pick_item_btn_'+current_no_items).addClass('hide');
 			$('#remove_item_btn_'+current_no_items).removeClass('hide');
+			$('#item_active_'+current_no_items).html(1);
 		}
 
 		function remove_item(current_no_items) {
 			$('#tr_no_'+current_no_items).addClass('unselectable');
 			$('#pick_item_btn_'+current_no_items).removeClass('hide');
 			$('#remove_item_btn_'+current_no_items).addClass('hide');
+			$('#item_active_'+current_no_items).html(0);
 		}
   	</script>
 @endsection
