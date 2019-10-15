@@ -54,17 +54,19 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr> 
-					<th> No </th>
+					<th width="5px"> </th>
+					<th width="30px"> No </th>
 					<th width="100px"> Quantity </th>
 					<th> Name </th>
-					<th> Action </th>
 				</tr>
 			</thead>
 			<tbody id="do_tbody">
 			</tbody>
 		</table>
 
-		<div class="btn btn-primary btn-block hide" id="create_delivery_order_btn" onclick="submit_delivery_order()"> create delivery order </div>
+		<button class="btn btn-primary btn-block hide" id="create_delivery_order_btn" onclick="submit_delivery_order()" disabled> 
+			create delivery order 
+		</button>
   	</div>
 
 
@@ -133,6 +135,13 @@
 		          			no_items = 1;
 		          			$.each(response.data.sub_po, function (key,val) {
 		          				var append_rows = '<tr id="tr_no_'+no_items+'" class="unselectable"> ' +
+		          					"<td width='20px'> "+
+		          					'<div class="checkbox">'+
+		          					'<label>'+
+		          					'<input type="checkbox" onclick="cek_checkbox('+no_items+')" id="checkbox_'+no_items+'">'+
+		          					'</label> '+
+		          					'</div>' +
+		          					"</td> " + 
 
 									"<td> " +
 									'<input type="text"  class="form-control hide" id=item_uuid_'+no_items+'" value="'+val.uuid+'">'+
@@ -140,18 +149,10 @@
 									(key+1) +
 									"</td> " +
 									"<td> " +
-									'<input type="number"  onchange=adjust_quantity(this,'+no_items+') class="form-control" id="item_quantity_'+no_items+'" value="'+val.quantity+'">'+
+									'<input type="number"  onchange=adjust_quantity(this,'+no_items+') class="form-control" id="item_quantity_'+no_items+'" value="'+val.quantity+'" disabled>'+
 									"</td> " +
 									"<td> " +
 									val.name +
-									"</td> " +
-									"<td> " +
-									'<button class="btn btn-primary" onclick="pick_item('+no_items+')" id="pick_item_btn_'+no_items+'"> '+
-										'pick item '+
-									'</button>'+
-									'<button class="btn btn-danger hide" onclick="remove_item('+no_items+')" id="remove_item_btn_'+no_items+'"> '+
-										'remove item '+
-									'</button>'+
 									"</td> " +
 								  			"<tr>";
 								no_items ++;
@@ -203,6 +204,34 @@
 			if(this_value < 1) {
 				$('#item_quantity_'+current_no_items).val(1);
 				alert("quantity is not correct!");
+			}
+		}
+
+		function checking_eligible() {
+			$('#create_delivery_order_btn').attr('disabled',true);
+			for(i=1;i<no_items;i++) {
+				value = $('#item_active_'+i).html();
+				if(value == 1) {
+					$('#create_delivery_order_btn').attr('disabled',false);
+				}
+			}
+		}
+
+		function cek_checkbox(current_no_items) {
+			if($('#checkbox_'+current_no_items).prop('checked')) {
+			    $('#tr_no_'+current_no_items).removeClass('unselectable');
+				$('#pick_item_btn_'+current_no_items).addClass('hide');
+				$('#remove_item_btn_'+current_no_items).removeClass('hide');
+				$('#item_quantity_'+current_no_items).attr('disabled',false);
+				$('#item_active_'+current_no_items).html(1);
+				checking_eligible(); 
+			} else {
+			    $('#tr_no_'+current_no_items).addClass('unselectable');
+				$('#pick_item_btn_'+current_no_items).removeClass('hide');
+				$('#remove_item_btn_'+current_no_items).addClass('hide');
+				$('#item_quantity_'+current_no_items).attr('disabled',true);
+				$('#item_active_'+current_no_items).html(0);
+				checking_eligible(); 
 			}
 		}
 
