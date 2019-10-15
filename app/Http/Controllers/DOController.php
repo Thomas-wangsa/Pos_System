@@ -72,7 +72,48 @@ class DOController extends Controller
 
 
     public function store(Request $request) {
-        dd($request);
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        try {
+            $driver = Driver::find($request->driver_id);
+            if($driver == null) {
+                $response['messages'] = "driver data is not found!";
+                return json_encode($response);
+            } 
+
+            $po = PO::where('uuid',$request->po_uuid)->first();
+            if($po == null) {
+                $response['messages'] = "po data is not found!";
+                return json_encode($response);
+            } 
+
+            $sub_po_array = [];
+            foreach($request->sub_data as $key=>$val) {
+                if($val['active'] == 1) {array_push($sub_po_array,$val);}
+
+            }
+
+            if(count($sub_po_array) < 1) {
+                $response['messages'] = "active sub po data is not found!";
+                return json_encode($response);
+            }
+
+            foreach($sub_po_array as $key=>$val) {
+                $sub_po = SubPO::where('po_id',$po->id)
+                        ->where('uuid',$val['sub_po_uuid']."a")
+                        ->first();
+                if($sub_po == null) {
+                    $response['messages'] = "sub po data is not found! : " . $val['sub_po_uuid'];
+                    return json_encode($response);
+                }
+            }
+
+
+        } catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+        
     }
     /**
      * Store a newly created resource in storage.
