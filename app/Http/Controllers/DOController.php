@@ -98,6 +98,7 @@ class DOController extends Controller
                 return json_encode($response);
             }
 
+            $sub_delivery_order_data = [];
             foreach($sub_po_array as $key=>$val) {
                 $sub_po = SubPO::where('po_id',$po->id)
                         ->where('uuid',$val['sub_po_uuid']."a")
@@ -108,6 +109,9 @@ class DOController extends Controller
                 }
             }
 
+            // $do = new Delivery_Order;
+            // $do->po_id = $po->id;
+            
 
         } catch(Exception $e) {
             $response['messages'] = $e->getMessage();
