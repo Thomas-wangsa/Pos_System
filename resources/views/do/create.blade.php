@@ -144,7 +144,7 @@
 		          					"</td> " + 
 
 									"<td> " +
-									'<input type="text"  class="form-control hide" id=item_uuid_'+no_items+'" value="'+val.uuid+'">'+
+									'<input type="text"  class="form-control hide" id="item_uuid_'+no_items+'"  value="'+val.uuid+'">'+
 									'<span id="item_active_'+no_items+'" class="hide">0</span>' +
 									(key+1) +
 									"</td> " +
@@ -171,30 +171,53 @@
 
 
 		function submit_delivery_order() {
+			driver_id = $('#do_driver').val();
+			po_uuid = $('#do_po').val();
+
+			if(driver_id == null || driver_id == "") {
+				alert("please select the driver!");
+				return;
+			} else if(po_uuid == null || po_uuid == "") {
+				alert("please select the po");
+				return;
+			}
+
 			if (confirm('Are you sure to create this delivery_order ?')) { 
-				driver_id = $('#do_driver').val();
-				po_uuid = $('#do_po').val();
+				
 
-				if(driver_id == null || driver_id == "") {
-					alert("please select the driver!");
-					return;
-				} else if(po_uuid == null || po_uuid == "") {
-					alert("please select the po");
-					return;
-				}
-
-				full_data = [];
+				sub_data = [];
 				for(i=1;i<no_items;i++) {
 					item = {
 						"sub_po_uuid":$('#item_uuid_'+i).val(),
 						"quantity":$('#item_quantity_'+i).val(),
 						"active":$('#item_active_'+i).html()
 					}
-					full_data.push(item);
+					sub_data.push(item);
 				}
 
-				
+				console.log(sub_data);
 
+
+				var data = {
+					"driver_id" : driver_id,
+					"po_uuid" : po_uuid,
+					"sub_data": sub_data
+				}
+				
+				$.ajax({
+					type : "POST",
+			      	url: " {{ route('do.store') }}",
+			      	contentType: "application/json",
+			      	data : JSON.stringify(data),
+			      	success: function(result) { 
+			      		response = JSON.parse(result);
+			            if(response.error != true) {
+			            	alert("A");
+			            } else {
+			              	alert(response.messages);
+			            }
+			      	}
+				})
 			}
 		}
 

@@ -70,13 +70,17 @@ class DOController extends Controller
         return view('do/create',compact('data'));
     }
 
+
+    public function store(Request $request) {
+        dd($request);
+    }
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store_bck(Request $request)
     {
 
         $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
