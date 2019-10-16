@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use DB;
 use Illuminate\Http\Request;
 use App\Http\Models\Category;
 use App\Http\Models\Customer;
@@ -98,6 +98,7 @@ class DOController extends Controller
                 return json_encode($response);
             }
 
+
             $sub_delivery_order_data = [];
             foreach($sub_po_array as $key=>$val) {
                 $sub_po = SubPO::where('po_id',$po->id)
@@ -108,7 +109,17 @@ class DOController extends Controller
                     return json_encode($response);
                 }
 
-                array_push($sub_delivery_order_data,"a");
+                $sub_delivery_order_each = [
+                    "quantity"=>$val['quantity'],
+                    "name"=>$sub_po->name,
+                    // "delivery_order_id"=> $do->id,
+                    "created_by"=> Auth::user()->id,
+                    "updated_by"=>Auth::user()->id,
+                    "uuid"=>$po->id."-".time()."-".$this->faker->uuid,
+                    "created_at"=>date("Y-m-d H:i:s"),
+                    "updated_at"=>date("Y-m-d H:i:s"),
+                ];
+                array_push($sub_delivery_order_data,$sub_delivery_order_each);
             }
 
 
@@ -117,7 +128,7 @@ class DOController extends Controller
                 return json_encode($response);
             }
 
-            
+
 
             $do = new Delivery_Order;
             $do->number = $this->set_patern_do_number($po);
@@ -128,7 +139,17 @@ class DOController extends Controller
             $do->created_by = Auth::user()->id;
             $do->updated_by = Auth::user()->id;
             $do->uuid = $po->id."-".time()."-".$this->faker->uuid;
-            $do->save();
+
+
+            DB::transaction(function() use ($do, $sub_delivery_order_data) {
+                $do->save();
+                foreach($sub_delivery_order_data as $key=>$val) {
+                    $sub_delivery_order_data[$key]['delivery_order_id'] = $do->id;
+                }
+                
+                Sub_Delivery_Order::insert($sub_delivery_order_data);
+
+            });
 
             $response['error'] = false;
             $response['data'] = $do;

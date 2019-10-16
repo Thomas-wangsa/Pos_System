@@ -212,7 +212,9 @@
 			      	success: function(result) { 
 			      		response = JSON.parse(result);
 			            if(response.error != true) {
-			            	alert("A");
+			            	alert("create new delivery order success");
+			            	var url = "{{route('do.index')}}";
+							window.location = url;
 			            } else {
 			              	alert(response.messages);
 			            }
