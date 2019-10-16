@@ -57,7 +57,7 @@ class DOController extends Controller
     public function create(Request $request)
     {   
         // $po = PO::where('uuid',$request->po_uuid)->first();
-
+        
 
         // $sub_po = SubPO::where('po_id',$po->id)->get();
         // $data['po'] = $po;
@@ -101,16 +101,39 @@ class DOController extends Controller
             $sub_delivery_order_data = [];
             foreach($sub_po_array as $key=>$val) {
                 $sub_po = SubPO::where('po_id',$po->id)
-                        ->where('uuid',$val['sub_po_uuid']."a")
+                        ->where('uuid',$val['sub_po_uuid'])
                         ->first();
                 if($sub_po == null) {
                     $response['messages'] = "sub po data is not found! : " . $val['sub_po_uuid'];
                     return json_encode($response);
                 }
+
+                array_push($sub_delivery_order_data,"a");
             }
 
-            // $do = new Delivery_Order;
-            // $do->po_id = $po->id;
+
+            if(count($sub_delivery_order_data) < 1) {
+                $response['messages'] = "sub_delivery_order_data is not found!";
+                return json_encode($response);
+            }
+
+            
+
+            $do = new Delivery_Order;
+            $do->number = $this->set_patern_do_number($po);
+            $do->driver_id = $driver->id;
+            $do->po_id = $po->id;
+            $do->customer_id = $po->customer_id;
+            $do->sales_id = $po->sales_id;
+            $do->created_by = Auth::user()->id;
+            $do->updated_by = Auth::user()->id;
+            $do->uuid = $po->id."-".time()."-".$this->faker->uuid;
+            $do->save();
+
+            $response['error'] = false;
+            $response['data'] = $do;
+            return json_encode($response);
+
             
 
         } catch(Exception $e) {
@@ -118,6 +141,17 @@ class DOController extends Controller
             return json_encode($response);
         }
         
+    }
+
+
+    private function set_patern_do_number($po) {
+        $current_last_do_id = Delivery_Order::orderBy('id','desc')->limit(1)->value('id');
+        $next_id = 1;
+        if($current_last_do_id != null) {
+            $next_id += $current_last_do_id;
+        }
+
+        $patern_do_name = $next_id."/".$po->customer_id."/".date("Y");
     }
     /**
      * Store a newly created resource in storage.
