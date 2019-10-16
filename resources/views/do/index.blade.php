@@ -28,22 +28,58 @@
           value="{{Request::get('search_nama')}}">
         </div>
       </div>
-      
+
       <div class="form-group">
-        <select class="form-control" name="search_filter">
-          <option value=""> Filter By </option>
+        <select class="form-control" name="search_po">
+          <option value=""> Filter By PO </option>
+          @foreach($data['po'] as $key=>$val)
+          <option value="{{$val->id}}"
+          @if($val->id == Request::get('search_po')) 
+            selected
+          @endif  
+          > {{$val->number}} </option>
+          @endforeach
         </select>
       </div>
 
       <div class="form-group">
-          <select class="form-control" name="search_order">
-            <option value=""> Sort By </option>
-          </select>
+        <select class="form-control" name="search_customer">
+          <option value=""> Filter By Customer </option>
+          @foreach($data['customer'] as $key=>$val)
+          <option value="{{$val->id}}"
+          @if($val->id == Request::get('search_customer')) 
+            selected
+          @endif  
+          > {{$val->name}} </option>
+          @endforeach
+        </select>
+      </div>
+
+
+     
+      <div class="form-group">
+        <select class="form-control" name="search_status">
+          <option value=""> Filter By Status </option>
+          @foreach($data['delivery_order_status'] as $key=>$val)
+          <option value="{{$val->id}}"
+          @if($val->id == Request::get('search_status')) 
+            selected
+          @endif  
+          > {{$val->name}} </option>
+          @endforeach
+        </select>
       </div>
     
       <button type="submit" class="btn btn-info"> 
         Filter
-      </button> 
+      </button>
+      @if(Request::get('search') == "on")
+      <button type="reset" 
+      class="btn"
+      onclick="reset_filter()"> 
+        Clear Filter 
+      </button>
+      @endif 
     </form>
   </div>
   <div class="clearfix"> </div>
@@ -55,6 +91,7 @@
         <th> No </th>
         <th> Number </th>
         <th> PO </th>
+        <th> Customer </th>
         <th> Driver </th>
         <th> Status </th>
         <th> Action </th>
@@ -77,6 +114,9 @@
           </td>
           <td>
             {{$val['po_number']}}
+          </td>
+          <td>
+            {{$val['customer_name']}}
           </td>
           <td>
             {{$val['driver_name']}}

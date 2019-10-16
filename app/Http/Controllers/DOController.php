@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use DB;
+use App\User;
+
 use Illuminate\Http\Request;
 use App\Http\Models\Category;
 use App\Http\Models\Customer;
@@ -38,14 +40,25 @@ class DOController extends Controller
         //$customer = Customer::all();
         // $category = Category::all();
         // $data['category'] = $category;
-        // $data['do'] = Delivery_Order::leftjoin('po','po.id','=','delivery_order.po_id')
-        //             ->leftjoin('driver','driver.id','=','delivery_order.driver_id')
-        //             ->leftjoin('delivery_order_status','delivery_order_status.id','=','delivery_order.status')
-        //             ->select('delivery_order.*','po.number AS po_number','driver.name AS driver_name','delivery_order_status.name AS status_name')
-        //             ->get();
-        //$data['customer'] = $customer;
+        $do = Delivery_Order::leftjoin('po','po.id','=','delivery_order.po_id')
+                    ->leftjoin('customer','customer.id','=','po.customer_id')
+                    ->leftjoin('users','users.id','=','po.sales_id')
+                    ->leftjoin('driver','driver.id','=','delivery_order.driver_id')
+                    ->leftjoin('delivery_order_status','delivery_order_status.id','=','delivery_order.status')
+                    ->select(
+                        'delivery_order.*',
+                        'po.number AS po_number',
+
+                        'customer.name AS customer_name',
+                        'users.name AS sales_name',
+                        'driver.name AS driver_name',
+                        'delivery_order_status.name AS status_name')
+                    ->get();
+        $data['po'] = PO::orderBy('number','asc')->withTrashed()->where('status',1)->get();
+        $data['customer'] = Customer::orderBy('name','asc')->withTrashed()->get();
+        $data['delivery_order_status'] = Sub_Delivery_Order::all();
         //dd($data);
-        $data['do'] = Delivery_Order::all();
+        $data['do'] = $do;
         return view('do/index',compact('data'));
     }
 
