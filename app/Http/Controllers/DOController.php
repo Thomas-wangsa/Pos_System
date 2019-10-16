@@ -151,7 +151,45 @@ class DOController extends Controller
             $next_id += $current_last_do_id;
         }
 
-        $patern_do_name = $next_id."/".$po->customer_id."/".date("Y");
+        return $this->set_patern_digit($next_id)."/".$this->set_patern_digit($po->customer_id)."/".$this->set_patern_month()."/".date("Y");
+    }
+
+    private function set_patern_digit($data) {
+        $length = strlen($data);
+        $response = "000000".$data;
+
+        switch($length) {
+            case "1": $response = "0000".$data; break;
+            case "2": $response = "000".$data; break;
+            case "3": $response = "00".$data; break;
+            case "4": $response = "0".$data; break;
+            case "5": $response = "$data"; break;
+            default : $response = "000000".$data;break;
+        }
+        return $response;
+    }
+
+    private function set_patern_month() {
+        $m = date("m");
+
+        $response = "XXX";
+
+        switch($m) {
+            case "1": $response = "I"; break;
+            case "2": $response = "II"; break;
+            case "3": $response = "III"; break;
+            case "4": $response = "IV"; break;
+            case "5": $response = "V"; break;
+            case "6": $response = "VI"; break;
+            case "7": $response = "VII"; break;
+            case "8": $response = "VIII"; break;
+            case "9": $response = "IX"; break;
+            case "10": $response = "X"; break;
+            case "11": $response = "XI"; break;
+            case "12": $response = "XII"; break;
+            default : $response = "XXX";;break;
+        }
+        return $response;
     }
     /**
      * Store a newly created resource in storage.
