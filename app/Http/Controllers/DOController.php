@@ -441,4 +441,36 @@ class DOController extends Controller
             return json_encode($response);
         }
     }
+
+
+    function update_sub_do_by_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+
+        try {
+
+            $sub_po = Sub_Delivery_Order::where('uuid',$request->sub_po_uuid)->first();
+            if($sub_po == null) {
+                $response['messages'] = "sub po is not found!";
+                return json_encode($response);
+            }
+
+            $item_quantity = $request->item_quantity;
+            if($item_quantity < 1) {
+                $response['messages'] = "item quantity is not correct : ".$request->item_quantity." qty";
+                return json_encode($response);
+            }
+
+            $item_name = $request->item_name;
+            if($item_name == null) {
+                $response['messages'] = "item name not found!";
+                return json_encode($response);
+            }
+
+        } catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+
+    }
 }
