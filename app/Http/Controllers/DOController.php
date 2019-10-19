@@ -449,9 +449,9 @@ class DOController extends Controller
 
         try {
 
-            $sub_po = Sub_Delivery_Order::where('uuid',$request->sub_po_uuid)->first();
-            if($sub_po == null) {
-                $response['messages'] = "sub po is not found!";
+            $sub_do = Sub_Delivery_Order::where('uuid',$request->sub_do_uuid)->first();
+            if($sub_do == null) {
+                $response['messages'] = "sub do is not found!";
                 return json_encode($response);
             }
 
@@ -466,6 +466,15 @@ class DOController extends Controller
                 $response['messages'] = "item name not found!";
                 return json_encode($response);
             }
+
+            $sub_do->quantity = $request->item_quantity;
+            $sub_do->name = $request->item_name;
+            $sub_do->save();
+
+            $response['error'] = false;
+            $response['data'] = $sub_do;
+
+            return json_encode($response);
 
         } catch(Exception $e) {
             $response['messages'] = $e->getMessage();

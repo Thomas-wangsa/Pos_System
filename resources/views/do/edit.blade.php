@@ -78,7 +78,7 @@
 							value="{{$val->name}}" disabled="">
 						</td>
 						<td>
-							<span id="item_sub_do_uuid_{{$no}}">{{$val->uuid}}</span>
+							<span id="item_sub_do_uuid_{{$no}}" class="hide">{{$val->uuid}}</span>
 							<div class="btn btn-warning <?php if($val->deleted_at != null) { echo "hide"; } ?>" 
 							onclick="edit_item('{{$no}}')" id="item_edit_btn_{{$no}}"> 
 								edit item
