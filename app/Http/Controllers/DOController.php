@@ -323,7 +323,18 @@ class DOController extends Controller
      */
     public function edit($id)
     {
-        //
+        $do = Delivery_Order::where('uuid',$id)->first();
+
+        $sub_do = Sub_Delivery_Order::where('do_id',$do->id);
+
+        $data = array(
+            'do'=>$do,
+            'sub_do'=>$sub_do
+        );
+
+        return view('do/edit',compact('data'));
+
+
     }
 
     /**
@@ -378,22 +389,30 @@ class DOController extends Controller
             }
 
 
+            //$data['sub_delivery_order'] = array();
+
             $data["sub_delivery_order"] = Sub_Delivery_Order::where('delivery_order_id',$data['delivery_order']->id)->get();
 
-            if(count($data['sub_delivery_order']) < 1) {
-                $response['messages'] = "no detail delivery order found!";
-                return json_encode($response);
-            }
-
-
-            if(count($data) > 0) {
-                $response['data'] = $data;
-                $response['error'] = False;
-                return json_encode($response);
-            }
-
-            $response['messages'] = "no data found!";
+            $response['error'] = False;
+            $response['data'] = $data;
             return json_encode($response);
+
+            // 
+
+            // if(count($data['sub_delivery_order']) < 1) {
+            //     $response['messages'] = "no detail delivery order found!";
+            //     return json_encode($response);
+            // }
+
+
+            // if(count($data) > 0) {
+            //     $response['data'] = $data;
+            //     $response['error'] = False;
+            //     return json_encode($response);
+            // }
+
+            // $response['messages'] = "no data found!";
+            // return json_encode($response);
 
         }//catch exception
         catch(Exception $e) {

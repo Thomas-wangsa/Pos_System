@@ -90,8 +90,8 @@
       <tr>
         <th> No </th>
         <th> Number </th>
-        <th> PO </th>
         <th> Customer </th>
+        <th> PO </th>
         <th> Driver </th>
         <th> Status </th>
         <th> Action </th>
@@ -113,10 +113,10 @@
             {{$val['number']}}
           </td>
           <td>
-            {{$val['po_number']}}
+            {{$val['customer_name']}}
           </td>
           <td>
-            {{$val['customer_name']}}
+            {{$val['po_number']}}
           </td>
           <td>
             {{$val['driver_name']}}
@@ -136,7 +136,7 @@
             </a>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <a href="#">
+            <a href="{{route('do.edit',$uuid)}}">
               <span class="glyphicon glyphicon-edit"
               style="color:green;cursor:pointer" 
               title="edit {{$val['name']}}"
@@ -161,4 +161,13 @@
       @endif
     </tbody>
   </table>
+
+  <script type="text/javascript">
+    $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+  </script>
+  @include('do.modal_info_do')
 @endsection
