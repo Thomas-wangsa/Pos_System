@@ -323,13 +323,24 @@ class DOController extends Controller
      */
     public function edit($id)
     {
-        $do = Delivery_Order::where('uuid',$id)->first();
+        $do = Delivery_Order::leftjoin('customer','customer.id','=','delivery_order.po_id')
+            ->leftjoin('po','po.id','=','delivery_order.po_id')
+            ->leftjoin('users','users.id','=','delivery_order.sales_id')
+            ->where('delivery_order.uuid',$id)
+            ->select('delivery_order.*','customer.name AS customer_name','po.number AS po_number','users.name AS sales_name')
+            ->first();
 
-        $sub_do = Sub_Delivery_Order::where('do_id',$do->id);
+        if($do == null) {
+            $request->session()->flash('alert-danger', 'do is not found!');
+            return redirect()->route($this->redirectTo);
+        }
+
+        $sub_do = Sub_Delivery_Order::where('delivery_order_id',$do->id)->get();
 
         $data = array(
             'do'=>$do,
-            'sub_do'=>$sub_do
+            'sub_do'=>$sub_do,
+            'driver'=>Driver::all()
         );
 
         return view('do/edit',compact('data'));
