@@ -53,6 +53,12 @@ Route::post('ajax/get_sales_subpo_by_po_uuid','POController@get_sales_subpo_by_p
 
 
 Route::resource('/do', 'DOController');
+Route::post('ajax/get_delivery_order_by_uuid','DOController@get_do_by_uuid')->name('do.get_do_by_uuid');
+Route::post('ajax/do/update_sub_do_by_uuid','DOController@update_sub_do_by_uuid')->name('do.update_sub_do_by_uuid');
+
+
+
+
 Route::resource('/invoice', 'InvoiceController');
 
 
@@ -66,5 +72,4 @@ Route::get('/adhoc/restore_config', 'ConfigController@restore_config')->name('co
 
 
 
-Route::post('ajax/get_delivery_order_by_uuid','DOController@get_do_by_uuid')->name('do.get_do_by_uuid');
 Route::post('ajax/get_invoice_by_uuid','InvoiceController@get_invoice_by_uuid')->name('invoice.get_invoice_by_uuid');

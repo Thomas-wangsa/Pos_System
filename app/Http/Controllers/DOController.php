@@ -357,7 +357,17 @@ class DOController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $do = Delivery_Order::where('uuid',$id)->first();
+
+        if($do == null) {
+            $request->session()->flash('alert-danger', 'do is not found!');
+            return redirect()->route($this->redirectTo);
+        }
+
+        $do->driver_id = $request->do_driver;
+        $do->save();
+        $request->session()->flash('alert-success', $do->number.' has been updated');
+        return redirect()->route($this->redirectTo,"search=on&uuid=".$do->uuid);
     }
 
     /**
