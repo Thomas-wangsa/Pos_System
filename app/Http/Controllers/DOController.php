@@ -335,7 +335,7 @@ class DOController extends Controller
             return redirect()->route($this->redirectTo);
         }
 
-        $sub_do = Sub_Delivery_Order::where('delivery_order_id',$do->id)->get();
+        $sub_do = Sub_Delivery_Order::where('delivery_order_id',$do->id)->withTrashed()->get();
 
         $data = array(
             'do'=>$do,
@@ -378,7 +378,23 @@ class DOController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        try {
+
+            $sub_po = Sub_Delivery_Order::where('uuid',$id)->first();
+            if($sub_po == null) {
+                $response['messages'] = "item is not found!";
+                return json_encode($response);
+            }
+
+            $sub_po->delete();
+            $response['error'] = false;
+            return json_encode($response);
+        } catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
     }
 
 

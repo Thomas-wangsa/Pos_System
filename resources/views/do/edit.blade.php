@@ -66,7 +66,7 @@
 				<?php $no = 1;?>
 				@if(count($data['sub_do']) > 0)
 					@foreach($data['sub_do'] as $key=>$val)
-					<tr>
+					<tr id="tr_no_{{$no}}" class="<?php if($val->deleted_at != null) { echo "unselectable"; } ?>">
 						<td> {{$no}} </td>
 						<td>
 							<input type="number" class="form-control" id="item_quantity_{{$no}}"
@@ -85,6 +85,14 @@
 							</div>
 							<div class="btn btn-success hide" onclick="update_item('{{$no}}')" id="item_update_btn_{{$no}}">
 								update item
+							</div>
+							<div class="btn btn-danger <?php if($val->deleted_at != null) { echo "hide"; } ?>" 
+							onclick="delete_item('{{$no}}')" id="item_delete_btn_{{$no}}">
+								delete item
+							</div>
+							<div class="btn btn-primary <?php if($val->deleted_at == null) { echo "hide"; } ?>" 
+							onclick="restore_item('{{$no}}')" id="item_restore_btn_{{$no}}">
+								restore item
 							</div>
 						</td>
 					</tr>
@@ -122,7 +130,7 @@
 			$('#item_quantity_'+current_no_items).prop('disabled', false);
 			$('#item_name_'+current_no_items).prop('disabled', false);
 			$('#item_edit_btn_'+current_no_items).hide();
-			// $('#item_delete_btn_'+current_no_items).hide();
+			$('#item_delete_btn_'+current_no_items).hide();
 			$('#item_update_btn_'+current_no_items).removeClass("hide");
 		}
 
@@ -161,7 +169,7 @@
 						$('#item_quantity_'+current_no_items).prop('disabled', true);
 						$('#item_name_'+current_no_items).prop('disabled', true);
 						$('#item_edit_btn_'+current_no_items).show();
-						// $('#item_delete_btn_'+current_no_items).show();
+						$('#item_delete_btn_'+current_no_items).show();
 						$('#item_update_btn_'+current_no_items).addClass("hide");
 					} else {
 						alert(response.messages);
@@ -169,6 +177,73 @@
 				}
 			});
 		}
+
+
+		function delete_item(current_no_items) {
+			if (confirm('Apakah anda yakin ingin menghapus item ini ?')) {
+				sub_do_uuid = $('#item_sub_do_uuid_'+current_no_items).html();
+				if(sub_do_uuid == null || sub_do_uuid == "") {
+					alert("error : sub_do_uuid is null");
+					return;
+				}
+
+				var payload = {"sub_do_uuid":sub_do_uuid,"_method": 'DELETE'};
+
+				$.ajax({
+		          type : "POST",
+		          url: " {!! url('do' ) !!}" + "/" + sub_do_uuid,
+		          contentType: "application/json",
+		          data : JSON.stringify(payload),
+		          success: function(result) {
+		            response = JSON.parse(result);
+		            if(response.error != true) {
+		            	$('#item_edit_btn_'+current_no_items).hide();
+						$('#item_delete_btn_'+current_no_items).hide();
+						$('#item_restore_btn_'+current_no_items).removeClass("hide");
+						$('#tr_no_'+current_no_items).addClass('unselectable');
+
+		            } else {
+		              alert(response.messages);
+		            }
+		          }
+		        });
+		    }
+		}
+
+
+		// function restore_item(current_no_items) {
+	 //       	if (confirm('Apakah anda yakin ingin restore item ini ?')) {
+	 //       		sub_do_uuid = $('#item_sub_do_uuid_'+current_no_items).html();
+		// 		if(sub_do_uuid == null || sub_do_uuid == "") {
+		// 			alert("error : sub_do_uuid is null");
+		// 			return;
+		// 		}
+
+		// 		var payload = {"sub_do_uuid":sub_do_uuid};
+
+		// 		$.ajax({
+		//           type : "POST",
+		//           url: " {{ route('po.restore_sub_po_by_sub_po_uuid') }}",
+		//           contentType: "application/json",
+		//           data : JSON.stringify(payload),
+		//           success: function(result) {
+		//             response = JSON.parse(result);
+		//             if(response.error != true) {
+		//             	$('#item_edit_btn_'+current_no_items).show();
+		//             	$('#item_edit_btn_'+current_no_items).removeClass("hide");
+		// 				$('#item_delete_btn_'+current_no_items).show();
+		// 				$('#item_delete_btn_'+current_no_items).removeClass("hide");
+		// 				$('#item_restore_btn_'+current_no_items).addClass("hide");
+		// 				$('#tr_no_'+current_no_items).removeClass('unselectable');
+		//             } else {
+		//               alert(response.messages);
+		//             }
+		//           }
+		//         });
+	 
+	          	
+	 //        } 
+	 //    };
 
   	</script>
 
