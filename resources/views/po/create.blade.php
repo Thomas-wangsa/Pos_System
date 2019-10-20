@@ -199,11 +199,12 @@
 					'<button class="btn btn-success hide" onclick="update_item('+no_items+')" id="item_update_btn_'+no_items+'">'+
 						' update item '+
 					'</button>'+
-					'&nbsp;<button class="btn btn-danger hide" onclick="delete_item('+no_items+')" id="item_delete_btn_'+no_items+'">'+
+					'&nbsp;'+
+					'<button class="btn btn-danger hide" onclick="delete_item('+no_items+')" id="item_delete_btn_'+no_items+'">'+
 						' delete item '+
 					'</button>'+
-					'</button>'+
-					'&nbsp;<button class="btn btn-primary hide" onclick="restore_item('+no_items+')" id="item_restore_btn_'+no_items+'">'+
+					'&nbsp;'+
+					'<button class="btn btn-primary hide" onclick="restore_item('+no_items+')" id="item_restore_btn_'+no_items+'">'+
 						' restore item '+
 					'</button>'+
 					'</td>';

@@ -335,11 +335,18 @@ class DOController extends Controller
             return redirect()->route($this->redirectTo);
         }
 
-        $sub_do = Sub_Delivery_Order::where('delivery_order_id',$do->id)->withTrashed()->get();
+        $po = PO::find($do->po_id);
+        if($po == null) {
+            $request->session()->flash('alert-danger', 'po is not found!');
+            return redirect()->route($this->redirectTo);
+        }
+
+        $sub_po = SubPO::where('po_id',$po->id)->get();
 
         $data = array(
             'do'=>$do,
-            'sub_do'=>$sub_do,
+            'sub_po'=>$sub_po,
+            'sub_do'=>Sub_Delivery_Order::where('delivery_order_id',$do->id)->withTrashed()->get(),
             'driver'=>Driver::all()
         );
 
@@ -497,5 +504,69 @@ class DOController extends Controller
             return json_encode($response);
         }
 
+    }
+
+
+    function restore_sub_do_by_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        try {
+            $sub_po = Sub_Delivery_Order::withTrashed()->where('uuid',$request->sub_do_uuid)->first();
+            if($sub_po == null) {
+                $response['messages'] = "item is not found!";
+                return json_encode($response);
+            }
+
+            $sub_po->restore();
+            $response['error'] = false;
+            return json_encode($response);
+        } catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+    }
+
+    function added_sub_do_by_uuid(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+
+        try {
+
+            $do = Delivery_Order::where('uuid',$request->do_uuid)->first();
+            if($do == null) {
+                $response['messages'] = "delivery order data is not found!";
+                return json_encode($response);
+            }
+
+            $item_quantity = $request->item_quantity;
+            if($item_quantity < 1) {
+                $response['messages'] = "item quantity is not correct : ".$request->item_quantity." qty";
+                return json_encode($response);
+            }
+
+            $item_name = $request->item_name;
+            if($item_name == null) {
+                $response['messages'] = "item name not found!";
+                return json_encode($response);
+            }
+
+            $sub_do = new Sub_Delivery_Order;
+            $sub_do->quantity = $item_quantity;
+            $sub_do->name = $item_name;
+            
+            $sub_do->delivery_order_id = $do->id;
+            $sub_do->created_by = Auth::user()->id;
+            $sub_do->updated_by = Auth::user()->id;
+            $sub_do->uuid = $do->id."-".time()."-".$this->faker->uuid;
+            $sub_do->save();
+
+            $response['error'] = false;
+            $response['data'] = $sub_do;
+
+            return json_encode($response);
+            
+        } catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
     }
 }

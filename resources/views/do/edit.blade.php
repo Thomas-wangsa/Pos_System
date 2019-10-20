@@ -37,6 +37,10 @@
 	        	</select>
 			 </div>
 
+			 <div class="form-group">
+			    <label class="control-label" for="do_po"> Number  :</label>
+			    <input class="form-control" type="text" name="do_customer" id="do_customer" value="{{$data['do']->number}}" disabled="">
+			</div>
 
 			<div class="form-group">
 			    <label class="control-label" for="do_po"> Customer  :</label>
@@ -52,6 +56,15 @@
 			    <label class="control-label" for="do_po"> Sales :</label>
 			    <input class="form-control" type="text" name="do_sales" id="do_sales" value="{{$data['do']->sales_name}}" disabled="">
 			</div>
+
+
+			<div class="btn btn-warning" id="btn_add_items" style="margin-bottom: 5px" onclick="add_items()"> 
+		    	<span class="glyphicon glyphicon-plus"></span>
+		    	add items 
+		    </div>
+
+
+		    <span id="new_do_uuid" class="hide">{{$data['do']['uuid']}}</span> 
 
 			<table class="table table-bordered">
 				<thead>
@@ -125,6 +138,95 @@
 		    }
   		});
 
+
+  		function add_items() {
+  			data = '<tr id="tr_no_'+no_items+'"> ';
+			data += "<td>"+no_items+"</td>";
+			data += '<td width="30px">'+
+					'<input type="number" onchange=adjust_quantity(this,'+no_items+') class="form-control" id="item_quantity_'+no_items+'" value="1">'+
+					'</td>';
+			data += "<td> ";
+			data += '<select class="form-control" id="item_name_'+no_items+'"> ';
+
+			@foreach($data['sub_po'] as $key=>$val)
+				data += '<option value="{{$val['name']}} " >';
+				data += '{{$val["name"]}}';
+				data += "</option>" ;
+			@endforeach
+
+			data += "</select> ";
+			data += "</td>";
+			data += '<td>'+
+					'<span id="item_sub_do_uuid_'+no_items+'" class="hide"> </span>' +
+					'<div class="btn btn-primary" onclick="save_item('+no_items+')" id="item_save_btn_'+no_items+'"> '+
+						'save item '+
+					'</div>'+
+					'<div class="btn btn-warning hide" onclick="edit_item('+no_items+')" id="item_edit_btn_'+no_items+'"> '+
+						' edit item '+
+					'</div>'+
+					'<div class="btn btn-success hide" onclick="update_item('+no_items+')" id="item_update_btn_'+no_items+'">'+
+						' update item '+
+					'</div>'+
+					'&nbsp;' +
+					'<div class="btn btn-danger hide" onclick="delete_item('+no_items+')" id="item_delete_btn_'+no_items+'">'+
+						' delete item '+
+					'</div>'+
+					'&nbsp;' +
+					'<div class="btn btn-primary hide" onclick="restore_item('+no_items+')" id="item_restore_btn_'+no_items+'">'+
+						' restore item '+
+					'</div>'+
+					'</td>';
+			data += "</tr>";
+			$('#do_tbody').append(data);
+  		}
+
+
+
+  		function save_item(current_no_items) {
+			do_uuid = $('#new_do_uuid').html();
+			item_quantity = $('#item_quantity_'+current_no_items).val();
+			item_name = $('#item_name_'+current_no_items).val();
+			
+			if(do_uuid == null || do_uuid == "") {
+				alert("error : do_uuid is null");
+				return;
+			} else if(item_name == null || item_name == "") {
+				alert("please input the item name");
+				return;
+			} else if(item_quantity == null || item_quantity < 1) {
+				alert("error : quantity is not correct");
+				return;
+			}
+
+			var payload = {
+				"do_uuid":do_uuid,
+				"item_quantity":item_quantity,
+				"item_name":item_name
+			}
+
+			$.ajax({
+				type : "POST",
+				url: " {{ route('do.added_sub_do_by_uuid') }}",
+				contentType: "application/json",
+				data : JSON.stringify(payload),
+				success: function(result) {
+					response = JSON.parse(result);
+					if(response.error != true) {
+						$('#item_quantity_'+current_no_items).prop('disabled', true);
+						$('#item_name_'+current_no_items).prop('disabled', true);
+						$('#item_save_btn_'+current_no_items).hide();
+						$('#item_edit_btn_'+current_no_items).removeClass("hide");
+						$('#item_delete_btn_'+current_no_items).removeClass("hide");
+						$('#submit_detail_po').removeClass("hide");
+						no_items = no_items + 1;
+						$('#item_sub_do_uuid_'+current_no_items).html(response.data.uuid);
+						$('#btn_add_items').prop('disabled', false);
+					} else {
+						alert(response.messages);
+					}
+				}
+			});
+		}
 
   		function edit_item(current_no_items) {
 			$('#item_quantity_'+current_no_items).prop('disabled', false);
@@ -211,39 +313,39 @@
 		}
 
 
-		// function restore_item(current_no_items) {
-	 //       	if (confirm('Apakah anda yakin ingin restore item ini ?')) {
-	 //       		sub_do_uuid = $('#item_sub_do_uuid_'+current_no_items).html();
-		// 		if(sub_do_uuid == null || sub_do_uuid == "") {
-		// 			alert("error : sub_do_uuid is null");
-		// 			return;
-		// 		}
+		function restore_item(current_no_items) {
+	       	if (confirm('Apakah anda yakin ingin restore item ini ?')) {
+	       		sub_do_uuid = $('#item_sub_do_uuid_'+current_no_items).html();
+				if(sub_do_uuid == null || sub_do_uuid == "") {
+					alert("error : sub_do_uuid is null");
+					return;
+				}
 
-		// 		var payload = {"sub_do_uuid":sub_do_uuid};
+				var payload = {"sub_do_uuid":sub_do_uuid};
 
-		// 		$.ajax({
-		//           type : "POST",
-		//           url: " {{ route('po.restore_sub_po_by_sub_po_uuid') }}",
-		//           contentType: "application/json",
-		//           data : JSON.stringify(payload),
-		//           success: function(result) {
-		//             response = JSON.parse(result);
-		//             if(response.error != true) {
-		//             	$('#item_edit_btn_'+current_no_items).show();
-		//             	$('#item_edit_btn_'+current_no_items).removeClass("hide");
-		// 				$('#item_delete_btn_'+current_no_items).show();
-		// 				$('#item_delete_btn_'+current_no_items).removeClass("hide");
-		// 				$('#item_restore_btn_'+current_no_items).addClass("hide");
-		// 				$('#tr_no_'+current_no_items).removeClass('unselectable');
-		//             } else {
-		//               alert(response.messages);
-		//             }
-		//           }
-		//         });
+				$.ajax({
+		          type : "POST",
+		          url: " {{ route('do.restore_sub_do_by_uuid') }}",
+		          contentType: "application/json",
+		          data : JSON.stringify(payload),
+		          success: function(result) {
+		            response = JSON.parse(result);
+		            if(response.error != true) {
+		            	$('#item_edit_btn_'+current_no_items).show();
+		             	$('#item_edit_btn_'+current_no_items).removeClass("hide");
+						$('#item_delete_btn_'+current_no_items).show();
+						$('#item_delete_btn_'+current_no_items).removeClass("hide");
+						$('#item_restore_btn_'+current_no_items).addClass("hide");
+						$('#tr_no_'+current_no_items).removeClass('unselectable');
+		            } else {
+		              alert(response.messages);
+		            }
+		          }
+		        });
 	 
 	          	
-	 //        } 
-	 //    };
+	        } 
+	    };
 
   	</script>
 
