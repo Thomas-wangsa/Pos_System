@@ -13,6 +13,7 @@ use App\Http\Models\SubPO;
 use App\Http\Models\Driver;
 
 use App\Http\Models\Delivery_Order;
+use App\Http\Models\Delivery_Order_Status;
 use App\Http\Models\Sub_Delivery_Order;
 
 use App\Http\Models\Invoice;
@@ -53,10 +54,11 @@ class DOController extends Controller
                         'users.name AS sales_name',
                         'driver.name AS driver_name',
                         'delivery_order_status.name AS status_name')
+                    ->orderBy('number','desc')
                     ->get();
         $data['po'] = PO::orderBy('number','asc')->withTrashed()->where('status',1)->get();
         $data['customer'] = Customer::orderBy('name','asc')->withTrashed()->get();
-        $data['delivery_order_status'] = Sub_Delivery_Order::all();
+        $data['delivery_order_status'] = Delivery_Order_Status::all();
         //dd($data);
         $data['do'] = $do;
         return view('do/index',compact('data'));
@@ -313,6 +315,36 @@ class DOController extends Controller
     public function show($id)
     {
         //
+    }
+
+
+    public function edit_status_do(Request $request) {
+        try {
+            $do = Delivery_Order::where('uuid',$request->do_uuid)->first();
+            if($do == null) {
+                $request->session()->flash('alert-danger', 'do is not found!');
+                return redirect()->route($this->redirectTo);
+            }
+
+
+            $do_status = Delivery_Order_Status::find($request->status);
+            if($do_status == null) {
+                $request->session()->flash('alert-danger', 'delivery order status is not found!');
+                return redirect()->route($this->redirectTo);
+            }
+
+
+            $do->status = $do_status->id;
+            $do->updated_by = Auth::user()->id;
+            $do->save();
+
+            $request->session()->flash('alert-success', 'DO : '. $do->number.' has been updated');
+            return redirect()->route($this->redirectTo,"search=on&uuid=".$do->uuid);
+        }
+        catch(Exception $e) {
+            $request->session()->flash('alert-danger', $e->getMessage());
+            return redirect()->route($this->redirectTo);
+        }
     }
 
     /**

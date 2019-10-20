@@ -53,6 +53,7 @@ Route::post('ajax/get_sales_subpo_by_po_uuid','POController@get_sales_subpo_by_p
 
 
 Route::resource('/do', 'DOController');
+Route::post('do/edit_status_do','DOController@edit_status_do')->name('do.edit_status_do');
 Route::post('ajax/get_delivery_order_by_uuid','DOController@get_do_by_uuid')->name('do.get_do_by_uuid');
 Route::post('ajax/do/added_sub_do_by_uuid','DOController@added_sub_do_by_uuid')->name('do.added_sub_do_by_uuid');
 Route::post('ajax/do/update_sub_do_by_uuid','DOController@update_sub_do_by_uuid')->name('do.update_sub_do_by_uuid');

@@ -145,6 +145,14 @@
             </a> 
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             
+            <a href="#" onclick="select_do_status('{{$uuid}}')">
+              <span class="glyphicon glyphicon-check"
+              style="cursor:pointer;color:red" 
+              title="set flag PO {{$val['number']}}"  
+              >
+              </span>
+            </a> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
             <a href="#">
               <span class="glyphicon glyphicon-trash"
@@ -170,4 +178,5 @@
     });
   </script>
   @include('do.modal_info_do')
+  @include('do.modal_select_status_do')
 @endsection
