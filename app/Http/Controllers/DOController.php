@@ -42,7 +42,7 @@ class DOController extends Controller
         // $category = Category::all();
         // $data['category'] = $category;
         $do = Delivery_Order::leftjoin('po','po.id','=','delivery_order.po_id')
-                    ->leftjoin('customer','customer.id','=','po.customer_id')
+                    ->leftjoin('customer','customer.id','=','delivery_order.customer_id')
                     ->leftjoin('users','users.id','=','po.sales_id')
                     ->leftjoin('driver','driver.id','=','delivery_order.driver_id')
                     ->leftjoin('delivery_order_status','delivery_order_status.id','=','delivery_order.status');

@@ -95,8 +95,10 @@
 						<thead>
 							<tr>
 								<td> no </td>
-								<td> number </td>
 								<td> date </td>
+								<td> number </td>
+								<td> quantity </td>
+								<td> name </td>
 								<td> status </td>
 							</tr>
 						</thead>
@@ -201,28 +203,38 @@
 					}
 
 
-					// if(response.data.delivery_order.length > 0) {
-					// 	$.each(response.data.delivery_order, function (key,val) {
+					if(response.data.delivery_order.length > 0) {
+						$.each(response.data.delivery_order, function (key,val) {
 
-					// 		var append_rows = "<tr> " +
-					// 							"<td> " +
-					// 							(key+1) +
-					// 							"</td> " +
-					// 							"<td> " +
-					// 							val.number +
-					// 							"</td> " +
-					// 							"<td> " +
-					// 							val.date +
-					// 							"</td> " +
-					// 							"<td> " +
-					// 							val.status_name +
-					// 							"</td> " +
-					// 						  "<tr>";
-					// 		$('#info_delivery_order_tbody').append(append_rows);
-					// 	});
-					// } else {
-					// 	$('#info_delivery_order_tbody').append("<tr> <td colspan='6'> no delivery order found! </td></tr>");
-					// }
+
+							var append_rows = "<tr> " +
+												'<td> ' +
+												(key+1) +
+												"</td> " +
+												'<td> ' +
+												val.updated_at +
+												"</td> " +
+												'<td> ' +
+												val.number +
+												"</td> ";
+
+							append_rows +=  '<td>' +
+											val.sub_delivery_order_quantity +
+											'</td>' +
+											'<td>' +
+											val.sub_delivery_order_name +
+											'</td>';
+							
+
+							append_rows +=	'<td> ' +
+											val.status_name +
+											"</td> " +
+											 "<tr>";
+							$('#info_delivery_order_tbody').append(append_rows);
+						});
+					} else {
+						$('#info_delivery_order_tbody').append("<tr> <td colspan='6'> no delivery order found! </td></tr>");
+					}
 
 
 					// if(response.data.invoice.length > 0) {

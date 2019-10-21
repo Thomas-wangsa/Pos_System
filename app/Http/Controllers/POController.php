@@ -12,6 +12,8 @@ use App\Http\Models\PO_Status;
 use App\Http\Models\SubPO;
 use App\Http\Models\Sub_PO_Status;
 use App\Http\Models\Delivery_Order;
+use App\Http\Models\Sub_Delivery_Order;
+
 use App\Http\Models\Invoice;
 use App\Http\Models\Invoice_Status;
 
@@ -386,11 +388,17 @@ class POController extends Controller
             }
 
 
-            // $data["delivery_order"] = Delivery_Order::leftjoin('delivery_order_status',
-            //     'delivery_order_status.id','=','delivery_order.status')
-            //     ->where('delivery_order.po_id',$data['po']->id)
-            //     ->select('delivery_order.*','delivery_order_status.name AS status_name')
-            //     ->get();
+            $data["delivery_order"] = Delivery_Order::leftjoin('delivery_order_status',
+                'delivery_order_status.id','=','delivery_order.status')
+                ->leftjoin('sub_delivery_order','sub_delivery_order.delivery_order_id','=','delivery_order.id')
+                ->where('delivery_order.po_id',$data['po']->id)
+                ->select(
+                    'delivery_order.*',
+                    'sub_delivery_order.quantity as sub_delivery_order_quantity',
+                    'sub_delivery_order.name as sub_delivery_order_name',
+                    'delivery_order_status.name AS status_name')
+                ->get();
+
 
             // $data["invoice"] = Invoice::leftjoin('invoice_status',
             //     'invoice_status.id','=','invoice.status')
