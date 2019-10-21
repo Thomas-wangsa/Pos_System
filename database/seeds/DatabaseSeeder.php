@@ -125,7 +125,7 @@ class DatabaseSeeder extends Seeder
 
 
         $full_data = array();
-        for($i=0;$i<=30;$i++) { 
+        for($i=0;$i<=5;$i++) { 
             $customer_array = array(
                 "name"=>$faker->company,
                 "phone"=>$faker->phoneNumber,
@@ -146,40 +146,40 @@ class DatabaseSeeder extends Seeder
         }
         Customer::insert($full_data);
 
-        $po_data = array();
-        for($i=0;$i<15;$i++) { 
+        // $po_data = array();
+        // for($i=0;$i<50;$i++) { 
             
-            $po = new PO;
-            $po->customer_id = $faker->numberBetween(1,15);
-            $po->sales_id = $faker->numberBetween(2,4);
-            $po->category_id = $faker->numberBetween(1,3);
-            $po->number = "00".$faker->randomDigitNotNull()."/".$faker->company;
-            $po->note = $faker->text;
-            $po->uuid = $faker->uuid;
-            $po->created_by = 1;
-            $po->updated_by = 1;
-            $po->save();
+        //     $po = new PO;
+        //     $po->customer_id = $faker->numberBetween(1,5);
+        //     $po->sales_id = $faker->numberBetween(2,4);
+        //     $po->category_id = $faker->numberBetween(1,3);
+        //     $po->number = "00".$faker->randomDigitNotNull()."/".$faker->company;
+        //     $po->note = $faker->text;
+        //     $po->uuid = $faker->uuid;
+        //     $po->created_by = 1;
+        //     $po->updated_by = 1;
+        //     $po->save();
 
-            $sub_po_qty = $faker->numberBetween(1,10);
+        //     $sub_po_qty = $faker->numberBetween(1,10);
 
-            $sub_po_data = array();
-            for($j=0;$j<=$sub_po_qty;$j++) {
-                $sub_po_array = array(
-                "po_id"=>$po->id,
-                "quantity"=>$faker->numberBetween(1,1000),
-                "name"=>$faker->swiftBicNumber,
-                "price"=>$faker->numberBetween(10000,1000000),
-                "status"=>1,
-                "note"=>$faker->text,
-                "uuid"=>$faker->uuid,
-                "created_by"=>1,
-                "updated_by"=>1,
-                );
+        //     $sub_po_data = array();
+        //     for($j=0;$j<=$sub_po_qty;$j++) {
+        //         $sub_po_array = array(
+        //         "po_id"=>$po->id,
+        //         "quantity"=>$faker->numberBetween(1,1000),
+        //         "name"=>$faker->swiftBicNumber,
+        //         "price"=>$faker->numberBetween(10000,1000000),
+        //         "status"=>1,
+        //         "note"=>$faker->text,
+        //         "uuid"=>$faker->uuid,
+        //         "created_by"=>1,
+        //         "updated_by"=>1,
+        //         );
 
-                array_push($sub_po_data,$sub_po_array);
-            }
-            SubPO::insert($sub_po_data);
-        }
+        //         array_push($sub_po_data,$sub_po_array);
+        //     }
+        //     SubPO::insert($sub_po_data);
+        // }
 
 
 
@@ -275,14 +275,34 @@ class DatabaseSeeder extends Seeder
         foreach ($po_status_array as $key => $value) {
             PO_Status::firstOrCreate($value); 
             Delivery_Order_Status::firstOrCreate($value);
+        }
+
+
+
+        $inv_status_array = array(
+            array(
+                "name"=>"in-progress",
+                "color"=>"black",
+            ),
+            array(
+                "name"=>"cancel",
+                "color"=>"red",
+            ),
+            array(
+            "name"=>"active",
+            "color"=>"black"
+            ),
+            array(
+                "name"=>"success",
+                "color"=>"blue",
+            )
+        );
+
+        foreach ($inv_status_array as $key => $value) {
             Invoice_Status::firstOrCreate($value);      
         }
 
-        $inv_status_array = array(
-            "name"=>"active",
-            "color"=>"black"
-        );
-        Invoice_Status::firstOrCreate($inv_status_array);
+
 
 
 
