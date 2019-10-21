@@ -29,18 +29,6 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <select class="form-control" name="search_po">
-          <option value=""> Filter By PO </option>
-          @foreach($data['po'] as $key=>$val)
-          <option value="{{$val->id}}"
-          @if($val->id == Request::get('search_po')) 
-            selected
-          @endif  
-          > {{$val->number}} </option>
-          @endforeach
-        </select>
-      </div>
 
       <div class="form-group">
         <select class="form-control" name="search_customer">
@@ -56,6 +44,20 @@
       </div>
 
 
+      <div class="form-group">
+        <select class="form-control" name="search_po">
+          <option value=""> Filter By PO </option>
+          @foreach($data['po'] as $key=>$val)
+          <option value="{{$val->id}}"
+          @if($val->id == Request::get('search_po')) 
+            selected
+          @endif  
+          > {{$val->number}} </option>
+          @endforeach
+        </select>
+      </div>
+
+      
      
       <div class="form-group">
         <select class="form-control" name="search_status">
@@ -107,7 +109,8 @@
         <?php $uuid = $val["uuid"];?>
         <tr>
           <td>
-            {{$key+1}}
+            {{ ($data['do']->currentpage()-1) 
+            * $data['do']->perpage() + $key + 1 }}
           </td>
           <td>
             {{$val['number']}}
@@ -169,6 +172,19 @@
       @endif
     </tbody>
   </table>
+  <div class="pull-right" style="margin-top: -15px!important"> 
+    {{ $data['do']->appends(
+      [
+      'search' => Request::get('search'),
+      'search_nama' => Request::get('search_nama'),
+      'search_customer' => Request::get('search_customer'),
+      'search_sales' => Request::get('search_po'),
+      'search_status' => Request::get('search_status')
+      ])
+
+    ->links() }}
+  </div>
+  <div class="clearfix"> </div>
 
   <script type="text/javascript">
     $.ajaxSetup({
@@ -176,6 +192,10 @@
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
+
+    function reset_filter() {
+      window.location = "{{route('do.index')}}";
+    }
   </script>
   @include('do.modal_info_do')
   @include('do.modal_select_status_do')

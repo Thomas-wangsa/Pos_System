@@ -36,7 +36,7 @@ class DOController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //$customer = Customer::all();
         // $category = Category::all();
@@ -45,17 +45,49 @@ class DOController extends Controller
                     ->leftjoin('customer','customer.id','=','po.customer_id')
                     ->leftjoin('users','users.id','=','po.sales_id')
                     ->leftjoin('driver','driver.id','=','delivery_order.driver_id')
-                    ->leftjoin('delivery_order_status','delivery_order_status.id','=','delivery_order.status')
-                    ->select(
-                        'delivery_order.*',
-                        'po.number AS po_number',
+                    ->leftjoin('delivery_order_status','delivery_order_status.id','=','delivery_order.status');
 
-                        'customer.name AS customer_name',
-                        'users.name AS sales_name',
-                        'driver.name AS driver_name',
-                        'delivery_order_status.name AS status_name')
-                    ->orderBy('number','desc')
-                    ->get();
+
+        if($request->search == "on") { 
+
+            if($request->search_nama != null) { 
+                $do = $do->where('delivery_order.number','like',$request->search_nama."%");
+            }
+
+            if($request->search_customer != null) {
+                $do = $do->where('delivery_order.customer_id','=', $request->search_customer);
+                
+            }
+
+            if($request->search_po != null) {
+                $do = $do->where('delivery_order.po_id','=', $request->search_po);
+                
+            }
+
+            if($request->search_status != null) {
+                $do = $do->where('delivery_order.status','=', $request->search_status);
+            }
+
+
+
+            if($request->uuid != null) {
+                $do = $do->where('delivery_order.uuid','=',$request->uuid);
+            }
+
+        }
+
+
+        $do = $do->select(
+                'delivery_order.*',
+                'po.number AS po_number',
+                'customer.name AS customer_name',
+                'users.name AS sales_name',
+                'driver.name AS driver_name',
+                'delivery_order_status.name AS status_name')
+            ->orderBy('number','desc');
+
+
+        $do = $do->paginate(3);
         $data['po'] = PO::orderBy('number','asc')->withTrashed()->where('status',1)->get();
         $data['customer'] = Customer::orderBy('name','asc')->withTrashed()->get();
         $data['delivery_order_status'] = Delivery_Order_Status::all();
