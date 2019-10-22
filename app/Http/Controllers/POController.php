@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\User;
-
+use DB;
 use Illuminate\Http\Request;
 use App\Http\Models\Category;
 use App\Http\Models\Customer;
@@ -396,8 +396,18 @@ class POController extends Controller
                     'delivery_order.*',
                     'sub_delivery_order.quantity as sub_delivery_order_quantity',
                     'sub_delivery_order.name as sub_delivery_order_name',
-                    'delivery_order_status.name AS status_name')
+                    'delivery_order_status.name AS status_name'
+                )
                 ->get();
+
+
+            // if(count($data['delivery_order']) > 0) {
+
+
+            //     foreach($data['delivery_order'] as $key=>$val) {
+            //         $data['delivery_order'][$key]["total_delivery_order"] = Sub_Delivery_Order::where('delivery_order_id',$val['id'])
+            //     }
+            // }
 
 
             // $data["invoice"] = Invoice::leftjoin('invoice_status',

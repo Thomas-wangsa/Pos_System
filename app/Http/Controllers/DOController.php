@@ -188,8 +188,21 @@ class DOController extends Controller
             $do->uuid = $po->id."-".time()."-".$this->faker->uuid;
 
 
-            DB::transaction(function() use ($do, $sub_delivery_order_data) {
+            $inv = new Invoice;
+            $inv->number = $this->set_patern_do_number($po);
+            $inv->po_id = $po->id;
+            $inv->customer_id = $po->customer_id;
+            $inv->sales_id = $po->sales_id;
+            $inv->created_by = Auth::user()->id;
+            $inv->updated_by = Auth::user()->id;
+            $inv->uuid = $po->id."-".time()."-".$this->faker->uuid;
+
+
+            DB::transaction(function() use ($do,$inv, $sub_delivery_order_data) {
                 $do->save();
+
+                $inv->delivery_order_id = $do->id;
+
                 foreach($sub_delivery_order_data as $key=>$val) {
                     $sub_delivery_order_data[$key]['delivery_order_id'] = $do->id;
                 }

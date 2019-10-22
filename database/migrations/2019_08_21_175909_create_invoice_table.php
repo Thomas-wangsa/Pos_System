@@ -15,15 +15,16 @@ class CreateInvoiceTable extends Migration
     {
         Schema::create('invoice', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('number')->unique();
+            $table->unsignedInteger('delivery_order_id');
             $table->unsignedInteger('po_id');
-            $table->unsignedInteger('sales_id')->nullable();
-            $table->string('number');
+            $table->unsignedInteger('customer_id');
+            $table->unsignedInteger('sales_id');
+            $table->unsignedInteger('created_by');
+            $table->unsignedInteger('updated_by');
             $table->unsignedInteger('status')->default(1);
             $table->string('uuid',100)->unique(); 
             $table->text('note')->nullable();
-            $table->date('date')->nullable();
-            $table->unsignedInteger('created_by');
-            $table->unsignedInteger('updated_by');
             $table->timestamps();
             $table->softDeletes();
         });
