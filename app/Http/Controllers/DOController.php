@@ -151,6 +151,7 @@ class DOController extends Controller
 
 
             $sub_delivery_order_data = [];
+            $sub_invoice_data = [];
             foreach($sub_po_array as $key=>$val) {
                 $sub_po = SubPO::where('po_id',$po->id)
                         ->where('uuid',$val['sub_po_uuid'])
@@ -170,7 +171,11 @@ class DOController extends Controller
                     "created_at"=>date("Y-m-d H:i:s"),
                     "updated_at"=>date("Y-m-d H:i:s"),
                 ];
+
+                $sub_invoice_each = $sub_delivery_order_each;
+                $sub_invoice_each['price'] = $sub_po->price;
                 array_push($sub_delivery_order_data,$sub_delivery_order_each);
+                array_push($sub_invoice_data,$sub_invoice_each);
             }
 
 
@@ -180,6 +185,7 @@ class DOController extends Controller
             }
 
 
+            $uuid_patern = $po->id."-".time()."-".$this->faker->uuid;
 
             $do = new Delivery_Order;
             $do->number = $this->set_patern_do_number($po);
@@ -189,7 +195,7 @@ class DOController extends Controller
             $do->sales_id = $po->sales_id;
             $do->created_by = Auth::user()->id;
             $do->updated_by = Auth::user()->id;
-            $do->uuid = $po->id."-".time()."-".$this->faker->uuid;
+            $do->uuid = $uuid_patern
 
 
             $inv = new Invoice;
@@ -199,10 +205,10 @@ class DOController extends Controller
             $inv->sales_id = $po->sales_id;
             $inv->created_by = Auth::user()->id;
             $inv->updated_by = Auth::user()->id;
-            $inv->uuid = $po->id."-".time()."-".$this->faker->uuid;
+            $inv->uuid = $uuid_patern;
 
 
-            DB::transaction(function() use ($do,$inv, $sub_delivery_order_data) {
+            DB::transaction(function() use ($do,$inv, $sub_delivery_order_data,$sub_invoice_data) {
                 $do->save();
 
                 $inv->delivery_order_id = $do->id;
@@ -211,8 +217,13 @@ class DOController extends Controller
                 foreach($sub_delivery_order_data as $key=>$val) {
                     $sub_delivery_order_data[$key]['delivery_order_id'] = $do->id;
                 }
+
+                foreach($sub_invoice_data as $key=>$val) {
+                    $sub_invoice_data[$key]['invoice_id'] = $inv->id;
+                }
                 
                 Sub_Delivery_Order::insert($sub_delivery_order_data);
+                Sub_Invoice::insert($sub_invoice_data);
 
             });
 
@@ -639,6 +650,9 @@ class DOController extends Controller
             $sub_do->created_by = Auth::user()->id;
             $sub_do->updated_by = Auth::user()->id;
             $sub_do->uuid = $do->id."-".time()."-".$this->faker->uuid;
+
+
+
             $sub_do->save();
 
             $response['error'] = false;
