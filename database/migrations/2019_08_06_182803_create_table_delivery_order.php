@@ -28,6 +28,10 @@ class CreateTableDeliveryOrder extends Migration
             $table->timestamps();
             $table->softDeletes();
 
+            $table->foreign('driver_id', 'delivery_order_driver_id_byfkey')
+                ->references('id')->on('driver')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+                
             $table->foreign('po_id', 'delivery_order_po_id_byfkey')
                 ->references('id')->on('po')
                 ->onUpdate('CASCADE')->onDelete('RESTRICT');
@@ -38,10 +42,6 @@ class CreateTableDeliveryOrder extends Migration
 
             $table->foreign('sales_id', 'delivery_order_sales_id_byfkey')
                 ->references('id')->on('users')
-                ->onUpdate('CASCADE')->onDelete('RESTRICT');
-
-            $table->foreign('driver_id', 'delivery_order_driver_id_byfkey')
-                ->references('id')->on('driver')
                 ->onUpdate('CASCADE')->onDelete('RESTRICT');
 
             $table->foreign('created_by', 'delivery_order_created_by_byfkey')

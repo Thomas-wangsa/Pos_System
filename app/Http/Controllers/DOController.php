@@ -122,6 +122,10 @@ class DOController extends Controller
         $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
 
         try {
+
+
+
+
             $driver = Driver::find($request->driver_id);
             if($driver == null) {
                 $response['messages'] = "driver data is not found!";
@@ -202,6 +206,7 @@ class DOController extends Controller
                 $do->save();
 
                 $inv->delivery_order_id = $do->id;
+                $inv->save();
 
                 foreach($sub_delivery_order_data as $key=>$val) {
                     $sub_delivery_order_data[$key]['delivery_order_id'] = $do->id;

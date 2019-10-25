@@ -27,6 +27,36 @@ class CreateInvoiceTable extends Migration
             $table->text('note')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+
+            $table->foreign('delivery_order_id', 'invoice_delivery_order_id_byfkey')
+                ->references('id')->on('driver')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+                
+            $table->foreign('po_id', 'invoice_po_id_byfkey')
+                ->references('id')->on('po')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+
+            $table->foreign('customer_id', 'invoice_customer_id_byfkey')
+                ->references('id')->on('customer')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+
+            $table->foreign('sales_id', 'invoice_sales_id_byfkey')
+                ->references('id')->on('users')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+
+            $table->foreign('created_by', 'invoice_created_by_byfkey')
+                ->references('id')->on('users')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+
+
+            $table->foreign('updated_by', 'invoice_updated_by_byfkey')
+                ->references('id')->on('users')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+
+            $table->foreign('status', 'invoice_status_byfkey')
+                ->references('id')->on('delivery_order_status')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
         });
     }
 
