@@ -127,7 +127,7 @@ class DatabaseSeeder extends Seeder
         $full_data = array();
         for($i=0;$i<=200;$i++) { 
             $customer_array = array(
-                "name"=>$faker->company,
+                "name"=>$faker->company."-".$faker->company,
                 "phone"=>$faker->phoneNumber,
                 "owner"=>$faker->name,
                 "address"=>$faker->address,

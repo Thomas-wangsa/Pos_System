@@ -25,8 +25,14 @@ class UserController extends Controller
     public function index(Request $request)
     {   
         $allowed = false;
-        $role = User::where('id',Auth::user()->id)->first()->role;
+        $self_data = User::where('id',Auth::user()->id)->first();
+        if($self_data == null) {
+            $request->session()->flash('alert-danger', "self_data is not found!");
+            return redirect()->route("home");
+        }
 
+
+        $role = $self_data->role;
         if($role == 1 OR $role == 2) {
             $allowed = true;
         }

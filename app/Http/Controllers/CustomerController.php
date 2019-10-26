@@ -30,8 +30,14 @@ class CustomerController extends Controller
     {   
         
         $allowed = false;
-        $role = User::where('id',Auth::user()->id)->first()->role;
+        $self_data = User::where('id',Auth::user()->id)->first();
+        if($self_data == null) {
+            $request->session()->flash('alert-danger', "self_data is not found!");
+            return redirect()->route("home");
+        }
 
+
+        $role = $self_data->role;
         if($role == 1 OR $role == 2) {
             $allowed = true;
         }
@@ -81,7 +87,7 @@ class CustomerController extends Controller
 
 
         if(!$allowed) {
-            $customer = $customer->where('customer.sales_id','=', $request->search_sales);
+            $customer = $customer->where('customer.sales_id','=', Auth::user()->id);
         }
 
         $customer = $customer->select('customer.*','users.name AS sales_name');
