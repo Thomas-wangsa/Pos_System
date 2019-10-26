@@ -87,7 +87,7 @@ class DOController extends Controller
             ->orderBy('number','desc');
 
 
-        $do = $do->paginate(3);
+        $do = $do->paginate(10);
         $data['po'] = PO::orderBy('number','asc')->withTrashed()->where('status',1)->get();
         $data['customer'] = Customer::orderBy('name','asc')->withTrashed()->get();
         $data['delivery_order_status'] = Delivery_Order_Status::all();

@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Models\Invoice;
 use App\Http\Models\Sub_Invoice;
+use App\Http\Models\Invoice_Status;
+
 use App\User;
 use App\Http\Models\Customer;
+use App\Http\Models\PO;
 
 class InvoiceController extends Controller
 {
@@ -15,29 +18,54 @@ class InvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {   
-
-
-        // $invoice = Invoice::leftjoin('po','po.id','=','invoice.po_id')
-        //             ->leftjoin('users','users.id','=','invoice.sales_id')
-        //             ->leftjoin('invoice_status','invoice_status.id','=','invoice.status')
-        //             ->select('invoice.*','po.number AS po_number','users.name AS sales_name','invoice_status.name AS status_name')
-        //             ->get();
-
-        
 
 
         $invoice = Invoice::leftjoin('invoice_status','invoice_status.id','=','invoice.status')
                     ->leftjoin('users','users.id','=','invoice.sales_id')
-                    ->leftjoin('customer','customer.id','=','invoice.customer_id')
-                    ->select(
+                    ->leftjoin('customer','customer.id','=','invoice.customer_id');
+                    
+        if($request->search == "on") { 
+
+            if($request->search_nama != null) { 
+                $invoice = $invoice->where('invoice.number','like',$request->search_nama."%");
+            }
+
+            if($request->search_sales != null) {
+                $invoice = $invoice->where('invoice.sales_id','=', $request->search_sales);
+                
+            }
+
+            if($request->search_customer != null) {
+                $invoice = $invoice->where('invoice.customer_id','=', $request->search_customer);
+                
+            }
+
+            if($request->search_po != null) {
+                $invoice = $invoice->where('invoice.po_id','=', $request->search_po);
+                
+            }
+
+            if($request->search_status != null) {
+                $invoice = $invoice->where('invoice.status','=', $request->search_status);
+            }
+
+
+
+            if($request->uuid != null) {
+                $invoice = $invoice->where('invoice.uuid','=',$request->uuid);
+            }
+
+        }
+
+        $invoice = $invoice->select(
                         'invoice.*',
                         'users.name AS sales_name',
                         'customer.name AS customer_name',
                         'invoice_status.name AS status_name'
                     )
-                    ->get();
+                    ->orderBy('number','desc')->paginate(2);
 
 
         foreach($invoice as $key=>$val) {
@@ -57,6 +85,7 @@ class InvoiceController extends Controller
         $data['sales'] = User::all();
         $data['customer'] = Customer::all();
         $data['po'] = PO::all();
+        $data['invoice_status'] = Invoice_Status::all();
         return view('invoice/index',compact('data'));
     }
 

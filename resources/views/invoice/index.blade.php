@@ -30,16 +30,30 @@
       </div>
 
       <div class="form-group">
-        <select class="form-control" name="search_customer">
+        <select class="form-control" name="search_sales">
           <option value=""> Filter By Sales </option>
-          
+          @foreach($data['sales'] as $key=>$val)
+          <option value="{{$val->id}}"
+            @if($val->id == Request::get('search_sales')) 
+              selected
+            @endif  
+            > {{$val->name}} 
+          </option>
+          @endforeach
         </select>
       </div>
 
       <div class="form-group">
         <select class="form-control" name="search_customer">
           <option value=""> Filter By Customer </option>
-          
+          @foreach($data['customer'] as $key=>$val)
+            <option value="{{$val->id}}"
+            @if($val->id == Request::get('search_customer')) 
+              selected
+            @endif  
+            > {{$val->name}} 
+            </option>
+          @endforeach
         </select>
       </div>
 
@@ -47,6 +61,14 @@
       <div class="form-group">
         <select class="form-control" name="search_po">
           <option value=""> Filter By PO </option>
+          @foreach($data['po'] as $key=>$val)
+            <option value="{{$val->id}}"
+            @if($val->id == Request::get('search_po')) 
+              selected
+            @endif  
+            > {{$val->number}} 
+            </option>
+          @endforeach
         </select>
       </div>
 
@@ -55,6 +77,14 @@
       <div class="form-group">
         <select class="form-control" name="search_status">
           <option value=""> Filter By Status </option>
+          @foreach($data['invoice_status'] as $key=>$val)
+            <option value="{{$val->id}}"
+            @if($val->id == Request::get('search_status')) 
+              selected
+            @endif  
+            > {{$val->name}} 
+            </option>
+          @endforeach
         </select>
       </div>
     
@@ -98,7 +128,7 @@
           <tr>
             <td> {{$key+1}} </td>
             <td> {{$val->number}}</td>
-            <td> {{$val->sales_name}}} </td>
+            <td> {{$val->sales_name}} </td>
             <td> {{$val->customer_name}}} </td>
             <td> {{$val->total}} </td>
             <td> {{$val->status_name}} </td>
@@ -117,7 +147,21 @@
         @endif
     </tbody>
   </table>
+  <div class="pull-right" style="margin-top: -15px!important"> 
+    {{ $data['invoice']->appends(
+      [
+      'search' => Request::get('search'),
+      'search_nama' => Request::get('search_nama'),
+      'search_sales' => Request::get('search_sales'),
+      'search_customer' => Request::get('search_customer'),
+      'search_sales' => Request::get('search_po'),
 
+      'search_status' => Request::get('search_status')
+      ])
+
+    ->links() }}
+  </div>
+  <div class="clearfix"> </div>
 
   <script type="text/javascript">
     $.ajaxSetup({

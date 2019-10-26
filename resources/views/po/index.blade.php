@@ -40,6 +40,19 @@
 
 
       <div class="form-group">
+        <select class="form-control" name="search_sales">
+          <option value=""> Filter By Sales </option>
+          @foreach($data['sales'] as $key=>$val)
+          <option value="{{$val->id}}"
+          @if($val->id == Request::get('search_sales')) 
+            selected
+          @endif  
+          > {{$val->name}} </option>
+          @endforeach
+        </select>
+      </div>
+
+      <div class="form-group">
         <select class="form-control" name="search_customer">
           <option value=""> Filter By Customer </option>
           @foreach($data['all_customer'] as $key=>$val)
@@ -52,18 +65,7 @@
         </select>
       </div>
 
-      <div class="form-group">
-        <select class="form-control" name="search_sales">
-          <option value=""> Filter By Sales </option>
-          @foreach($data['sales'] as $key=>$val)
-          <option value="{{$val->id}}"
-          @if($val->id == Request::get('search_sales')) 
-            selected
-          @endif  
-          > {{$val->name}} </option>
-          @endforeach
-        </select>
-      </div>
+      
 
       
       <div class="form-group">
