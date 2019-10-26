@@ -78,15 +78,43 @@
       <tr>
         <th> No </th>
         <th> Number </th>
+        <th> Sales </th>
         <th> Customer </th>
-        <th> PO </th>
-        <th> Driver </th>
+        <th> Total </th>
         <th> Status </th>
         <th> Action </th>
       </tr>
     </thead>
     <tbody>
-       
+        @if (count($data['invoice']) == 0 ) 
+          <tr> 
+            <td colspan="10" class="text-center"> 
+            No Invoice Data Found! 
+            </td>
+          </tr>
+        @else
+          @foreach($data['invoice'] as $key=>$val)
+          <?php $uuid = $val["uuid"];?>
+          <tr>
+            <td> {{$key+1}} </td>
+            <td> {{$val->number}}</td>
+            <td> {{$val->sales_name}}} </td>
+            <td> {{$val->customer_name}}} </td>
+            <td> {{$val->total}} </td>
+            <td> {{$val->status_name}} </td>
+            <td> 
+              <a href="#" onclick="info('{{$uuid}}')">  
+              <span class="glyphicon glyphicon-file"
+              style="cursor:pointer" 
+              title="detail {{$val['name']}}" 
+              >
+              </span>
+              </a>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+          </tr> 
+          @endforeach
+        @endif
     </tbody>
   </table>
 
@@ -102,4 +130,5 @@
       window.location = "{{route('invoice.index')}}";
     }
   </script>
+  @include('invoice.modal_info_invoice')
 @endsection

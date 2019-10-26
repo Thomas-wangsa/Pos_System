@@ -38,6 +38,14 @@
 			EDIT CATEGORY PAGE
 			@elseif(Route::current()->getName() == 'config.edit_driver')
 			EDIT DRIVER PAGE
+			@elseif(Route::current()->getName() == 'do.index')
+			DELIVERY ORDER PAGE
+			@elseif(Route::current()->getName() == 'do.create')
+			CREATE NEW DELIVERY ORDER PAGE
+			@elseif(Route::current()->getName() == 'do.edit')
+			EDIT DELIVERY ORDER PAGE
+			@elseif(Route::current()->getName() == 'invoice.index')
+			INVOICE PAGE
 			@endif
 			
 		</h3>

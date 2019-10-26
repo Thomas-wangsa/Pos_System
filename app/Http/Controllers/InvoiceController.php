@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Models\Invoice;
 use App\Http\Models\Sub_Invoice;
+use App\User;
+use App\Http\Models\Customer;
 
 class InvoiceController extends Controller
 {
@@ -23,19 +25,38 @@ class InvoiceController extends Controller
         //             ->select('invoice.*','po.number AS po_number','users.name AS sales_name','invoice_status.name AS status_name')
         //             ->get();
 
-        // foreach($invoice as $key=>$val) {
-        //     $invoice[$key]["total"] = Sub_Invoice::where('invoice_id',$val->id)->sum('total');
-        // }
+        
 
 
         $invoice = Invoice::leftjoin('invoice_status','invoice_status.id','=','invoice.status')
+                    ->leftjoin('users','users.id','=','invoice.sales_id')
+                    ->leftjoin('customer','customer.id','=','invoice.customer_id')
                     ->select(
                         'invoice.*',
+                        'users.name AS sales_name',
+                        'customer.name AS customer_name',
                         'invoice_status.name AS status_name'
                     )
                     ->get();
 
+
+        foreach($invoice as $key=>$val) {
+            $total = 0;
+            
+            $sub_inv_data = Sub_Invoice::where('invoice_id',$val->id)->get();
+            if(count($sub_inv_data) > 0) {
+                foreach($sub_inv_data as $sub_key=>$sub_val) {
+                    $total += $sub_val["quantity"] * $sub_val["price"];
+                }
+            }
+
+            $invoice[$key]["total"] = number_format($total);
+        }
+
         $data['invoice'] = $invoice;
+        $data['sales'] = User::all();
+        $data['customer'] = Customer::all();
+        $data['po'] = PO::all();
         return view('invoice/index',compact('data'));
     }
 
@@ -111,6 +132,8 @@ class InvoiceController extends Controller
         try {
             $data["invoice"] = Invoice::leftjoin('po','po.id','=','invoice.po_id')
                     ->leftjoin('users','users.id','=','invoice.sales_id')
+                    ->leftjoin('customer','customer.id','=','invoice.customer_id')
+                    ->leftjoin('delivery_order','delivery_order.id','=','invoice.delivery_order_id')
                     ->leftjoin('invoice_status','invoice_status.id','=','invoice.status')
                     ->leftjoin('users as c_user','c_user.id','=','invoice.created_by')
                     ->leftjoin('users as u_user','u_user.id','=','invoice.updated_by')
@@ -119,6 +142,8 @@ class InvoiceController extends Controller
                         'invoice.*',
                         'po.number AS po_number',
                         'users.name AS sales_name',
+                        'customer.name AS customer_name',
+                        'delivery_order.number AS delivery_order_number',
                         'invoice_status.name AS status_name',
                         'c_user.name AS created_by_name',
                         'u_user.name AS updated_by_name'

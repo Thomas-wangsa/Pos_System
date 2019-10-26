@@ -28,21 +28,30 @@
 						        <th> invoice number </th>
 						        <td id="modal_info_number">  </td>
 						      </tr>
+
+						      <tr>
+						        <th> sales name </th>
+						        <td id="modal_info_sales_name">  </td>
+						      </tr>
+
+						      <tr>
+						        <th> customer name </th>
+						        <td id="modal_info_customer_name">  </td>
+						      </tr>
+
+
 						      <tr>
 						        <th>  po number </th>
 						        <td id="modal_info_po_number">   </td>
 						      </tr>
-						      <tr>
-						        <th> sales name </th>
-						        <td id="modal_info_driver_name">  </td>
-						      </tr>
-						      
+
 
 						      <tr>
-						        <th> date </th>
-						        <td id="modal_info_date">  </td>
-						      </tr>		
-						     
+						        <th> delivery order number </th>
+						        <td id="modal_info_delivery_order_number">  </td>
+						      </tr>
+
+
 			
 						      <tr class="info">
 						        <th> status </th>
@@ -112,9 +121,13 @@
 
 	function info(uuid) {
 		$('#modal_info_number').html("-");
+		$('#modal_info_sales_name').html("-");
+		$('#modal_info_customer_name').html("-");
 		$('#modal_info_po_number').html("-");
-		$('#modal_info_driver_name').html("-");
-		$('#modal_info_date').html("-");
+		$('#modal_info_delivery_order_number').html("-");
+
+
+
 		$('#modal_info_status_name').html("-");
 		$('#modal_info_created_by').html("-");
 		$('#modal_info_updated_by').html("-");
@@ -133,9 +146,11 @@
 				response = JSON.parse(result);
 				if(response.error != true) {
 					$('#modal_info_number').html(response.data.invoice.number);
+					$('#modal_info_sales_name').html(response.data.invoice.sales_name);
+					$('#modal_info_customer_name').html(response.data.invoice.customer_name);
 					$('#modal_info_po_number').html(response.data.invoice.po_number);
-					$('#modal_info_driver_name').html(response.data.invoice.sales_name);
-					$('#modal_info_date').html(response.data.invoice.date);
+					$('#modal_info_delivery_order_number').html(response.data.invoice.delivery_order_number);
+
 					$('#modal_info_status_name').html(response.data.invoice.status_name);
 					$('#modal_info_created_by').html(response.data.invoice.created_by_name+" : "+response.data.invoice.created_at);
 					$('#modal_info_updated_by').html(response.data.invoice.updated_by_name+" : "+response.data.invoice.updated_at);
@@ -144,6 +159,8 @@
 					if(response.data.sub_invoice.length > 0) {
 						$.each(response.data.sub_invoice, function (key,val) {
 
+							total = val.quantity * val.price;
+							
 							var append_rows = "<tr> " +
 												"<td> " +
 												(key+1) +
@@ -158,7 +175,7 @@
 												"Rp. " + val.price.toLocaleString() +
 												"</td> " +
 												"<td> " +
-												"Rp. " + val.total.toLocaleString() +
+												"Rp. " + total.toLocaleString() +
 												"</td> " +
 												"<td> " +
 												val.note +
