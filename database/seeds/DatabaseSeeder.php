@@ -125,7 +125,7 @@ class DatabaseSeeder extends Seeder
 
 
         $full_data = array();
-        for($i=0;$i<=5;$i++) { 
+        for($i=0;$i<=100;$i++) { 
             $customer_array = array(
                 "name"=>$faker->company,
                 "phone"=>$faker->phoneNumber,
@@ -134,7 +134,7 @@ class DatabaseSeeder extends Seeder
                 "note"=>$faker->text,
                 "relation_at"=>$faker->date,
                 "uuid"=>$faker->uuid,
-                "sales_id"=>$faker->numberBetween(2,13),
+                "sales_id"=>$faker->numberBetween(2,20),
                 "created_by"=>1,
                 "updated_by"=>1,
                 "created_at"    => $faker->dateTime($max = 'now'),
@@ -147,10 +147,10 @@ class DatabaseSeeder extends Seeder
         Customer::insert($full_data);
 
         $po_data = array();
-        for($i=0;$i<15;$i++) { 
+        for($i=0;$i<300;$i++) { 
             
             $po = new PO;
-            $po->customer_id = $faker->numberBetween(1,5);
+            $po->customer_id = $faker->numberBetween(1,50);
             $po->sales_id = $faker->numberBetween(2,4);
             $po->category_id = $faker->numberBetween(1,3);
             $po->number = "00".$faker->randomDigitNotNull()."/".$faker->company;
