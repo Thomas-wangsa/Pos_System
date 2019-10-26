@@ -195,7 +195,7 @@ class DOController extends Controller
             $do->sales_id = $po->sales_id;
             $do->created_by = Auth::user()->id;
             $do->updated_by = Auth::user()->id;
-            $do->uuid = $uuid_patern
+            $do->uuid = $uuid_patern;
 
 
             $inv = new Invoice;
@@ -387,6 +387,12 @@ class DOController extends Controller
                 return redirect()->route($this->redirectTo);
             }
 
+            $inv = Invoice::where('uuid',$request->do_uuid)->first();
+            if($inv == null) {
+                $request->session()->flash('alert-danger', 'invoice is not match found!');
+                return redirect()->route($this->redirectTo);
+            }
+
 
             $do_status = Delivery_Order_Status::find($request->status);
             if($do_status == null) {
@@ -397,6 +403,16 @@ class DOController extends Controller
 
             $do->status = $do_status->id;
             $do->updated_by = Auth::user()->id;
+
+            $inv->status = $do_status->id;
+            $inv->updated_by = Auth::user()->id;
+
+            DB::transaction(function() use ($do,$inv) {
+                $do->save();
+                $inv->save();
+            });
+
+
             $do->save();
 
             $request->session()->flash('alert-success', 'DO : '. $do->number.' has been updated');
@@ -414,7 +430,7 @@ class DOController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
         $do = Delivery_Order::leftjoin('customer','customer.id','=','delivery_order.po_id')
             ->leftjoin('po','po.id','=','delivery_order.po_id')
@@ -482,13 +498,24 @@ class DOController extends Controller
 
         try {
 
-            $sub_po = Sub_Delivery_Order::where('uuid',$id)->first();
-            if($sub_po == null) {
+            $sub_do = Sub_Delivery_Order::where('uuid',$id)->first();
+            if($sub_do == null) {
                 $response['messages'] = "item is not found!";
                 return json_encode($response);
             }
 
-            $sub_po->delete();
+            $sub_inv = Sub_Invoice::where('uuid',$id)->first();
+            if($sub_inv == null) {
+                $response['messages'] = "sub invoice is not match!";
+                return json_encode($response);
+            }
+
+
+            DB::transaction(function() use ($sub_do,$sub_inv) {
+                $sub_do->delete();
+                $sub_inv->delete();
+            });
+
             $response['error'] = false;
             return json_encode($response);
         } catch(Exception $e) {
@@ -571,6 +598,12 @@ class DOController extends Controller
                 return json_encode($response);
             }
 
+            $sub_inv = Sub_Invoice::where('uuid',$request->sub_do_uuid)->first();
+            if($sub_inv == null) {
+                $response['messages'] = "sub invoice is not match!";
+                return json_encode($response);
+            }
+
             $item_quantity = $request->item_quantity;
             if($item_quantity < 1) {
                 $response['messages'] = "item quantity is not correct : ".$request->item_quantity." qty";
@@ -585,7 +618,15 @@ class DOController extends Controller
 
             $sub_do->quantity = $request->item_quantity;
             $sub_do->name = $request->item_name;
-            $sub_do->save();
+
+            $sub_inv->quantity = $request->item_quantity;
+            $sub_inv->name = $request->item_name;
+
+            DB::transaction(function() use ($sub_do,$sub_inv) {
+                $sub_do->save();
+                $sub_inv->save();
+            });
+            
 
             $response['error'] = false;
             $response['data'] = $sub_do;
@@ -604,13 +645,27 @@ class DOController extends Controller
         $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
 
         try {
-            $sub_po = Sub_Delivery_Order::withTrashed()->where('uuid',$request->sub_do_uuid)->first();
-            if($sub_po == null) {
+            $sub_do = Sub_Delivery_Order::withTrashed()->where('uuid',$request->sub_do_uuid)->first();
+            if($sub_do == null) {
                 $response['messages'] = "item is not found!";
                 return json_encode($response);
             }
 
-            $sub_po->restore();
+
+            $sub_inv = Sub_Invoice::withTrashed()->where('uuid',$request->sub_do_uuid)->first();
+            if($sub_inv == null) {
+                $response['messages'] = "sub invoice is not match!";
+                return json_encode($response);
+            }
+
+
+            DB::transaction(function() use ($sub_do,$sub_inv) {
+                $sub_do->restore();
+                $sub_inv->restore();
+            });
+
+
+
             $response['error'] = false;
             return json_encode($response);
         } catch(Exception $e) {
@@ -630,17 +685,33 @@ class DOController extends Controller
                 return json_encode($response);
             }
 
+            $inv = Invoice::where('uuid',$request->do_uuid)->first();
+            if($inv == null) {
+                $response['messages'] = "invoice data is not match!";
+                return json_encode($response);
+            }
+
             $item_quantity = $request->item_quantity;
             if($item_quantity < 1) {
                 $response['messages'] = "item quantity is not correct : ".$request->item_quantity." qty";
                 return json_encode($response);
             }
 
-            $item_name = $request->item_name;
+            $sub_po_uuid = $request->item_name;
+            $sub_po_data = SubPO::where('uuid',$sub_po_uuid)->first();
+            if($sub_po_data == null) {
+                $response['messages'] = "sub_po not found!";
+                return json_encode($response);
+            }
+
+            $item_name = $sub_po_data->name;
             if($item_name == null) {
                 $response['messages'] = "item name not found!";
                 return json_encode($response);
             }
+
+            $uuid = $do->id."-".time()."-".$this->faker->uuid;
+
 
             $sub_do = new Sub_Delivery_Order;
             $sub_do->quantity = $item_quantity;
@@ -649,11 +720,26 @@ class DOController extends Controller
             $sub_do->delivery_order_id = $do->id;
             $sub_do->created_by = Auth::user()->id;
             $sub_do->updated_by = Auth::user()->id;
-            $sub_do->uuid = $do->id."-".time()."-".$this->faker->uuid;
+            $sub_do->uuid = $uuid;
 
 
+            $sub_inv = New Sub_Invoice;
+            $sub_inv->quantity = $item_quantity;
+            $sub_inv->name = $item_name;
+            $sub_inv->price = $sub_po_data->price;
 
-            $sub_do->save();
+            $sub_inv->invoice_id = $inv->id;
+            $sub_inv->created_by = Auth::user()->id;
+            $sub_inv->updated_by = Auth::user()->id;
+            $sub_inv->uuid = $uuid;
+
+
+            DB::transaction(function() use ($sub_do,$sub_inv) {
+                $sub_do->save();
+                $sub_inv->save();
+            });
+
+            
 
             $response['error'] = false;
             $response['data'] = $sub_do;

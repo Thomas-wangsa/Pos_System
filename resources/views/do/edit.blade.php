@@ -149,7 +149,7 @@
 			data += '<select class="form-control" id="item_name_'+no_items+'"> ';
 
 			@foreach($data['sub_po'] as $key=>$val)
-				data += '<option value="{{$val['name']}} " >';
+				data += '<option value="{{$val['uuid']}} " >';
 				data += '{{$val["name"]}}';
 				data += "</option>" ;
 			@endforeach
@@ -183,6 +183,7 @@
 
 
   		function save_item(current_no_items) {
+  			$('#item_save_btn_'+current_no_items).prop('disabled', true);
 			do_uuid = $('#new_do_uuid').html();
 			item_quantity = $('#item_quantity_'+current_no_items).val();
 			item_name = $('#item_name_'+current_no_items).val();
@@ -239,6 +240,7 @@
 
 
 		function update_item(current_no_items) {
+			$('#item_update_btn_'+current_no_items).prop('disabled', true);
 			sub_do_uuid = $('#item_sub_do_uuid_'+current_no_items).html();
 			item_quantity = $('#item_quantity_'+current_no_items).val();
 			item_name = $('#item_name_'+current_no_items).val();
@@ -272,6 +274,7 @@
 						$('#item_name_'+current_no_items).prop('disabled', true);
 						$('#item_edit_btn_'+current_no_items).show();
 						$('#item_delete_btn_'+current_no_items).show();
+						$('#item_update_btn_'+current_no_items).prop('disabled', false);
 						$('#item_update_btn_'+current_no_items).addClass("hide");
 					} else {
 						alert(response.messages);
