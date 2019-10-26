@@ -84,6 +84,12 @@ class UserController extends Controller
     public function store(Request $request)
     {   
         try {
+
+            if($request->password != $request->re_password) {
+                $request->session()->flash('alert-danger', "password is not match!");
+                return redirect()->route("user.create");
+            }
+
             $new_user = new User;   
             $new_user->name = $request->name;
             $new_user->email = $request->email;

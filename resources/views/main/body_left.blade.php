@@ -58,8 +58,8 @@
     </li>
 
 
-    <li class="@if(Route::current()->getName() == 'config.index') echo active @endif">
-      <a href="{{route('config.index')}}">
+    <li class="@if(Route::current()->getName() == 'profile.index') echo active @endif">
+      <a href="{{route('profile.index')}}">
         <span class="glyphicon glyphicon-edit">
         Profile
       </a>

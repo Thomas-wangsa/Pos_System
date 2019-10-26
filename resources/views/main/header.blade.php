@@ -96,7 +96,7 @@
 
               <ul class="dropdown-menu">
                 <li>
-                  <a href="{{ route('config.index') }}">
+                  <a href="{{ route('profile.index') }}">
                     <span class="glyphicon glyphicon-edit"></span>
                     Profile
                   </a>

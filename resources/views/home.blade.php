@@ -110,7 +110,7 @@
 
     <div class="col-md-3">
       <div class="thumbnail">
-        <a href="{{route('config.index')}}">
+        <a href="{{route('profile.index')}}">
 
           <div class="icon_block">
                 <span class="glyphicon glyphicon-edit">
