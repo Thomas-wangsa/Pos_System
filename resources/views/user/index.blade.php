@@ -156,6 +156,7 @@
               </a> 
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               
+              @if(Auth::user()->role == 1)
               <span class="glyphicon glyphicon-trash"
               style="color:red;cursor:pointer" 
               title="remove {{$val['name']}}"
@@ -163,6 +164,7 @@
               >
               </span>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              @endif
             @endif
 
           </td>

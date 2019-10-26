@@ -24,6 +24,17 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {   
+        $allowed = false;
+        $role = User::where('id',Auth::user()->id)->first()->role;
+
+        if($role == 1 OR $role == 2) {
+            $allowed = true;
+        }
+
+        if(!$allowed) {
+            $request->session()->flash('alert-danger', "only admin and owner is allowed!");
+            return redirect()->route("home");
+        }
 
 
         $users = User::leftjoin('user_role','user_role.id','=','users.role');
