@@ -110,8 +110,27 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(Request $request)
+    {   
+        $allowed = false;
+        $self_data = User::where('id',Auth::user()->id)->first();
+        if($self_data == null) {
+            $request->session()->flash('alert-danger', "self_data is not found!");
+            return redirect()->route("home");
+        }
+
+
+        $role = $self_data->role;
+        if($role == 1 OR $role == 2) {
+            $allowed = true;
+        }
+
+        if(!$allowed) {
+            $request->session()->flash('alert-danger', "only admin and owner is allowed!");
+            return redirect()->route($this->redirectTo);
+        }
+
+
         $sales = User::orderBy('name','asc')->get();
         $status = Customer_Status::all();
 
@@ -174,8 +193,27 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($uuid)
+    public function edit(Request $request,$uuid)
     {   
+        $allowed = false;
+        $self_data = User::where('id',Auth::user()->id)->first();
+        if($self_data == null) {
+            $request->session()->flash('alert-danger', "self_data is not found!");
+            return redirect()->route("home");
+        }
+
+
+        $role = $self_data->role;
+        if($role == 1 OR $role == 2) {
+            $allowed = true;
+        }
+
+        if(!$allowed) {
+            $request->session()->flash('alert-danger', "only admin and owner is allowed!");
+            return redirect()->route($this->redirectTo);
+        }
+
+
         $sales = User::orderBy('name','asc')->get();
         $status = Customer_Status::all();
         $customer = Customer::where('uuid',$uuid)->first();

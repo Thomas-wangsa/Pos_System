@@ -134,10 +134,12 @@
             <?php $uuid = $val['uuid']; $name = $val['name'];?>
 
             @if(Request::get('search_filter') == 'is_deleted')
+              @if(Auth::user()->role == 1)
               <button class="btn btn-primary"
               onclick="restore_user('{{$uuid}}')">
                 restore user
               </button>
+              @endif
             @else 
               <span class="glyphicon glyphicon-file"
               style="cursor:pointer;color:#337ab7" 

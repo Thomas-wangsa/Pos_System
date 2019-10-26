@@ -10,6 +10,8 @@
      </p>
     @endif
   @endforeach
+
+  @if(Auth::user()->role == 1 OR Auth::user()->role == 2)
   <div style="margin-top: 15px">
     <div class="pull-left">
       <a href="{{route('customer.create')}}">
@@ -21,6 +23,7 @@
     </div>
     <div class="clearfix"> </div>
   </div>
+  @endif
 
   <div class="pull-left" style="margin: 10px auto">
     <form class="form-inline" action="">
@@ -145,10 +148,12 @@
           <td>
             <?php $uuid = $val['uuid']; $name = $val['name'];?>
             @if(Request::get('search_status') == 'is_deleted')
+              @if(Auth::user()->role == 1)
               <button class="btn btn-primary"
               onclick="restore('{{$uuid}}')">
                 restore customer
               </button>
+              @endif
             @else
 
               <a href="#">  
@@ -161,6 +166,7 @@
               </a>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
+              @if(Auth::user()->role == 1 OR Auth::user()->role == 2)
               <a href="{{route('customer.edit',$uuid)}}">
                 <span class="glyphicon glyphicon-edit"
                 style="color:green;cursor:pointer" 
@@ -169,8 +175,10 @@
                 </span>
               </a> 
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              @endif
               
 
+              @if(Auth::user()->role == 1)
               <a href="#">
                 <span class="glyphicon glyphicon-trash"
                 style="color:red;cursor:pointer" 
@@ -180,7 +188,9 @@
                 </span>
               </a> 
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              @endif
               
+              @if(Auth::user()->role == 1 OR Auth::user()->role == 2)
               <a href="{{route('po.create')}}?customer_uuid={{$val['uuid']}}">  
                 <span class="glyphicon glyphicon-play-circle"
                 style="cursor:pointer;color:black" 
@@ -189,6 +199,7 @@
                 </span>
               </a>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              @endif
             @endif
                 
           </td>
