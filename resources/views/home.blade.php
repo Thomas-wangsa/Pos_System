@@ -20,7 +20,7 @@
         <a href="{{route('customer.index')}}">
 
           <div class="icon_block">
-                <span class="glyphicon glyphicon-user ">
+                <span class="glyphicon glyphicon-book">
                 </span> &nbsp;
           </div>
           <div class="caption text-center">
@@ -51,7 +51,7 @@
         <a href="{{route('do.index')}}">
 
           <div class="icon_block">
-                <span class="glyphicon glyphicon-file ">
+                <span class="glyphicon glyphicon-envelope">
                 </span> &nbsp;
           </div>
           <div class="caption text-center">
@@ -67,7 +67,7 @@
         <a href="{{route('invoice.index')}}">
 
           <div class="icon_block">
-                <span class="glyphicon glyphicon-file ">
+                <span class="glyphicon glyphicon-usd">
                 </span> &nbsp;
           </div>
           <div class="caption text-center">
@@ -79,14 +79,14 @@
 
     <div class="col-md-3">
       <div class="thumbnail">
-        <a href="/w3images/nature.jpg">
+        <a href="{{route('config.index')}}">
 
           <div class="icon_block">
-                <span class="glyphicon glyphicon-file">
+                <span class="glyphicon glyphicon-folder-open">
                 </span> &nbsp;
           </div>
           <div class="caption text-center">
-            <p>Lorem ipsum...</p>
+            <p> Report </p>
           </div>
         </a>
       </div>
@@ -103,6 +103,21 @@
           </div>
           <div class="caption text-center">
             <p> Config </p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="thumbnail">
+        <a href="{{route('config.index')}}">
+
+          <div class="icon_block">
+                <span class="glyphicon glyphicon-edit">
+                </span> &nbsp;
+          </div>
+          <div class="caption text-center">
+            <p> Profile </p>
           </div>
         </a>
       </div>

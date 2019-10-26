@@ -9,7 +9,7 @@
   });
 </script>
 
-<div class="col-sm-9" style="padding-top: 0px">
+<div class="col-sm-10" style="padding-top: 0px">
 	
 
 	<div class="pull-left">
