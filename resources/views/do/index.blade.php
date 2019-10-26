@@ -168,15 +168,6 @@
             </a> 
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <a href="#">
-              <span class="glyphicon glyphicon-trash"
-              style="color:red;cursor:pointer" 
-              title="remove {{$val['name']}}"  
-              >
-              </span>
-            </a> 
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
           </td>
         </tr>
         @endforeach

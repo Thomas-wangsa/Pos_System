@@ -17,15 +17,23 @@ class InvoiceController extends Controller
     {   
 
 
-        $invoice = Invoice::leftjoin('po','po.id','=','invoice.po_id')
-                    ->leftjoin('users','users.id','=','invoice.sales_id')
-                    ->leftjoin('invoice_status','invoice_status.id','=','invoice.status')
-                    ->select('invoice.*','po.number AS po_number','users.name AS sales_name','invoice_status.name AS status_name')
-                    ->get();
+        // $invoice = Invoice::leftjoin('po','po.id','=','invoice.po_id')
+        //             ->leftjoin('users','users.id','=','invoice.sales_id')
+        //             ->leftjoin('invoice_status','invoice_status.id','=','invoice.status')
+        //             ->select('invoice.*','po.number AS po_number','users.name AS sales_name','invoice_status.name AS status_name')
+        //             ->get();
 
-        foreach($invoice as $key=>$val) {
-            $invoice[$key]["total"] = Sub_Invoice::where('invoice_id',$val->id)->sum('total');
-        }
+        // foreach($invoice as $key=>$val) {
+        //     $invoice[$key]["total"] = Sub_Invoice::where('invoice_id',$val->id)->sum('total');
+        // }
+
+
+        $invoice = Invoice::leftjoin('invoice_status','invoice_status.id','=','invoice.status')
+                    ->select(
+                        'invoice.*',
+                        'invoice_status.name AS status_name'
+                    )
+                    ->get();
 
         $data['invoice'] = $invoice;
         return view('invoice/index',compact('data'));
