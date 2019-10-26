@@ -7,7 +7,7 @@
     <div class="modal-dialog">
     
       <!-- Modal content-->
-      <div class="modal-content">
+      <div class="modal-content modal-lg">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title text-center" >
@@ -120,8 +120,12 @@
 						<thead>
 							<tr>
 								<td> no </td>
-								<td> number </td>
 								<td> date </td>
+								<td> number </td>
+								<td> quantity </td>
+								<td> name </td>
+								<td> price </td>
+								<td> total </td>
 								<td> status </td>
 							</tr>
 						</thead>
@@ -234,6 +238,48 @@
 						});
 					} else {
 						$('#info_delivery_order_tbody').append("<tr> <td colspan='6'> no delivery order found! </td></tr>");
+					}
+
+
+
+					if(response.data.invoice.length > 0) {
+						$.each(response.data.invoice, function (key,val) {
+
+							total = val.sub_invoice_quantity * val.sub_invoice_price;
+
+							var append_rows = "<tr> " +
+												'<td> ' +
+												(key+1) +
+												"</td> " +
+												'<td> ' +
+												val.updated_at +
+												"</td> " +
+												'<td> ' +
+												val.number +
+												"</td> ";
+
+							append_rows +=  '<td>' +
+											val.sub_invoice_quantity +
+											'</td>' +
+											'<td>' +
+											val.sub_invoice_name +
+											'</td>'+
+											'<td>' +
+											val.sub_invoice_price.toLocaleString() +
+											'</td>'+
+											'<td>' +
+											total.toLocaleString() +
+											'</td>';
+							
+
+							append_rows +=	'<td> ' +
+											val.status_name +
+											"</td> " +
+											 "<tr>";
+							$('#info_invoice_tbody').append(append_rows);
+						});
+					} else {
+						$('#info_invoice_tbody').append("<tr> <td colspan='10'> no invoice found! </td></tr>");
 					}
 
 

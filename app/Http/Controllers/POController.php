@@ -410,11 +410,18 @@ class POController extends Controller
             // }
 
 
-            // $data["invoice"] = Invoice::leftjoin('invoice_status',
-            //     'invoice_status.id','=','invoice.status')
-            //     ->where('invoice.po_id',$data['po']->id)
-            //     ->select('invoice.*','invoice_status.name AS status_name')
-            //     ->get();
+            $data["invoice"] = Invoice::leftjoin('invoice_status',
+                'invoice_status.id','=','invoice.status')
+                ->leftjoin('sub_invoice','sub_invoice.invoice_id','=','invoice.id')
+                ->where('invoice.po_id',$data['po']->id)
+                ->select(
+                    'invoice.*',
+                    'sub_invoice.quantity as sub_invoice_quantity',
+                    'sub_invoice.name as sub_invoice_name',
+                    'sub_invoice.price as sub_invoice_price',
+                    'invoice_status.name AS status_name'
+                )
+                ->get();
 
 
             // if(count($data) > 0) {
