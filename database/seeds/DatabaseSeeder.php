@@ -125,7 +125,7 @@ class DatabaseSeeder extends Seeder
 
 
         $full_data = array();
-        for($i=0;$i<=100;$i++) { 
+        for($i=0;$i<=200;$i++) { 
             $customer_array = array(
                 "name"=>$faker->company,
                 "phone"=>$faker->phoneNumber,
@@ -147,7 +147,7 @@ class DatabaseSeeder extends Seeder
         Customer::insert($full_data);
 
         $po_data = array();
-        for($i=0;$i<300;$i++) { 
+        for($i=0;$i<700;$i++) { 
             
             $po = new PO;
             $po->customer_id = $faker->numberBetween(1,50);

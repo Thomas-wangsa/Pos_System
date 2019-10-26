@@ -28,7 +28,23 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {   
-        $sales = User::orderBy('name','asc')->withTrashed()->get();
+        
+        $allowed = false;
+        $role = User::where('id',Auth::user()->id)->first()->role;
+
+        if($role == 1 OR $role == 2) {
+            $allowed = true;
+        }
+
+
+        $sales = User::orderBy('name','asc')->withTrashed();
+        if(!$allowed) {
+            $sales = $sales->where('id','=', Auth::user()->id);
+        }
+        $sales = $sales->get();
+
+
+
         $customer_status = Customer_Status::all();
         $customer = Customer::leftjoin('users','users.id','=','customer.sales_id');
 
@@ -62,6 +78,12 @@ class CustomerController extends Controller
             }
 
         }
+
+
+        if(!$allowed) {
+            $customer = $customer->where('customer.sales_id','=', $request->search_sales);
+        }
+
         $customer = $customer->select('customer.*','users.name AS sales_name');
 
         if($request->search_order != null) {
