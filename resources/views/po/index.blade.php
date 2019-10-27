@@ -164,33 +164,37 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
             @if(Auth::user()->role == 1 OR Auth::user()->role == 2)
-            <a href="{{route('po.edit',$uuid)}}">
-              <span class="glyphicon glyphicon-edit"
-              style="color:green;cursor:pointer" 
-              title="edit PO {{$val['number']}}"
-              >
-              </span>
-            </a> 
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            
 
-            <a href="#" onclick="select_sub_po_status('{{$uuid}}')">
-              <span class="glyphicon glyphicon-check"
-              style="cursor:pointer;color:red" 
-              title="set flag PO {{$val['number']}}"  
-              >
-              </span>
-            </a> 
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              @if($val['status'] == 1)
+              <a href="{{route('po.edit',$uuid)}}">
+                <span class="glyphicon glyphicon-edit"
+                style="color:green;cursor:pointer" 
+                title="edit PO {{$val['number']}}"
+                >
+                </span>
+              </a> 
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              @endif
 
-            <a href="{{route('do.create')}}?po_uuid={{$val['uuid']}}">  
-              <span class="glyphicon glyphicon-play-circle"
-              style="cursor:pointer;color:black" 
-              title="create new DO & Invoice for PO {{$val['number']}}" 
-              >
-              </span>
-            </a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <a href="#" onclick="select_sub_po_status('{{$uuid}}')">
+                <span class="glyphicon glyphicon-check"
+                style="cursor:pointer;color:red" 
+                title="set flag PO {{$val['number']}}"  
+                >
+                </span>
+              </a> 
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+              @if($val['status'] == 1)
+              <a href="{{route('do.create')}}?po_uuid={{$val['uuid']}}">  
+                <span class="glyphicon glyphicon-play-circle"
+                style="cursor:pointer;color:black" 
+                title="create new DO & Invoice for PO {{$val['number']}}" 
+                >
+                </span>
+              </a>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              @endif
             @endif
 
           </td>

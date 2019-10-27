@@ -153,7 +153,7 @@ class DatabaseSeeder extends Seeder
             $po->customer_id = $faker->numberBetween(1,200);
             $po->sales_id = $faker->numberBetween(2,20);
             $po->category_id = $faker->numberBetween(1,3);
-            $po->number = "00".$faker->randomDigitNotNull()."-".$faker->randomDigitNotNull()."/".$faker->company;
+            $po->number = "00".$faker->randomDigitNotNull()."/".$faker->company."-".$faker->randomDigitNotNull()."/".$faker->company;
             $po->note = $faker->text;
             $po->uuid = $faker->uuid;
             $po->created_by = 1;

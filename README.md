@@ -89,4 +89,4 @@ Question :
 6. validasi di surat jalan ke po - 3 hari -> done
 7. report 1 mgu
 8. print + siapin fitur nya -> 2 minggu
-9. aut + role ->  1minggu
+9. aut + role ->  1minggu -> done
