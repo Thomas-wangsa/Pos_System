@@ -13,6 +13,7 @@
       @endif
   @endforeach
   
+  @if(Auth::user()->role == 1 OR Auth::user()->role == 2)
   <div style="margin-top: 15px">
     <div class="pull-left">
       <a href="{{route('do.create')}}">
@@ -24,6 +25,7 @@
     </div>
     <div class="clearfix"> </div>
   </div>
+  @endif
 
   <div class="pull-left" style="margin: 10px auto">
     <form class="form-inline" action="">
@@ -150,6 +152,7 @@
             </a>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
+            @if(Auth::user()->role == 1 OR Auth::user()->role == 2)
             <a href="{{route('do.edit',$uuid)}}">
               <span class="glyphicon glyphicon-edit"
               style="color:green;cursor:pointer" 
@@ -167,6 +170,7 @@
               </span>
             </a> 
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @endif
 
           </td>
         </tr>

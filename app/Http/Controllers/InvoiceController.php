@@ -20,7 +20,41 @@ class InvoiceController extends Controller
      */
     public function index(Request $request)
     {   
+        $allowed = false;
+        $self_data = User::where('id',Auth::user()->id)->first();
+        if($self_data == null) {
+            $request->session()->flash('alert-danger', "self_data is not found!");
+            return redirect()->route("home");
+        }
 
+
+        $role = $self_data->role;
+        if($role == 1 OR $role == 2) {
+            $allowed = true;
+        }
+
+
+        $sales = User::orderBy('name','asc')->withTrashed();
+        if(!$allowed) {
+            $sales = $sales->where('id','=', Auth::user()->id);
+        }
+        $sales = $sales->get();
+
+
+
+
+        $customer = Customer::orderBy('name','asc')->withTrashed();
+        if(!$allowed) {
+            $customer = $customer->where('customer.sales_id','=', Auth::user()->id);
+        }
+        $customer = $customer->get();
+
+
+        $po = PO::orderBy('name','asc')->withTrashed();
+        if(!$allowed) {
+            $po = $po->where('po.sales_id','=', Auth::user()->id);
+        }
+        $po = $po->get();
 
         $invoice = Invoice::leftjoin('invoice_status','invoice_status.id','=','invoice.status')
                     ->leftjoin('users','users.id','=','invoice.sales_id')
@@ -59,6 +93,11 @@ class InvoiceController extends Controller
 
         }
 
+
+        if(!$allowed) {
+            $invoice = $invoice->where('invoice.sales_id','=', Auth::user()->id);
+        }
+
         $invoice = $invoice->select(
                         'invoice.*',
                         'users.name AS sales_name',
@@ -82,9 +121,9 @@ class InvoiceController extends Controller
         }
 
         $data['invoice'] = $invoice;
-        $data['sales'] = User::all();
-        $data['customer'] = Customer::all();
-        $data['po'] = PO::all();
+        $data['sales'] = $sales;
+        $data['customer'] = $customer;
+        $data['po'] = $po;
         $data['invoice_status'] = Invoice_Status::all();
         return view('invoice/index',compact('data'));
     }

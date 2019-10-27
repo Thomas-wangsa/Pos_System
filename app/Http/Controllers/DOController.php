@@ -38,9 +38,35 @@ class DOController extends Controller
      */
     public function index(Request $request)
     {
-        //$customer = Customer::all();
-        // $category = Category::all();
-        // $data['category'] = $category;
+        $allowed = false;
+        $self_data = User::where('id',Auth::user()->id)->first();
+        if($self_data == null) {
+            $request->session()->flash('alert-danger', "self_data is not found!");
+            return redirect()->route("home");
+        }
+
+
+        $role = $self_data->role;
+        if($role == 1 OR $role == 2) {
+            $allowed = true;
+        }
+
+
+        $customer = Customer::orderBy('name','asc')->withTrashed();
+        if(!$allowed) {
+            $customer = $customer->where('customer.sales_id','=', Auth::user()->id);
+        }
+        $customer = $customer->get();
+
+
+        $po = PO::orderBy('number','asc')->withTrashed();
+        if(!$allowed) {
+            $po = $po->where('po.sales_id','=', Auth::user()->id);
+        }
+        $po = $po->get();
+
+
+
         $do = Delivery_Order::leftjoin('po','po.id','=','delivery_order.po_id')
                     ->leftjoin('customer','customer.id','=','delivery_order.customer_id')
                     ->leftjoin('users','users.id','=','po.sales_id')
@@ -77,6 +103,10 @@ class DOController extends Controller
         }
 
 
+        if(!$allowed) {
+            $do = $do->where('do.sales_id','=', Auth::user()->id);
+        }
+
         $do = $do->select(
                 'delivery_order.*',
                 'po.number AS po_number',
@@ -88,8 +118,8 @@ class DOController extends Controller
 
 
         $do = $do->paginate(10);
-        $data['po'] = PO::orderBy('number','asc')->withTrashed()->where('status',1)->get();
-        $data['customer'] = Customer::orderBy('name','asc')->withTrashed()->get();
+        $data['po'] = $po;
+        $data['customer'] = $customer;
         $data['delivery_order_status'] = Delivery_Order_Status::all();
         //dd($data);
         $data['do'] = $do;
@@ -103,6 +133,23 @@ class DOController extends Controller
      */
     public function create(Request $request)
     {   
+        $allowed = false;
+        $self_data = User::where('id',Auth::user()->id)->first();
+        if($self_data == null) {
+            $request->session()->flash('alert-danger', "self_data is not found!");
+            return redirect()->route("home");
+        }
+
+
+        $role = $self_data->role;
+        if($role == 1 OR $role == 2) {
+            $allowed = true;
+        }
+
+        if(!$allowed) {
+            $request->session()->flash('alert-danger', "only admin and owner is allowed!");
+            return redirect()->route($this->redirectTo);
+        }
         // $po = PO::where('uuid',$request->po_uuid)->first();
         
 

@@ -23,6 +23,24 @@ class ConfigController extends Controller
      */
     public function index(Request $request)
     {   
+        $allowed = false;
+        $self_data = User::where('id',Auth::user()->id)->first();
+        if($self_data == null) {
+            $request->session()->flash('alert-danger', "self_data is not found!");
+            return redirect()->route("home");
+        }
+
+
+        $role = $self_data->role;
+        if($role == 1) {
+            $allowed = true;
+        }
+
+        if(!$allowed) {
+            $request->session()->flash('alert-danger', "only owner is allowed!");
+            return redirect()->route("home");
+        }
+
         $config = array(
             "Category"    => 1,
             "Driver"    => 2,

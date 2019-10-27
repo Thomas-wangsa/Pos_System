@@ -36,13 +36,40 @@ class POController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
+    {   
+        $allowed = false;
+        $self_data = User::where('id',Auth::user()->id)->first();
+        if($self_data == null) {
+            $request->session()->flash('alert-danger', "self_data is not found!");
+            return redirect()->route("home");
+        }
+
+
+        $role = $self_data->role;
+        if($role == 1 OR $role == 2) {
+            $allowed = true;
+        }
+
         //$customer = Customer::all();
         $po_status = PO_Status::all();
-        $sales = User::orderBy('name','asc')->withTrashed()->get();
-        $all_customer = Customer::orderBy('name','asc')->withTrashed()->get();
-        $customer = Customer::orderBy('name','asc')->get();
 
+
+        $sales = User::orderBy('name','asc')->withTrashed();
+        if(!$allowed) {
+            $sales = $sales->where('id','=', Auth::user()->id);
+        }
+        $sales = $sales->get();
+
+
+
+        $all_customer = Customer::orderBy('name','asc')->withTrashed();
+        if(!$allowed) {
+            $all_customer = $all_customer->where('customer.sales_id','=', Auth::user()->id);
+        }
+        $all_customer = $all_customer->get();
+
+
+        $customer = Customer::orderBy('name','asc')->get();
 
         $po = PO::leftjoin('customer','po.customer_id','=','customer.id')
             ->leftjoin('users','po.sales_id','=','users.id')
@@ -78,6 +105,11 @@ class POController extends Controller
         }
 
         
+        if(!$allowed) {
+            $po = $po->where('po.sales_id','=', Auth::user()->id);
+        }
+
+
         $po = $po->select('po.*','customer.name AS customer_name','users.name AS sales_name','po_status.name AS status_name');
 
         if($request->search_order != null) {
@@ -126,6 +158,26 @@ class POController extends Controller
     public function create(Request $request)
     {   
         try {
+
+            $allowed = false;
+            $self_data = User::where('id',Auth::user()->id)->first();
+            if($self_data == null) {
+                $request->session()->flash('alert-danger', "self_data is not found!");
+                return redirect()->route("home");
+            }
+
+
+            $role = $self_data->role;
+            if($role == 1 OR $role == 2) {
+                $allowed = true;
+            }
+
+            if(!$allowed) {
+                $request->session()->flash('alert-danger', "only admin and owner is allowed!");
+                return redirect()->route($this->redirectTo);
+            }
+
+
             $category = Category::all();
             $sub_po_status = Sub_PO_Status::all();
             $customer = Customer::leftjoin('users','users.id','=','customer.sales_id')
@@ -218,9 +270,27 @@ class POController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($uuid)
+    public function edit(Request $request, $uuid)
     {
         try {
+             $allowed = false;
+            $self_data = User::where('id',Auth::user()->id)->first();
+            if($self_data == null) {
+                $request->session()->flash('alert-danger', "self_data is not found!");
+                return redirect()->route("home");
+            }
+
+
+            $role = $self_data->role;
+            if($role == 1 OR $role == 2) {
+                $allowed = true;
+            }
+
+            if(!$allowed) {
+                $request->session()->flash('alert-danger', "only admin and owner is allowed!");
+                return redirect()->route($this->redirectTo);
+            }
+
             $po = PO::where('uuid',$uuid)->first();
             if($po == null) {
                 $request->session()->flash('alert-danger', 'po is not found!');

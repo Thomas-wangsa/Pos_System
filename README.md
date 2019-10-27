@@ -81,13 +81,12 @@ Question :
 -- 5. pas buat PO baru
 
 
-1. ubah UI -> 1 mggu
-2. full fitur semua -> 2 minggu
-3. category pindah ke po -> 3 hari
+1. ubah UI -> 1 mggu -> done
+2. full fitur semua -> 2 minggu -> done
+3. category pindah ke po -> 3 hari ->done
 4. tempo pembayaran -> 2 hari
-5. patern no surat jalan sama kwitansi - 3 hari
-6. validasi di surat jalan ke po - 3 hari
+5. patern no surat jalan sama kwitansi - 3 hari ->done 
+6. validasi di surat jalan ke po - 3 hari -> done
 7. report 1 mgu
 8. print + siapin fitur nya -> 2 minggu
 9. aut + role ->  1minggu
-10. fitur history di surat jalan -> 3 harui
