@@ -29,6 +29,10 @@
 						        <td id="modal_info_number">  </td>
 						      </tr>
 						      <tr>
+						        <th> payment method </th>
+						        <td id="modal_info_payment_method_name">   </td>
+						      </tr>
+						      <tr>
 						        <th> customer name </th>
 						        <td id="modal_info_customer_name">   </td>
 						      </tr>
@@ -159,6 +163,7 @@
 		$('#modal_info_updated_by').html("-");
 		$('#modal_info_note').html("-");
 		$('#modal_info_grand_total').html("-");
+		$('#modal_info_payment_method_name').html("-");
 
 		$('#info_sub_tbody').empty();
 		$('#info_delivery_order_tbody').empty();

@@ -50,6 +50,16 @@
 		  </div>
 
 		  <div class="form-group">
+		    <label class="control-label" for="category"> Payment Methdod :</label>
+	    	<select class="form-control" id="po_payment_method" name="po_payment_method" required="">
+		    	<option value=""> Select Category </option>
+              	@foreach($data['category'] as $key=>$val)
+              	<option value="{{$val->id}}"> {{$val->name}} </option>
+              	@endforeach
+        	</select>
+		  </div>
+
+		  <div class="form-group">
 		    <label class="control-label" for="note"> Note :</label>
 		    <textarea class="form-control" rows="4" id="po_note" name="po_note"></textarea>
 		  </div>

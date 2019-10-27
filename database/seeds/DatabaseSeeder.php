@@ -17,6 +17,7 @@ use App\Http\Models\Sub_PO_Status;
 use App\Http\Models\Delivery_Order_Status;
 use App\Http\Models\Invoice_Status;
 use App\Http\Models\Customer_Status;
+use App\Http\Models\Payment_Method;
 
 use Faker\Factory as Faker;
 
@@ -325,6 +326,26 @@ class DatabaseSeeder extends Seeder
             Sub_PO_Status::firstOrCreate($value);     
         }
 
+
+
+        $payment_method_array = array(
+            array(
+                "name"=>"cash",
+                "detail"=>"cash",
+            ),
+            array(
+                "name"=>"30D",
+                "detail"=>"payment 30D",
+            ),
+            array(
+                "name"=>"low",
+                "detail"=>"payment 60D",
+            )
+        );
+
+        foreach ($payment_method_array as $key => $value) {
+            Payment_Method::firstOrCreate($value);     
+        }
 
 
     }
