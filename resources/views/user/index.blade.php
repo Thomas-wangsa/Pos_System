@@ -97,7 +97,7 @@
 
   <table class="table table-striped table-bordered table-responsive">
     <thead>
-      <tr>
+      <tr class="info"> 
         <th> No </th>
         <th> User Name </th>
         <th> Email </th>

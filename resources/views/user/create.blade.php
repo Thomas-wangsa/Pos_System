@@ -16,7 +16,7 @@
   <?php $set_passwd = 123456; ?>
   <div style="margin: 10px auto">
     <a href="{{route('user.index')}}">
-      <button type="button" class="btn btn-md btn-warning">
+      <button type="button" class="btn btn-md btn-info">
         <span class="glyphicon glyphicon-chevron-left "></span>
         Back
       </button>
@@ -66,7 +66,7 @@
     </div>
 
     <div class="text-center" style="margin-top: 50px">
-      <button type="submit" class="btn btn-primary btn-block">
+      <button type="submit" class="btn btn-info btn-block">
         <span class="glyphicon glyphicon-plus"></span> New Users
       </button>
     </div>

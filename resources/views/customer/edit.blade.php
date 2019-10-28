@@ -82,7 +82,7 @@
     </div>
 
     <div class="text-center">
-      <button type="submit" class="btn btn-primary btn-block">
+      <button type="submit" class="btn btn-warning btn-block">
         Update Customer
       </button>
     </div>
