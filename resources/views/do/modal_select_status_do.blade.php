@@ -36,7 +36,7 @@
             </select>
           </div>
 
-          <button type="submit" class="btn btn-block btn-primary">
+          <button type="submit" class="btn btn-block btn-success">
             UPDATE Delivey Order STATUS
           </button>
         </form>

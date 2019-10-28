@@ -79,7 +79,7 @@
           </select>
       </div>
     
-      <button type="submit" class="btn btn-info"> 
+      <button type="submit" class="btn btn-primary"> 
         Filter
       </button> 
 

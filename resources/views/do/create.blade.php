@@ -11,7 +11,7 @@
 </style>
 	<div style="margin: 10px auto">
 	    <a href="{{route('do.index')}}">
-	      <button type="button" class="btn btn-md btn-warning">
+	      <button type="button" class="btn btn-md btn-success">
 	        <span class="glyphicon glyphicon-chevron-left "></span>
 	        Back to Delivery Order Page
 	      </button>
@@ -68,8 +68,9 @@
 			</tbody>
 		</table>
 
-		<button class="btn btn-primary btn-block hide" id="create_delivery_order_btn" onclick="submit_delivery_order()" disabled> 
-			create delivery order 
+		<button class="btn btn-success btn-block hide" id="create_delivery_order_btn" onclick="submit_delivery_order()" disabled> 
+			<span class="glyphicon glyphicon-plus"></span>
+			Create New Delivery Order
 		</button>
   	</div>
 

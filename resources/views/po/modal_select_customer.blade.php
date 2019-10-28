@@ -34,7 +34,8 @@
             </select>
           </div>
 
-          <button type="submit" class="btn btn-block btn-warning">
+          <button type="submit" class="btn btn-block btn-primary">
+            <span class="glyphicon glyphicon-plus"></span>
             CREATE NEW PO 
           </button>
         </form>

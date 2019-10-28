@@ -17,7 +17,7 @@
   <div style="margin-top: 15px">
     <div class="pull-left">
       <a href="{{route('do.create')}}">
-        <button type="button" class="btn btn-md btn-primary">
+        <button type="button" class="btn btn-md btn-success">
           <span class="glyphicon glyphicon-plus"></span>
           New Delivery Order
         </button>
@@ -85,7 +85,7 @@
         </select>
       </div>
     
-      <button type="submit" class="btn btn-info"> 
+      <button type="submit" class="btn btn-success"> 
         Filter
       </button>
       @if(Request::get('search') == "on")

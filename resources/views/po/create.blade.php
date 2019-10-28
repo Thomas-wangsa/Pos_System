@@ -10,7 +10,7 @@
 
 	<div style="margin: 10px auto">
 	    <a href="{{route('po.index')}}">
-	      <button type="button" class="btn btn-md btn-warning">
+	      <button type="button" class="btn btn-md btn-primary">
 	        <span class="glyphicon glyphicon-chevron-left "></span>
 	        Back
 	      </button>
@@ -65,7 +65,10 @@
 		  </div>
 
 		  <div class="form-group"> 
-		     <div class="btn btn-primary btn-block" id="po_set_submit" onclick="submit_po()"> Submit and set item </div>
+		     <div class="btn btn-primary btn-block" id="po_set_submit" onclick="submit_po()"> 
+		     	<span class="glyphicon glyphicon-plus"></span>
+		     	Submit PO and set item 
+		     </div>
 		  </div>
 
 		  <div class="clearfix"> </div>

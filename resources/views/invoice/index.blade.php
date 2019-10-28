@@ -89,7 +89,7 @@
         </select>
       </div>
     
-      <button type="submit" class="btn btn-info"> 
+      <button type="submit" class="btn btn-danger"> 
         Filter
       </button>
       @if(Request::get('search') == "on")

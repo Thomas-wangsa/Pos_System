@@ -11,7 +11,7 @@
 </style>
 	<div style="margin: 10px auto">
 	    <a href="{{route('do.index')}}">
-	      <button type="button" class="btn btn-md btn-warning">
+	      <button type="button" class="btn btn-md btn-success">
 	        <span class="glyphicon glyphicon-chevron-left "></span>
 	        Back to Delivery Order Page
 	      </button>
@@ -58,7 +58,7 @@
 			</div>
 
 
-			<div class="btn btn-warning" id="btn_add_items" style="margin-bottom: 5px" onclick="add_items()"> 
+			<div class="btn btn-success" id="btn_add_items" style="margin-bottom: 5px" onclick="add_items()"> 
 		    	<span class="glyphicon glyphicon-plus"></span>
 		    	add items 
 		    </div>
@@ -120,8 +120,8 @@
 			</table>
 
 			<div class="text-center" style="margin-top: 50px">
-		      <button type="submit" class="btn btn-primary btn-block">
-		        <span class="glyphicon glyphicon-plus"></span> update delivery order 
+		      <button type="submit" class="btn btn-success btn-block">
+		        <span class="glyphicon glyphicon-plus"></span> Update Delivery Order
 		      </button>
 		    </div>
 

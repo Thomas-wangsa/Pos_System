@@ -28,7 +28,7 @@
               Invoice Status :
             </label>
             <select class="form-control" id="status" name="status" disabled="">
-              <option> Set Success </option>
+              <option> Success </option>
             </select>
           </div>
 
@@ -40,7 +40,7 @@
             placeholder="eg : Giro no BRI-XXX, BCA-XXX">
           </div>
 
-          <button type="submit" class="btn btn-block btn-primary">
+          <button type="submit" class="btn btn-block btn-danger">
             UPDATE INVOICE STATUS
           </button>
         </form>

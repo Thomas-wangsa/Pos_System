@@ -15,7 +15,7 @@
           </h4>
         </div>
         <div class="modal-body">
-  			<div class="panel panel-primary">
+  			<div class="panel panel-success">
 		      <div class="panel-heading text-center">
 		      	Basic Information
 		      </div>
