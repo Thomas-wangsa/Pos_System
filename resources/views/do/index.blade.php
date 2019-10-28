@@ -171,7 +171,7 @@
                 >
                 </span>
               </a> 
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             @endif
 
           </td>

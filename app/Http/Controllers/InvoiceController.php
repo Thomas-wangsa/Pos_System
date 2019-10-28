@@ -14,7 +14,8 @@ use App\Http\Models\PO;
 use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
-{
+{   
+    protected $redirectTo      = 'invoice.index';
     /**
      * Display a listing of the resource.
      *
@@ -110,7 +111,7 @@ class InvoiceController extends Controller
                         'invoice_status.name AS status_name',
                         'payment_method.name AS payment_method_name'
                     )
-                    ->orderBy('number','desc')->paginate(2);
+                    ->orderBy('number','desc')->paginate(20);
 
 
         foreach($invoice as $key=>$val) {
@@ -202,7 +203,7 @@ class InvoiceController extends Controller
     }
 
 
-     public function get_invoice_by_uuid(Request $request) {
+    public function get_invoice_by_uuid(Request $request) {
         $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
         try {
             $data["invoice"] = Invoice::leftjoin('po','po.id','=','invoice.po_id')
@@ -253,5 +254,29 @@ class InvoiceController extends Controller
         }
 
 
-     }
+    }
+
+    public function set_success_status_invoice(Request $request) {
+
+        try {
+            $invoice = Invoice::where('uuid',$request->invoice_uuid)->first();
+            if($invoice == null) {
+                $request->session()->flash('alert-danger', 'invoice data is not found!');
+                return redirect()->route($this->redirectTo);
+            }
+
+            $invoice->status = 4;
+
+            if($request->payment_detail != null) {
+                $invoice->payment_detail = $request->payment_detail;
+            }
+
+            $invoice->save();
+            $request->session()->flash('alert-success', 'INVOICE : '. $invoice->number.' has been updated');
+            return redirect()->route($this->redirectTo,"search=on&uuid=".$invoice->uuid);
+        } catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+    }
 }

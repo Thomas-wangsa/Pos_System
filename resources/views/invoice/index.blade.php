@@ -146,6 +146,16 @@
               </span>
               </a>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+              @if($val->status == 3)
+              <a href="#" onclick="update_invoice_status('{{$uuid}}')">
+                <span class="glyphicon glyphicon-check"
+                style="cursor:pointer;color:red" 
+                title="set flag PO {{$val['number']}}"  
+                >
+                </span>
+              </a> 
+              @endif
             </td>
           </tr> 
           @endforeach
@@ -180,4 +190,5 @@
     }
   </script>
   @include('invoice.modal_info_invoice')
+  @include('invoice.modal_update_invoice')
 @endsection

@@ -132,7 +132,7 @@ class POController extends Controller
             $po = $po->orderBy('po.created_at','desc');
         }
         
-        $po = $po->paginate(10);
+        $po = $po->paginate(20);
 
         foreach($po as $key=>$val) {
             $po[$key]["total"] = 0;

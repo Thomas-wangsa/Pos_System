@@ -22,6 +22,7 @@ class CreateInvoiceTable extends Migration
             $table->unsignedInteger('delivery_order_id');
             $table->unsignedInteger('payment_method_id')->default(1);
             $table->date('due_date')->nullable();
+            $table->string('payment_detail')->nullable();
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
             $table->unsignedInteger('status')->default(1);
@@ -57,7 +58,7 @@ class CreateInvoiceTable extends Migration
                 ->onUpdate('CASCADE')->onDelete('RESTRICT');
 
             $table->foreign('status', 'invoice_status_byfkey')
-                ->references('id')->on('delivery_order_status')
+                ->references('id')->on('invoice_status')
                 ->onUpdate('CASCADE')->onDelete('RESTRICT');
 
             $table->foreign('payment_method_id', 'invoice_payment_method_id_byfkey')

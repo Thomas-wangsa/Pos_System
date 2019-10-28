@@ -97,7 +97,7 @@ class CustomerController extends Controller
         }
 
 
-        $customer = $customer->paginate(10);
+        $customer = $customer->paginate(20);
         // dd($customer);
         $data['customer'] = $customer;
         $data['sales'] = $sales;

@@ -117,7 +117,7 @@ class DOController extends Controller
             ->orderBy('number','desc');
 
 
-        $do = $do->paginate(10);
+        $do = $do->paginate(20);
         $data['po'] = $po;
         $data['customer'] = $customer;
         $data['delivery_order_status'] = Delivery_Order_Status::all();
