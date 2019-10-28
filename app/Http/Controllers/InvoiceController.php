@@ -10,6 +10,7 @@ use App\Http\Models\Invoice_Status;
 use App\User;
 use App\Http\Models\Customer;
 use App\Http\Models\PO;
+use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
 {
@@ -50,7 +51,7 @@ class InvoiceController extends Controller
         $customer = $customer->get();
 
 
-        $po = PO::orderBy('name','asc')->withTrashed();
+        $po = PO::orderBy('number','asc')->withTrashed();
         if(!$allowed) {
             $po = $po->where('po.sales_id','=', Auth::user()->id);
         }

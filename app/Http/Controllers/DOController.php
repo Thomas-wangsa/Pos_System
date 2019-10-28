@@ -104,7 +104,7 @@ class DOController extends Controller
 
 
         if(!$allowed) {
-            $do = $do->where('do.sales_id','=', Auth::user()->id);
+            $do = $do->where('delivery_order.sales_id','=', Auth::user()->id);
         }
 
         $do = $do->select(

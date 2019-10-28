@@ -31,7 +31,7 @@ class CreateInvoiceTable extends Migration
 
 
             $table->foreign('delivery_order_id', 'invoice_delivery_order_id_byfkey')
-                ->references('id')->on('driver')
+                ->references('id')->on('delivery_order')
                 ->onUpdate('CASCADE')->onDelete('RESTRICT');
                 
             $table->foreign('po_id', 'invoice_po_id_byfkey')
