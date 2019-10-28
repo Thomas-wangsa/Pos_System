@@ -213,6 +213,7 @@ class InvoiceController extends Controller
                     ->leftjoin('invoice_status','invoice_status.id','=','invoice.status')
                     ->leftjoin('users as c_user','c_user.id','=','invoice.created_by')
                     ->leftjoin('users as u_user','u_user.id','=','invoice.updated_by')
+                    ->leftjoin('payment_method','payment_method.id','=','invoice.payment_method_id')
                     ->where('invoice.uuid',$request->uuid)
                     ->select(
                         'invoice.*',
@@ -222,7 +223,8 @@ class InvoiceController extends Controller
                         'delivery_order.number AS delivery_order_number',
                         'invoice_status.name AS status_name',
                         'c_user.name AS created_by_name',
-                        'u_user.name AS updated_by_name'
+                        'u_user.name AS updated_by_name',
+                        'payment_method.name AS payment_method_name'
                     )
                     ->first();
 

@@ -70,6 +70,20 @@
 						        <td id="modal_info_note">  </td>
 						      </tr>
 
+
+						      <tr class="info">
+						        <th> payment_method </th>
+						        <td id="modal_info_payment_method">  </td>
+						      </tr>
+						      <tr>
+						        <th> due date </th>
+						        <td id="modal_info_due_date">  </td>
+						      </tr>
+						      <tr>
+						        <th> payment detail </th>
+						        <td id="modal_info_payment_detail">  </td>
+						      </tr>
+
 						    </tbody>
 					  	</table>
 
@@ -126,12 +140,14 @@
 		$('#modal_info_po_number').html("-");
 		$('#modal_info_delivery_order_number').html("-");
 
-
-
 		$('#modal_info_status_name').html("-");
 		$('#modal_info_created_by').html("-");
 		$('#modal_info_updated_by').html("-");
 		$('#modal_info_note').html("-");
+
+		$('#modal_info_payment_method').html("-");
+		$('#modal_info_due_date').html("-");
+		$('#modal_info_payment_detail').html("-");
 
 		$('#info_sub_tbody').empty();
 		var payload = {"uuid":uuid};
@@ -155,6 +171,10 @@
 					$('#modal_info_created_by').html(response.data.invoice.created_by_name+" : "+response.data.invoice.created_at);
 					$('#modal_info_updated_by').html(response.data.invoice.updated_by_name+" : "+response.data.invoice.updated_at);
 					$('#modal_info_note').html(response.data.invoice.note);
+
+					$('#modal_info_payment_method').html(response.data.invoice.payment_method_name);
+					$('#modal_info_due_date').html(response.data.invoice.due_date);
+					$('#modal_info_payment_detail').html(response.data.invoice.payment_detail);
 
 					if(response.data.sub_invoice.length > 0) {
 						$.each(response.data.sub_invoice, function (key,val) {

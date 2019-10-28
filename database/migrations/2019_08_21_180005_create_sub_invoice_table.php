@@ -27,7 +27,7 @@ class CreateSubInvoiceTable extends Migration
             $table->softDeletes();
 
             $table->foreign('invoice_id', 'sub_invoice_id_byfkey')
-                ->references('id')->on('delivery_order')
+                ->references('id')->on('invoice')
                 ->onUpdate('CASCADE')->onDelete('RESTRICT');
 
             $table->foreign('created_by', 'sub_invoice_created_by_byfkey')
