@@ -134,8 +134,8 @@
             <td> {{$val->sales_name}} </td>
             <td> {{$val->customer_name}}} </td>
             <td> {{$val->total}} </td>
-            <td> </td>
             <td> {{$val->payment_method_name}} </td>
+            <td>  {{$val->due_date}} </td>
             <td> {{$val->status_name}} </td>
             <td> 
               <a href="#" onclick="info('{{$uuid}}')">  

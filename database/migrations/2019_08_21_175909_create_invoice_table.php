@@ -21,7 +21,7 @@ class CreateInvoiceTable extends Migration
             $table->unsignedInteger('po_id');
             $table->unsignedInteger('delivery_order_id');
             $table->unsignedInteger('payment_method_id')->default(1);
-            
+            $table->date('due_date')->nullable();
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
             $table->unsignedInteger('status')->default(1);

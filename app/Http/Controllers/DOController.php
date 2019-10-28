@@ -455,6 +455,31 @@ class DOController extends Controller
             $inv->status = $do_status->id;
             $inv->updated_by = Auth::user()->id;
 
+            if($do_status->id == 3) {
+
+
+                switch ($inv->payment_method_id) {
+                    case '1':
+                        $due_date = date("Y-m-d");
+                        break;
+                    case '2':
+                        $due_date = date('Y-m-d', strtotime("+30 days"));
+                        break;
+                    case '3':
+                        $due_date = date('Y-m-d', strtotime("+60 days"));
+                        break;
+                    case '4':
+                        $due_date = null;
+                        break;
+                    default:
+                        $due_date = date("Y-m-d");
+                        break;
+                }
+
+                $inv->due_date = $due_date;
+
+            }
+
             DB::transaction(function() use ($do,$inv) {
                 $do->save();
                 $inv->save();
