@@ -77,5 +77,7 @@ Route::get('/adhoc/restore_config', 'ConfigController@restore_config')->name('co
 
 
 Route::resource('/profile', 'ProfileController');
+
 Route::resource('/report', 'ReportController');
+Route::post('/report/get_report', 'ReportController@get_report')->name('report.get_report');
 
