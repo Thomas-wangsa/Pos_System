@@ -78,7 +78,7 @@ class DatabaseSeeder extends Seeder
         }
 
 
-        for($i=1;$i<=20;$i++){
+        for($i=1;$i<=6;$i++){
 
             $data = array(
                 "name"=>$faker->name,
@@ -86,7 +86,7 @@ class DatabaseSeeder extends Seeder
                 "phone"=>$faker->phoneNumber,
                 "uuid"=>$faker->uuid,
                 "password"=>bcrypt(123456),
-                "role"=>$faker->numberBetween(1,3),
+                "role"=>$faker->numberBetween(2,3),
                 "created_by"=>1,
                 "updated_by"=>1
             );
@@ -126,7 +126,7 @@ class DatabaseSeeder extends Seeder
 
 
         $full_data = array();
-        for($i=0;$i<=200;$i++) { 
+        for($i=0;$i<=30;$i++) { 
             $customer_array = array(
                 "name"=>$faker->company."-".$faker->company,
                 "phone"=>$faker->phoneNumber,
@@ -135,7 +135,7 @@ class DatabaseSeeder extends Seeder
                 "note"=>$faker->text,
                 "relation_at"=>$faker->date,
                 "uuid"=>$faker->uuid,
-                "sales_id"=>$faker->numberBetween(2,20),
+                "sales_id"=>$faker->numberBetween(2,8),
                 "created_by"=>1,
                 "updated_by"=>1,
                 "created_at"    => $faker->dateTime($max = 'now'),
@@ -148,11 +148,11 @@ class DatabaseSeeder extends Seeder
         Customer::insert($full_data);
 
         $po_data = array();
-        for($i=0;$i<5000;$i++) { 
+        for($i=0;$i<150;$i++) { 
             
             $po = new PO;
-            $po->customer_id = $faker->numberBetween(1,200);
-            $po->sales_id = $faker->numberBetween(2,20);
+            $po->customer_id = $faker->numberBetween(1,30);
+            $po->sales_id = $faker->numberBetween(2,8);
             $po->category_id = $faker->numberBetween(1,3);
             $po->number = "00".$faker->randomDigitNotNull()."/".$faker->company."-".$faker->randomDigitNotNull()."/".$faker->company;
             $po->note = $faker->text;
@@ -338,8 +338,12 @@ class DatabaseSeeder extends Seeder
                 "detail"=>"payment 30D",
             ),
             array(
-                "name"=>"low",
+                "name"=>"60D",
                 "detail"=>"payment 60D",
+            ),
+            array(
+                "name"=>"other",
+                "detail"=>"payment other",
             )
         );
 

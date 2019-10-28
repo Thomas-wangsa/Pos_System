@@ -50,10 +50,10 @@
 		  </div>
 
 		  <div class="form-group">
-		    <label class="control-label" for="category"> Payment Methdod :</label>
+		    <label class="control-label" for="category"> Payment Method :</label>
 	    	<select class="form-control" id="po_payment_method" name="po_payment_method" required="">
-		    	<option value=""> Select Category </option>
-              	@foreach($data['category'] as $key=>$val)
+		    	<option value=""> Select Payment Method </option>
+              	@foreach($data['payment_method'] as $key=>$val)
               	<option value="{{$val->id}}"> {{$val->name}} </option>
               	@endforeach
         	</select>
@@ -123,6 +123,7 @@
 			po_name = $('#po_name').val();
 			po_category = $('#po_category').val();
 			po_note = $('#po_note').val();
+			po_payment_method  = $('#po_payment_method').val();
 
 			if(customer_uuid == null || customer_uuid == "") {
 				alert("error : customer_uuid is null");
@@ -133,6 +134,9 @@
 			} else if(po_category == null || po_category == "") {
 				alert("select the category first!");
 				return;
+			} else if(po_payment_method == null || po_payment_method == "") {
+				alert("select the payment method first!");
+				return;
 			}
 
 
@@ -140,7 +144,8 @@
 				"customer_uuid":customer_uuid,
 				"po_name":po_name,
 				"po_category":po_category,
-				"po_note":po_note
+				"po_note":po_note,
+				"po_payment_method":po_payment_method
 			};
 
 			$.ajax({
@@ -153,6 +158,7 @@
 					if(response.error != true) {
 						$('#po_category').prop('disabled', true);
 						$('#po_note').prop('disabled', true);
+						$('#po_payment_method').prop('disabled', true);
 						$('#po_set_submit').hide();
 						$('#po_set_draft').hide();
 						$('#main_section_body').removeClass("hide");

@@ -57,6 +57,7 @@
         </select>
       </div>
 
+      <br/> <br/>
 
       <div class="form-group">
         <select class="form-control" name="search_po">
@@ -111,6 +112,8 @@
         <th> Sales </th>
         <th> Customer </th>
         <th> Total </th>
+        <th> Payment Method </th>
+        <th> Due Date </th>
         <th> Status </th>
         <th> Action </th>
       </tr>
@@ -131,6 +134,8 @@
             <td> {{$val->sales_name}} </td>
             <td> {{$val->customer_name}}} </td>
             <td> {{$val->total}} </td>
+            <td> </td>
+            <td> {{$val->payment_method_name}} </td>
             <td> {{$val->status_name}} </td>
             <td> 
               <a href="#" onclick="info('{{$uuid}}')">  

@@ -20,7 +20,8 @@ class CreateInvoiceTable extends Migration
             $table->unsignedInteger('customer_id');
             $table->unsignedInteger('po_id');
             $table->unsignedInteger('delivery_order_id');
-            $table->unsignedInteger('payment_method_id')->detault(1);
+            $table->unsignedInteger('payment_method_id')->default(1);
+            
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
             $table->unsignedInteger('status')->default(1);

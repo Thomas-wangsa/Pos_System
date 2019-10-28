@@ -57,6 +57,20 @@
 		  </div>
 
 		  <div class="form-group">
+		    <label class="control-label" for="category"> Payment Method :</label>
+	    	<select class="form-control" id="po_payment_method" name="po_payment_method" required="">
+		    	<option value=""> Select Payment Method </option>
+              	@foreach($data['payment_method'] as $key=>$val)
+              	<option value="{{$val->id}}"
+              	<?php if($data['po']->payment_method_id == $val['id']) { echo "selected"; } ?>	
+              	> 
+              		{{$val->name}} 
+              	</option>
+              	@endforeach
+        	</select>
+		  </div>
+
+		  <div class="form-group">
 		    <label class="control-label" for="note"> Note :</label>
 		    <textarea class="form-control" rows="4" id="po_note" name="po_note">{{$data['po']['note']}}</textarea>
 		  </div>
@@ -169,12 +183,14 @@
 			po_customer_id = $('#po_customer_id').val();
 			po_category = $('#po_category').val();
 			po_note = $('#po_note').val();
+			po_payment_method  = $('#po_payment_method').val();
 
 			var payload = {
 				"po_uuid":po_uuid,
 				"po_customer_id":po_customer_id,
 				"po_category":po_category,
-				"po_note":po_note
+				"po_note":po_note,
+				"po_payment_method":po_payment_method
 			};
 
 			$.ajax({

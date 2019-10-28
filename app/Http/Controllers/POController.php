@@ -8,6 +8,7 @@ use App\Http\Models\Category;
 use App\Http\Models\Customer;
 use App\Http\Models\PO;
 use App\Http\Models\PO_Status;
+use App\Http\Models\Payment_Method;
 
 use App\Http\Models\SubPO;
 use App\Http\Models\Sub_PO_Status;
@@ -70,10 +71,12 @@ class POController extends Controller
 
 
         $customer = Customer::orderBy('name','asc')->get();
+        $payment_method = Payment_Method::all();
 
         $po = PO::leftjoin('customer','po.customer_id','=','customer.id')
             ->leftjoin('users','po.sales_id','=','users.id')
-            ->leftjoin('po_status','po.status','=','po_status.id');
+            ->leftjoin('po_status','po.status','=','po_status.id')
+            ->leftjoin('payment_method','payment_method.id','=','po.payment_method_id');
 
 
         if($request->search == "on") { 
@@ -110,7 +113,13 @@ class POController extends Controller
         }
 
 
-        $po = $po->select('po.*','customer.name AS customer_name','users.name AS sales_name','po_status.name AS status_name');
+        $po = $po->select(
+            'po.*',
+            'customer.name AS customer_name',
+            'users.name AS sales_name',
+            'po_status.name AS status_name',
+            'payment_method.name AS payment_method_name'
+        );
 
         if($request->search_order != null) {
             if($request->search_order == "oldest_po") {
@@ -147,6 +156,7 @@ class POController extends Controller
         $data['customer'] = $customer;
         $data['all_customer'] = $all_customer;
         $data['sales'] = $sales;
+        $data['payment_method'] = $payment_method;
         return view('po/index',compact('data'));
     }
 
@@ -180,6 +190,8 @@ class POController extends Controller
 
             $category = Category::all();
             $sub_po_status = Sub_PO_Status::all();
+            $payment_method = Payment_Method::all();
+
             $customer = Customer::leftjoin('users','users.id','=','customer.sales_id')
                     ->where('customer.uuid',$request->customer_uuid)
                     ->select('customer.*','users.name AS sales_name')
@@ -203,6 +215,7 @@ class POController extends Controller
             $data['category'] = $category;
             $data['patern_po_name'] = $patern_po_name;
             $data['faker'] = $this->faker;
+            $data['payment_method'] = $payment_method;
             return view('po/create',compact('data')); 
         }
         catch(Exception $e) {
@@ -235,6 +248,7 @@ class POController extends Controller
 
             $po = new PO;
             $po->number = $request->po_name;
+            $po->payment_method_id = $request->po_payment_method;
             $po->customer_id = $customer->id;
             $po->sales_id = $customer->sales_id;
             $po->category_id = $request->po_category;
@@ -305,6 +319,7 @@ class POController extends Controller
             $data['po'] = $po;
             $data['sub_po'] = $sub_po;
             $data['faker'] = $this->faker;
+            $data['payment_method'] = Payment_Method::all();
             return view('po/edit',compact('data')); 
         }
         catch(Exception $e) {
@@ -428,6 +443,7 @@ class POController extends Controller
                     ->leftjoin('po_status','po_status.id','=','po.status')
                     ->leftjoin('users as c_user','c_user.id','=','po.created_by')
                     ->leftjoin('users as u_user','u_user.id','=','po.updated_by')
+                    ->leftjoin('payment_method','payment_method.id','=','po.payment_method_id')
                     ->where('po.uuid',$request->uuid)
                     ->select(
                         'po.*',
@@ -435,7 +451,8 @@ class POController extends Controller
                         'users.name AS sales_name',
                         'po_status.name AS status_name',
                         'c_user.name AS created_by_name',
-                        'u_user.name AS updated_by_name'
+                        'u_user.name AS updated_by_name',
+                        'payment_method.name AS payment_method_name'
                     )
                     ->first();
 
@@ -535,8 +552,16 @@ class POController extends Controller
                 return json_encode($response);
             }
 
+            $payment_method = Payment_Method::where('id',$request->po_payment_method)->first();
+            if($payment_method == null) {
+                $response['messages'] = "payment_method is not found!";
+                return json_encode($response);
+            }
+
+
             $po = new PO;
             $po->number = $request->po_name;
+            $po->payment_method_id = $payment_method->id;
             $po->customer_id = $customer->id;
             $po->sales_id = $customer->sales_id;
             $po->category_id = $request->po_category;
@@ -690,7 +715,15 @@ class POController extends Controller
                 return json_encode($response);
             }
 
+            $payment_method = Payment_Method::where('id',$request->po_payment_method)->first();
+            if($payment_method == null) {
+                $response['messages'] = "payment_method is not found!";
+                return json_encode($response);
+            }
+
+
             $po->customer_id = $customer->id;
+            $po->payment_method_id = $payment_method->id;
             $po->sales_id = $customer->sales_id;
             $po->category_id = $request->po_category;
             $po->note = $request->po_note;

@@ -84,7 +84,7 @@ Question :
 1. ubah UI -> 1 mggu -> done
 2. full fitur semua -> 2 minggu -> done
 3. category pindah ke po -> 3 hari ->done
-4. tempo pembayaran -> 2 hari
+4. tempo pembayaran -> 2 hari -> done
 5. patern no surat jalan sama kwitansi - 3 hari ->done 
 6. validasi di surat jalan ke po - 3 hari -> done
 7. report 1 mgu

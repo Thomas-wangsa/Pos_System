@@ -19,6 +19,7 @@ class CreatePoTable extends Migration
             $table->unsignedInteger('sales_id');
             $table->unsignedInteger('customer_id');
             $table->unsignedInteger('category_id');
+            $table->unsignedInteger('payment_method_id')->default(1);
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
             $table->unsignedInteger('status')->default(1);
@@ -51,6 +52,10 @@ class CreatePoTable extends Migration
 
             $table->foreign('status', 'po_status_byfkey')
                 ->references('id')->on('po_status')
+                ->onUpdate('CASCADE')->onDelete('RESTRICT');
+
+            $table->foreign('payment_method_id', 'po_payment_method_id_byfkey')
+                ->references('id')->on('payment_method')
                 ->onUpdate('CASCADE')->onDelete('RESTRICT');
         });
     }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Models\Invoice;
 use App\Http\Models\Sub_Invoice;
 use App\Http\Models\Invoice_Status;
+use App\Http\Models\Payment_Method;
 
 use App\User;
 use App\Http\Models\Customer;
@@ -57,9 +58,12 @@ class InvoiceController extends Controller
         }
         $po = $po->get();
 
+        $payment_method = Payment_Method::all();
+
         $invoice = Invoice::leftjoin('invoice_status','invoice_status.id','=','invoice.status')
                     ->leftjoin('users','users.id','=','invoice.sales_id')
-                    ->leftjoin('customer','customer.id','=','invoice.customer_id');
+                    ->leftjoin('customer','customer.id','=','invoice.customer_id')
+                    ->leftjoin('payment_method','payment_method.id','=','invoice.payment_method_id');
                     
         if($request->search == "on") { 
 
@@ -103,7 +107,8 @@ class InvoiceController extends Controller
                         'invoice.*',
                         'users.name AS sales_name',
                         'customer.name AS customer_name',
-                        'invoice_status.name AS status_name'
+                        'invoice_status.name AS status_name',
+                        'payment_method.name AS payment_method_name'
                     )
                     ->orderBy('number','desc')->paginate(2);
 
@@ -126,6 +131,7 @@ class InvoiceController extends Controller
         $data['customer'] = $customer;
         $data['po'] = $po;
         $data['invoice_status'] = Invoice_Status::all();
+        $data['payment_method'] = $payment_method;
         return view('invoice/index',compact('data'));
     }
 

@@ -247,6 +247,7 @@ class DOController extends Controller
 
             $inv = new Invoice;
             $inv->number = $this->set_patern_do_number($po);
+            $inv->payment_method_id = $po->payment_method_id;
             $inv->po_id = $po->id;
             $inv->customer_id = $po->customer_id;
             $inv->sales_id = $po->sales_id;

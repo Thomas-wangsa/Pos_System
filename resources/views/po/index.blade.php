@@ -35,7 +35,7 @@
             </i>
           </span>
           <input type="text" class="form-control" 
-          name="search_nama" placeholder="Find Name..."
+          name="search_nama" placeholder="Find Number..."
           value="{{Request::get('search_nama')}}">
         </div>
       </div>
@@ -124,6 +124,7 @@
         <th> No </th>
         <th> Number </th>
         <th> Total </th>
+        <th> Payment Method </th>
         <th> Status </th>
         <th> Action </th>
       </tr>
@@ -147,6 +148,10 @@
           
           <td>
             Rp. {{ number_format($val['total']) }} 
+          </td>
+
+          <td> 
+            {{$val['payment_method_name']}}
           </td>
 
           <td>

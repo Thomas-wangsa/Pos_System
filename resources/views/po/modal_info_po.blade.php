@@ -179,6 +179,7 @@
 				response = JSON.parse(result);
 				if(response.error != true) {
 					$('#modal_info_number').html(response.data.po.number);
+					$('#modal_info_payment_method_name').html(response.data.po.payment_method_name);
 					$('#modal_info_customer_name').html(response.data.po.customer_name);
 					$('#modal_info_sales_name').html(response.data.po.sales_name);
 					$('#modal_info_status_name').html(response.data.po.status_name);
