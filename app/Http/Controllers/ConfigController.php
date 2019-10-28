@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Models\Category;
 use App\Http\Models\Driver;
 use Faker\Factory as Faker;
+use App\User;
 
 class ConfigController extends Controller
 {   

@@ -66,7 +66,7 @@
 
 
             <li>
-              <a href="#">
+              <a href="{{route('report.index')}}">
                 <span class="glyphicon glyphicon-folder-open"></span> 
                 Report 
               </a>

@@ -12,8 +12,9 @@ class ReportController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
+    {   
+        $data = null;
+        return view('report/index',compact('data'));
     }
 
     /**
