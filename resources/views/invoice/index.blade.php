@@ -132,7 +132,7 @@
             <td> {{$key+1}} </td>
             <td> {{$val->number}}</td>
             <td> {{$val->sales_name}} </td>
-            <td> {{$val->customer_name}}} </td>
+            <td> {{$val->customer_name}} </td>
             <td> {{$val->total}} </td>
             <td> {{$val->payment_method_name}} </td>
             <td>  {{$val->due_date}} </td>

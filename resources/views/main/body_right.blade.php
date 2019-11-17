@@ -48,6 +48,8 @@
 			INVOICE PAGE
 			@elseif(Route::current()->getName() == 'report.index')
 			REPORT PAGE
+			@elseif(Route::current()->getName() == 'report.get_report')
+			REPORT PAGE
 			@endif
 			
 		</h3>

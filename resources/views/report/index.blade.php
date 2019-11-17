@@ -44,15 +44,6 @@
       </select>
     </div>
 
-    <div class="form-group">
-      <label for="email"> Payment Method : </label>
-      <select class="form-control" name="search_status">
-        <option value=""> Filter By Payment Method </option>
-        @foreach($data['payment_method'] as $key=>$val)
-        <option value="{{$val['id']}}"> {{$val['name']}} </option>
-        @endforeach
-      </select>
-    </div>
 
     <div class="text-center" style="margin-top: 50px">
       <button type="submit" class="btn btn-primary btn-block">
