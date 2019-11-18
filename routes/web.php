@@ -82,3 +82,4 @@ Route::resource('/profile', 'ProfileController');
 Route::resource('/report', 'ReportController');
 Route::get('/view-report/get_report', 'ReportController@get_report')->name('report.get_report');
 
+Route::resource('/doc', 'DocumentationController');

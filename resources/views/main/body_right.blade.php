@@ -50,6 +50,8 @@
 			REPORT PAGE
 			@elseif(Route::current()->getName() == 'report.get_report')
 			REPORT PAGE
+			@elseif(Route::current()->getName() == 'doc.index')
+			DOCUMENTATION PAGE
 			@endif
 			
 		</h3>
