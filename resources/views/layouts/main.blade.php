@@ -21,7 +21,7 @@
   <script src="{{ asset('js/jquery.min.js') }}"></script>
   <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 
-
+  <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/De_Brothers.png')}}" />
 
 
 
@@ -39,7 +39,7 @@
     footer {
       background-color: #555;
       color: white;
-      padding: 15px;
+      padding: 5px;
     }
     
     /* On small screens, set height to 'auto' for sidenav and grid */
