@@ -34,6 +34,7 @@ Route::post('ajax/restore_user_by_uuid','UserController@restore_user_by_uuid')->
 Route::resource('/customer', 'CustomerController');
 Route::post('ajax/get_customer_by_category_id','CustomerController@get_customer_by_category_id')->name('customer.get_customer_by_category_id');
 Route::post('ajax/get_customer_by_uuid','CustomerController@get_customer_by_uuid')->name('customer.get_customer_by_uuid');
+Route::post('ajax/get_customer_by_sales_id','CustomerController@get_customer_by_sales_id')->name('customer.get_customer_by_sales_id');
 Route::post('ajax/restore_customer_by_uuid','CustomerController@restore_customer_by_uuid')->name('customer.restore_customer_by_uuid');
 
 

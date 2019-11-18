@@ -23,8 +23,6 @@ class ReportController extends Controller
         $data['from_date'] =  date('Y-m-d', strtotime("-7 day"));
         $data['to_date'] = date('Y-m-d');
         $data['sales'] = User::all();
-        $data['customer'] = Customer::all();
-        $data['payment_method'] = Payment_Method::all();
         return view('report/index',compact('data'));
     }
 

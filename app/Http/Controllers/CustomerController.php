@@ -340,6 +340,31 @@ class CustomerController extends Controller
     }
 
 
+    public function get_customer_by_sales_id(Request $request) {
+        $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
+        try {
+            $data = Customer::where('customer.sales_id',$request->sales_id)
+            ->select('customer.*')
+            ->get();
+
+            if(count($data) < 1) {
+                $response['messages'] = "no data customer found!";
+                return json_encode($response);
+            } else {
+                $response['data'] = $data;
+                $response['error'] = False;
+                return json_encode($response);
+            }
+
+        }
+        //catch exception
+        catch(Exception $e) {
+            $response['messages'] = $e->getMessage();
+            return json_encode($response);
+        }
+    }
+
+
     public function restore_customer_by_uuid(Request $request) {
         $response = ["error"=>True,"messages"=>NULL,"data"=>NULL];
 
