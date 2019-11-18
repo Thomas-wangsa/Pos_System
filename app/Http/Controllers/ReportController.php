@@ -8,6 +8,7 @@ use App\Http\Models\Customer;
 use App\Http\Models\Payment_Method;
 use App\Http\Models\Invoice;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 
 class ReportController extends Controller
@@ -20,9 +21,29 @@ class ReportController extends Controller
      */
     public function index()
     {   
+
+        $allowed = false;
+        $self_data = User::where('id',Auth::user()->id)->first();
+        if($self_data == null) {
+            $request->session()->flash('alert-danger', "self_data is not found!");
+            return redirect()->route("home");
+        }
+
+
+        $role = $self_data->role;
+        if($role == 1 OR $role == 2) {
+            $allowed = true;
+        }
+
+        $sales = User::all();
+
+        if(!$allowed) {
+            $sales = User::where('id',Auth::user()->id)->get();
+        }
+
         $data['from_date'] =  date('Y-m-d', strtotime("-7 day"));
         $data['to_date'] = date('Y-m-d');
-        $data['sales'] = User::all();
+        $data['sales'] = $sales;
         return view('report/index',compact('data'));
     }
 

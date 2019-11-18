@@ -12,8 +12,7 @@
       @endif
   @endforeach
 
-  <form action="{{route('report.get_report')}}" method="POST">
-    {{ csrf_field() }}
+  <form action="{{route('report.get_report')}}" method="GET">
     <div class="form-group">
       <label for="email">From Date :</label>
       <input type="text" class="form-control datepicker_class" id="from_date" name="from_date" value="{{$data['from_date']}}" required=""> 
