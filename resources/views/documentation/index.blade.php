@@ -153,7 +153,10 @@
             <br/> <br/>
             sales : not available to this page. <br/> 
             admin : can create new delivery-order-data <br/> 
-            owner : same like admin.
+            owner : same like admin. <br/> <br/>
+
+
+            note : will create new-invoice too.
           </li>
 
           <li class="list-group-item"> 
@@ -161,7 +164,9 @@
             <br/> <br/>
             sales : not available to this page. <br/> 
             admin : can edit the delivery-order-data <br/> 
-            owner : same like admin.
+            owner : same like admin. <br/> <br/>
+
+            note : will update invoice too.
           </li>
 
         </ul>
@@ -233,6 +238,6 @@
       </div>
     </div>
 
-    
+
   </div>
 @endsection
