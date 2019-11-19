@@ -169,5 +169,70 @@
     </div>
 
 
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#collapse6"> Invoice Page </a>
+        </h4>
+      </div>
+      <div id="collapse6" class="panel-collapse collapse">
+        <ul class="list-group">
+          <li class="list-group-item"> 
+            Invoice Page.
+            <br/> <br/>
+            sales : can view & filter invoice data that belong to himself. <br/> 
+            admin : can view, filter, add, edit, update status of invoice<br/> 
+            owner : same like admin 
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
+
+
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#collapse7"> Report Page </a>
+        </h4>
+      </div>
+      <div id="collapse7" class="panel-collapse collapse">
+        <ul class="list-group">
+          <li class="list-group-item"> 
+            Report Page.
+            <br/> <br/>
+            sales : can view & filter data that belong to himself. <br/> 
+            admin : can view & filter data all users. <br/> 
+            owner : same like admin 
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
+
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#collapse8"> Config Page </a>
+        </h4>
+      </div>
+      <div id="collapse8" class="panel-collapse collapse">
+        <ul class="list-group">
+          <li class="list-group-item"> 
+            Config Page.
+            <br/> <br/>
+            sales & admin : not available in this page <br/> 
+            owner : can view, add, edit & update driver & category data
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
+    
   </div>
 @endsection
