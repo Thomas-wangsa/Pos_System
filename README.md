@@ -90,3 +90,12 @@ Question :
 7. report 1 mgu
 8. print + siapin fitur nya -> 2 minggu
 9. aut + role ->  1minggu -> done
+
+
+
+- tambahan pcs,set / lembar di PO page
+- bug di delivery order PO success/failed
+- patern name PO, Delivery Order & Invoice
+- report PO
+- tambah modul listing price
+- tambah kolom maker -> di delivery order buat internal note

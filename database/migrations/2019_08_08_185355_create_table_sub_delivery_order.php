@@ -17,6 +17,7 @@ class CreateTableSubDeliveryOrder extends Migration
             $table->increments('id');
             $table->unsignedInteger('quantity');
             $table->string('name');
+            $table->string('unit')->default("Pcs");
             $table->unsignedInteger('delivery_order_id');
             $table->text('note')->nullable();
             $table->unsignedInteger('created_by');

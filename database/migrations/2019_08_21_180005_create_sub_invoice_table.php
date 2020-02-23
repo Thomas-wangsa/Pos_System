@@ -18,6 +18,7 @@ class CreateSubInvoiceTable extends Migration
             $table->unsignedInteger('quantity');
             $table->string('name');
             $table->unsignedInteger('price');
+            $table->string('unit')->default("Pcs");
             $table->unsignedInteger('invoice_id');
             $table->text('note')->nullable();
             $table->unsignedInteger('created_by');

@@ -19,6 +19,7 @@ class CreateSubPoTable extends Migration
             $table->string('name');
             $table->unsignedInteger('price');
             $table->unsignedInteger('status')->default(2);
+            $table->string('unit')->default("Pcs");
             $table->unsignedInteger('po_id');
             $table->text('note')->nullable();
             $table->unsignedInteger('created_by');
