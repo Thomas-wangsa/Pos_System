@@ -57,6 +57,11 @@
 			    <input class="form-control" type="text" name="do_sales" id="do_sales" value="{{$data['do']->sales_name}}" disabled="">
 			</div>
 
+			<div class="form-group">
+			    <label class="control-label" for="do_po"> Note  :</label>
+			    <input class="form-control" type="text" name="do_note" id="do_note" value="{{$data['do']->note}}">
+			</div>
+
 
 			<div class="btn btn-success" id="btn_add_items" style="margin-bottom: 5px" onclick="add_items()"> 
 		    	<span class="glyphicon glyphicon-plus"></span>

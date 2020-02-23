@@ -211,6 +211,7 @@ class DOController extends Controller
                 $sub_delivery_order_each = [
                     "quantity"=>$val['quantity'],
                     "name"=>$sub_po->name,
+                    "unit"=>$val["unit"],
                     // "delivery_order_id"=> $do->id,
                     "created_by"=> Auth::user()->id,
                     "updated_by"=>Auth::user()->id,
@@ -238,6 +239,7 @@ class DOController extends Controller
             $do->number = $this->set_patern_do_number($po);
             $do->driver_id = $driver->id;
             $do->po_id = $po->id;
+            $do->note = $request->do_note;
             $do->customer_id = $po->customer_id;
             $do->sales_id = $po->sales_id;
             $do->created_by = Auth::user()->id;
@@ -505,7 +507,7 @@ class DOController extends Controller
      */
     public function edit(Request $request,$id)
     {
-        $do = Delivery_Order::leftjoin('customer','customer.id','=','delivery_order.po_id')
+        $do = Delivery_Order::leftjoin('customer','customer.id','=','delivery_order.customer_id')
             ->leftjoin('po','po.id','=','delivery_order.po_id')
             ->leftjoin('users','users.id','=','delivery_order.sales_id')
             ->where('delivery_order.uuid',$id)

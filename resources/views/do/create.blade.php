@@ -55,12 +55,19 @@
 		    <input class="form-control" type="text" name="do_sales" id="do_sales" disabled="">
 		</div>
 
+
+		<div class="form-group">
+		    <label class="control-label" for="do_po"> Note :</label>
+		    <input class="form-control" type="text" name="do_note" id="do_note">
+		</div>
+
 		<table class="table table-bordered">
 			<thead>
 				<tr> 
 					<th width="5px"> </th>
 					<th width="30px"> No </th>
 					<th width="100px"> Quantity </th>
+					<th width="100px"> Unit </th>
 					<th> Name </th>
 				</tr>
 			</thead>
@@ -157,6 +164,9 @@
 									'<input type="number"  onchange=adjust_quantity(this,'+no_items+') class="form-control" id="item_quantity_'+no_items+'" value="'+val.quantity+'" disabled>'+
 									"</td> " +
 									"<td> " +
+									'<input type="text" class="form-control" id="item_unit_'+no_items+'" value="'+val.unit+'" disabled>'+
+									"</td> " +
+									"<td> " +
 									val.name +
 									"</td> " +
 								  			"<tr>";
@@ -178,6 +188,7 @@
 		function submit_delivery_order() {
 			driver_id = $('#do_driver').val();
 			po_uuid = $('#do_po').val();
+			do_note = $('#do_note').val();
 
 			if(driver_id == null || driver_id == "") {
 				alert("please select the driver!");
@@ -195,6 +206,7 @@
 					item = {
 						"sub_po_uuid":$('#item_uuid_'+i).val(),
 						"quantity":$('#item_quantity_'+i).val(),
+						"unit":$('#item_unit_'+i).val(),
 						"active":$('#item_active_'+i).html()
 					}
 					sub_data.push(item);
@@ -206,6 +218,7 @@
 				var data = {
 					"driver_id" : driver_id,
 					"po_uuid" : po_uuid,
+					"do_note": do_note,
 					"sub_data": sub_data
 				}
 				

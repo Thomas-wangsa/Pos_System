@@ -415,6 +415,7 @@ class POController extends Controller
         try {
             $data = PO::join('customer','customer.id','=','po.customer_id')
                             ->where('customer.uuid',$request->customer_uuid)
+                            ->where('po.status',1)
                             ->select('po.uuid','po.number')->get();
 
             if(count($data) > 0) {

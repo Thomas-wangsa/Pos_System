@@ -93,9 +93,9 @@ Question :
 
 
 
-- tambahan pcs,set / lembar di PO page
-- bug di delivery order PO success/failed
+- tambahan pcs,set / lembar di PO page (Done)
+- bug di delivery order PO success/failed (Done)
 - patern name PO, Delivery Order & Invoice
 - report PO
 - tambah modul listing price
-- tambah kolom maker -> di delivery order buat internal note
+- tambah kolom maker -> di delivery order buat internal note (Done)

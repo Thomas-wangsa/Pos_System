@@ -69,6 +69,7 @@
 								<tr>
 									<td> no </td>
 									<td> qty </td>
+									<td> unit </td>
 									<td> desc </td>
 								</tr>
 							</thead>
@@ -140,6 +141,9 @@
 												"</td> " +
 												"<td> " +
 												val.quantity +
+												"</td> " +
+												"<td> " +
+												val.unit +
 												"</td> " +
 												"<td> " +
 												val.name +
