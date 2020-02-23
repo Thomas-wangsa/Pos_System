@@ -88,6 +88,7 @@
 					<tr> 
 						<th> No </th>
 						<th width="100px"> Quantity </th>
+						<th width="100px"> Unit </th>
 						<th> Name </th>
 						<th width="150px"> Price </th>
 						<th> Status </th>
@@ -184,6 +185,11 @@
 					'</td>';
 			data += '<td>'+
 						'<input type="text" class="form-control" '+
+						"value='Pcs'" +
+						' id="item_unit_'+no_items+'">'+
+					'</td>';
+			data += '<td>'+
+						'<input type="text" class="form-control" '+
 						"value='@if(env('ENV_STATUS', 'development') == 'development'){{$faker_name}} @endif'" +
 						' id="item_name_'+no_items+'">'+
 					'</td>';
@@ -253,6 +259,7 @@
 			po_uuid = $('#new_po_uuid').html();
 			item_quantity = $('#item_quantity_'+current_no_items).val();
 			item_name = $('#item_name_'+current_no_items).val();
+			item_unit = $('#item_unit_'+current_no_items).val();
 			item_price = $('#item_price_'+current_no_items).val();
 			item_status = $('#item_status_'+current_no_items).val();
 			item_note = $('#item_note_'+current_no_items).val();
@@ -275,6 +282,7 @@
 				"po_uuid":po_uuid,
 				"item_quantity":item_quantity,
 				"item_name":item_name,
+				"item_unit":item_unit,
 				"item_price":item_price,
 				"item_status":item_status,
 				"item_note":item_note
@@ -290,6 +298,7 @@
 					if(response.error != true) {
 						$('#item_quantity_'+current_no_items).prop('disabled', true);
 						$('#item_name_'+current_no_items).prop('disabled', true);
+						$('#item_unit_'+current_no_items).prop('disabled', true);
 						$('#item_price_'+current_no_items).prop('disabled', true);
 						$('#item_status_'+current_no_items).prop('disabled', true);
 						$('#item_note_'+current_no_items).prop('disabled', true);
@@ -376,6 +385,7 @@
 		function edit_item(current_no_items) {
 			$('#item_quantity_'+current_no_items).prop('disabled', false);
 			$('#item_name_'+current_no_items).prop('disabled', false);
+			$('#item_unit_'+current_no_items).prop('disabled', false);
 			$('#item_price_'+current_no_items).prop('disabled', false);
 			$('#item_status_'+current_no_items).prop('disabled', false);
 			$('#item_note_'+current_no_items).prop('disabled', false);
@@ -389,6 +399,7 @@
 			sub_po_uuid = $('#item_sub_po_uuid_'+current_no_items).html();
 			item_quantity = $('#item_quantity_'+current_no_items).val();
 			item_name = $('#item_name_'+current_no_items).val();
+			item_unit = $('#item_unit_'+current_no_items).val();
 			item_price = $('#item_price_'+current_no_items).val();
 			item_status = $('#item_status_'+current_no_items).val();
 			item_note = $('#item_note_'+current_no_items).val();
@@ -411,6 +422,7 @@
 				"sub_po_uuid":sub_po_uuid,
 				"item_quantity":item_quantity,
 				"item_name":item_name,
+				"item_unit":item_unit,
 				"item_price":item_price,
 				"item_status":item_status,
 				"item_note":item_note
@@ -426,6 +438,7 @@
 					if(response.error != true) {
 						$('#item_quantity_'+current_no_items).prop('disabled', true);
 						$('#item_name_'+current_no_items).prop('disabled', true);
+						$('#item_unit_'+current_no_items).prop('disabled', true);
 						$('#item_price_'+current_no_items).prop('disabled', true);
 						$('#item_status_'+current_no_items).prop('disabled', true);
 						$('#item_note_'+current_no_items).prop('disabled', true);

@@ -598,6 +598,12 @@ class POController extends Controller
                 return json_encode($response);
             }
 
+
+            $item_unit = $request->item_unit;
+            if($item_unit == null) {
+                $item_unit = "Pcs";
+            }
+
             $item_name = $request->item_name;
             if($item_name == null) {
                 $response['messages'] = "item name not found!";
@@ -619,6 +625,7 @@ class POController extends Controller
             $sub_po = new SubPO;
             $sub_po->quantity = $item_quantity;
             $sub_po->name = $item_name;
+            $sub_po->unit = $item_unit;
             $sub_po->price = $item_price;
             $sub_po->status = $item_status->id;
             $sub_po->po_id = $po->id;
@@ -660,6 +667,11 @@ class POController extends Controller
                 return json_encode($response);
             }
 
+            $item_unit = $request->item_unit;
+            if($item_unit == null) {
+                $item_unit = "Pcs";
+            }
+
             $item_price = $request->item_price;
             if($item_price < 1) {
                 $response['messages'] = "item price is not correct : ".$request->item_price;
@@ -674,6 +686,7 @@ class POController extends Controller
 
             $sub_po->quantity = $item_quantity;
             $sub_po->name = $item_name;
+            $sub_po->unit = $item_unit;
             $sub_po->price = $item_price;
             $sub_po->status = $item_status->id;
             $sub_po->updated_by = Auth::user()->id;
