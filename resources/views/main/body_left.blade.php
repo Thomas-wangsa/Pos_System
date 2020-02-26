@@ -43,6 +43,14 @@
       </a>
     </li>
 
+
+    <li class="@if(Route::current()->getName() == 'report_po.index') echo active @endif">
+      <a href="{{route('report_po.index')}}">
+        <span class="glyphicon glyphicon-folder-open">
+        Report PO
+      </a>
+    </li>
+
     <li class="@if(Route::current()->getName() == 'report.index') echo active @endif">
       <a href="{{route('report.index')}}">
         <span class="glyphicon glyphicon-folder-open">

@@ -80,6 +80,13 @@ Route::get('/adhoc/restore_config', 'ConfigController@restore_config')->name('co
 Route::resource('/profile', 'ProfileController');
 
 Route::resource('/report', 'ReportController');
+Route::resource('/report_po', 'ReportPOController');
+
+
+
 Route::get('/view-report/get_report', 'ReportController@get_report')->name('report.get_report');
+Route::get('/view-po-report/get_po_report', 'ReportPOController@get_po_report')->name('report_po.get_po_report');
+
+
 
 Route::resource('/doc', 'DocumentationController');

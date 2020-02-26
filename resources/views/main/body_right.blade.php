@@ -46,6 +46,10 @@
 			EDIT DELIVERY ORDER PAGE
 			@elseif(Route::current()->getName() == 'invoice.index')
 			INVOICE PAGE
+			@elseif(Route::current()->getName() == 'report_po.index')
+			REPORT PO PAGE
+			@elseif(Route::current()->getName() == 'report_po.get_report')
+			REPORT PO PAGE
 			@elseif(Route::current()->getName() == 'report.index')
 			REPORT PAGE
 			@elseif(Route::current()->getName() == 'report.get_report')

@@ -191,14 +191,14 @@
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
               @if($val['status'] == 1)
-              <a href="{{route('do.create')}}?po_uuid={{$val['uuid']}}">  
+              <!-- <a href="{{route('do.create')}}?po_uuid={{$val['uuid']}}">  
                 <span class="glyphicon glyphicon-play-circle"
                 style="cursor:pointer;color:black" 
                 title="create new DO & Invoice for PO {{$val['number']}}" 
                 >
                 </span>
               </a>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
               @endif
             @endif
 

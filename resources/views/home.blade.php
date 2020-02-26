@@ -89,6 +89,22 @@
       </div>
     </div>
 
+
+    <div class="col-md-3">
+      <div class="thumbnail">
+        <a href="{{route('report.index')}}">
+
+          <div class="icon_block">
+                <span class="glyphicon glyphicon-folder-open">
+                </span> &nbsp;
+          </div>
+          <div class="caption text-center">
+            <p> Report PO </p>
+          </div>
+        </a>
+      </div>
+    </div>
+
     <div class="col-md-3">
       <div class="thumbnail">
         <a href="{{route('report.index')}}">
